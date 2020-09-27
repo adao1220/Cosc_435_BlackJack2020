@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BlackJack2020</string>
+    <string name="hp_title_tv">Blackjack Homepage</string>
+    <string name="hp_play_btn">Play</string>
+    <string name="hp_how_to_play_btn">How to play</string>
+    <string name="hp_settings_btn">Settings</string>
+    <string name="hp_tips_btn">Tips N Tricks</string>
 </resources>
