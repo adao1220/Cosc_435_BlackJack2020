@@ -16,4 +16,34 @@
     <string name="set_name">Input your Name: </string>
     <string name="set_back">Return to the Home Screen</string>
     <string name="set_music">Music</string>
+
+    //****************How to Play Page***************
+    <string name="how_to_play_title">How to Play!</string>
+    <string name="how_to_play_goal">Goal:</string>
+    <string name="how_to_play_goal_content">Beat the dealer by getting closer to 21 by adding up the pip number on the card without going over.</string>
+    <string name="how_to_play_important_rules">Important Rules:</string>
+    <string name="how_to_play_important_rules_content">All face cards count as 10 points and aces can either count as 11 or 1. Otherwise the number on the card is its point value.</string>
+
+    <string name="how_to_play_btn_title">Buttons</string>
+    <string name="how_to_play_btn_deal_title">Deal:</string>
+    <string name="how_to_play_btn_deal_content">Start a new round.</string>
+    <string name="how_to_play_btn_stand_title">Stand:</string>
+    <string name="how_to_play_btn_stand_content">Stop dealing cards to you.</string>
+    <string name="how_to_play_btn_hit_title">Hit:</string>
+    <string name="how_to_play_btn_hit_content">Deal another card.</string>
+    <string name="how_to_play_btn_double_down_title">Double Down:</string>
+    <string name="how_to_play_btn_double_down_content">Stop dealing cards and double your current bet.</string>
+    <string name="how_to_play_btn_split_title">Split:</string>
+    <string name="how_to_play_btn_split_content">When dealt doubles split each card into new bet and deal a new card to each bet to be played separately.</string>
+    <string name="how_to_play_btn_fold">Fold:</string>
+    <string name="how_to_play_btn_fold_content">Stop play and exit current round.</string>
+
+
+    //****************Tips N Tricks Page***************
+    <string name="tips_n_tricks_title">Tips N Tricks!</string>
+    <string name="tips_n_tricks_1">Stand when your hand is 12 through 16 and the dealer has a 2 through 6.</string>
+    <string name="tips_n_tricks_2">Hit when your hand is 12 through 16 and the dealer has 7 through Ace.</string>
+    <string name="tips_n_tricks_3">Always split Aces and 8s.</string>
+    <string name="tips_n_tricks_4">Double down when you have 11 and the dealer has 2 through 10</string>
+    <string name="tips_n_tricks_5">Hit or double down if the dealer Aces through 6</string>
 </resources>
