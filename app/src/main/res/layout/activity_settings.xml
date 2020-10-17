@@ -24,6 +24,7 @@
         android:textSize="24sp" />
 
     <RadioGroup
+        android:id="@+id/aiGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -59,6 +60,7 @@
         android:textSize="24sp" />
 
     <RadioGroup
+        android:id="@+id/cardGroup"
         android:layout_width="wrap_content"
         android:layout_height="165dp"
         android:orientation="horizontal">
@@ -94,7 +96,7 @@
 
         <TextView
             android:id="@+id/set_name"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/set_name"
             android:textSize="18sp" />

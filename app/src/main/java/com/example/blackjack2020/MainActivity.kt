@@ -5,14 +5,20 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.example.blackjack2020.interfaces.ISettingRepository
 import com.example.blackjack2020.models.SettingModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),ISettingRepository {
+    private lateinit var settingVar:ISettingRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        settingVar = SettingRepository()
+
+
 
         hp_play_btn.setOnClickListener{launchPlay()}
         hp_how_to_play_btn.setOnClickListener{launchHowToPlay()}
@@ -31,8 +37,12 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(intent,HOW_TO_PLAY_REQUEST_CODE)
     }
     fun launchSettings(){
+        val getSet = settingVar.getSetting(index)
+        val json = Gson().toJson(getSet)
         val intent= Intent(this, SettingsActivity::class.java)
+        intent.putExtra(SET_KEY, json)
         startActivityForResult(intent, SETTINGS_REQUEST_CODE)
+
     }
     fun launchTipsNTricks(){
         val intent= Intent(this, TipsNTricksActivity::class.java)
@@ -51,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                             null->return
                             else->{
                                 val setting = Gson().fromJson(json, SettingModel::class.java)
-                                Log.i(TAG, setting.toString())
+                                settingVar.editSettings(index, setting)
                             }
                         }
                     }
@@ -69,8 +79,28 @@ class MainActivity : AppCompatActivity() {
         val PLAY_REQUEST_CODE=1
         val SETTINGS_REQUEST_CODE=1
         val TIPS_REQUEST_CODE=1
+        val SET_KEY = "Setting Key"
         val TAG = "Test"
+        var index=0;
 
 
+
+    }
+
+    override fun getSettings(): List<SettingModel> {
+        return settingVar.getSettings()
+    }
+
+    override fun getSetting(idx: Int): SettingModel {
+        return settingVar.getSetting(idx)
+
+    }
+
+    override fun editSettings(idx: Int, setting: SettingModel) {
+        //todo: Finish up the code once we implement it
+    }
+
+    override fun getCount(): Int {
+        return settingVar.getCount()
     }
 }
