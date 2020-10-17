@@ -18,4 +18,60 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.499" />
+
+    <Button
+        android:id="@+id/play_deal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/play_deal_btn"
+        app:layout_constraintBottom_toTopOf="@+id/CHANGEME2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.13" />
+
+    <Button
+        android:id="@+id/play_hit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/play_hit_btn"
+        app:layout_constraintBottom_toTopOf="@+id/CHANGEME2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/play_deal"
+        app:layout_constraintVertical_bias="0.17" />
+
+    <Button
+        android:id="@+id/play_score_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/play_score_btn"
+        app:layout_constraintBottom_toTopOf="@+id/CHANGEME2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/play_hit_button"
+        app:layout_constraintVertical_bias="0.196" />
+
+    <Button
+        android:id="@+id/play_new_game_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/play_new_game_btn"
+        app:layout_constraintBottom_toTopOf="@+id/CHANGEME2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/play_score_btn" />
+
+    <Button
+        android:id="@+id/play_my_hand_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/play_my_hand_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CHANGEME2"
+        tools:layout_editor_absoluteX="159dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
