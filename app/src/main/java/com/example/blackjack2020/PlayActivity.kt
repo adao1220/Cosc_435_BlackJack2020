@@ -45,6 +45,7 @@ class PlayActivity : AppCompatActivity() {
             var card2 = deck.getRandomCard()
             deck.addToHand(card2,"user")
             userCount += deck.getValue(card2)
+            play_score.text= userCount.toString()
             var message =
                 "Your cards are: " + deck.cardFormat(card1) + " and " + deck.cardFormat(card2)
             Log.d(tag, message)
@@ -71,6 +72,7 @@ class PlayActivity : AppCompatActivity() {
                 var newCard = deck.getRandomCard()
                 deck.addToHand(newCard, string)
                 userCount += deck.getValue(newCard)
+                play_score.text= userCount.toString()
 
                 var message = "Your new card is: " + deck.cardFormat(newCard)
                 Log.d(tag, message)
