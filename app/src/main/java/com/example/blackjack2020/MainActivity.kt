@@ -18,8 +18,6 @@ class MainActivity : AppCompatActivity(),ISettingRepository {
         setContentView(R.layout.activity_main)
         settingVar = SettingRepository()
 
-
-
         hp_play_btn.setOnClickListener{launchPlay()}
         hp_how_to_play_btn.setOnClickListener{launchHowToPlay()}
         hp_settings_btn.setOnClickListener{launchSettings()}
@@ -28,8 +26,12 @@ class MainActivity : AppCompatActivity(),ISettingRepository {
     }
 
     fun launchPlay() {
+        val getSet = settingVar.getSetting(index)
+        val json = Gson().toJson(getSet)
         val intent = Intent(this, PlayActivity::class.java)
         startActivityForResult(intent, PLAY_REQUEST_CODE)
+        intent.putExtra(LAUNCH_KEY, json)
+        startActivityForResult(intent, SETTINGS_REQUEST_CODE)
     }
 
     fun launchHowToPlay(){
@@ -80,6 +82,7 @@ class MainActivity : AppCompatActivity(),ISettingRepository {
         val SETTINGS_REQUEST_CODE=1
         val TIPS_REQUEST_CODE=1
         val SET_KEY = "Setting Key"
+        val LAUNCH_KEY= "Launch Key"
         val TAG = "Test"
         var index=0;
 

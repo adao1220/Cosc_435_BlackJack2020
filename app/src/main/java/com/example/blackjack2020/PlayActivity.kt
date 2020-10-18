@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.blackjack2020.models.CardsModel
+import com.example.blackjack2020.models.SettingModel
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_play.*
 
 private var deck= CardsModel(CardRepository())
@@ -12,6 +14,16 @@ class PlayActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
+
+        val options = intent.getStringExtra(MainActivity.SET_KEY)
+        if (options!= null){
+            val toSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
+            val difficulty = toSet.difficulty
+            val backCard = toSet.card
+        }
+
+
+
         play_deal.setOnClickListener{deal()}
         play_hit_btn.setOnClickListener { hit("user")  }
         deal()
