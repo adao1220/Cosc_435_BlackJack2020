@@ -12,7 +12,9 @@ interface ICardRepository {
     fun removeCard(suit:Int, num:Int)
     fun removeCard(card: Card)
     fun newGame()
-   //fun getHand()
+    fun getHand(string: String)
+    fun addToHand(card: Card, string: String)
+    fun stand()
 
 
 

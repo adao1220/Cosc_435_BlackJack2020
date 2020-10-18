@@ -51,11 +51,28 @@ class CardsModel(private val cardrepo: ICardRepository) {
 
 
     }
+    fun addToHand(card: Card, string: String)
+    {
+        if (string.equals("user")){
+            cardrepo.addToHand(card,"user")
+        }
+        else{
+            cardrepo.addToHand(card,"dealer")
+        }
 
-//    fun getHand()
-//    {
-//        cardrepo.getHand()
-//    }
+    }
+    fun getHand(string: String)
+    {
+        if (string.equals("user")){
+            cardrepo.getHand("user")
+        }
+        else{
+            cardrepo.getHand("dealer")
+        }
+
+
+
+    }
 
     fun count():Int
     {

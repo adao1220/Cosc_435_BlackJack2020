@@ -53,5 +53,6 @@
     <string name="play_score_btn">Score</string>
     <string name="play_new_game_btn">New Game</string>
     <string name="play_my_hand_btn">My Hand</string>
+    <string name="play_stand_btn">Stand</string>
 
 </resources>
