@@ -5,13 +5,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.example.blackjack2020.interfaces.ISettingRepository
+import com.example.blackjack2020.Interfaces.ISettingsRepository
+//import com.example.blackjack2020.interfaces.ISettingRepository
 import com.example.blackjack2020.models.SettingModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(),ISettingRepository {
-    private lateinit var settingVar:ISettingRepository
+class MainActivity : AppCompatActivity(), ISettingsRepository {
+    private lateinit var settingVar:ISettingsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
