@@ -14,8 +14,8 @@ class PlayActivity : AppCompatActivity() {
         setContentView(R.layout.activity_play)
         //var deck= CardsModel(CardRepository())
         play_deal.setOnClickListener{deal()}
-        play_hit_button.setOnClickListener { hit() }
-        play_score_btn.setOnClickListener{score()}
+        play_hit_btn.setOnClickListener { hit() }
+//        play_score_btn.setOnClickListener{score()}
         play_new_game_btn.setOnClickListener{reset()}
         //play_my_hand_btn.setOnClickListener{myhand()}
 
