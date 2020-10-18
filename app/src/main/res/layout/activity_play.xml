@@ -21,15 +21,17 @@
 
     <TextView
         android:id="@+id/play_ai_hand"
-        android:layout_width="314dp"
-        android:layout_height="0dp"
+        android:layout_width="318dp"
+        android:layout_height="85dp"
         android:layout_marginTop="30dp"
         android:text="Hellome"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/play_my_hand"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.659"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         tools:text="Ai_hand" />
 
     <SeekBar

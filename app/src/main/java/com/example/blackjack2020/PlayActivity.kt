@@ -13,8 +13,7 @@ class PlayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
         play_deal.setOnClickListener{deal()}
-        play_hit_btn.setOnClickListener { hit() }
-//        play_hit_button.setOnClickListener { hit("user") }
+        play_hit_btn.setOnClickListener { hit("user")  }
         play_new_game_btn.setOnClickListener{reset()}
         play_stand_btn.setOnClickListener{stand()}
 
