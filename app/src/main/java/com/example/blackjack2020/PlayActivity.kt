@@ -15,7 +15,7 @@ class PlayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
 
-        val options = intent.getStringExtra(MainActivity.SET_KEY)
+        val options = intent.getStringExtra(MainActivity.LAUNCH_KEY)
         if (options!= null){
             val toSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
             val difficulty = toSet.difficulty
@@ -88,10 +88,6 @@ class PlayActivity : AppCompatActivity() {
 
     }
 
-    fun score(){
-        var message= "Your Score is : "+ userCount
-        Log.d(tag, message)
-    }
 
     fun reset(){
         userCount=0
@@ -100,9 +96,7 @@ class PlayActivity : AppCompatActivity() {
         deal()
     }
 
-    fun myhand(){
-        deck.getHand("user")
-    }
+
     fun stand(){
         Log.d(tag, "User Finished with score of: "+ userCount + "\n Dealers Turn")
         Log.d(tag, "Dealer count: "+ dealerCount)
@@ -128,4 +122,13 @@ class PlayActivity : AppCompatActivity() {
         var dealerCount=0 //holds dealers score
     }
 
+
+//    Old Code
+//    fun score(){
+//        var message= "Your Score is : "+ userCount
+//        Log.d(tag, message)
+//    }
+//    fun myhand(){
+//        deck.getHand("user")
+//    }
 }
