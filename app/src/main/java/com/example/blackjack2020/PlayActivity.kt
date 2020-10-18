@@ -14,6 +14,7 @@ class PlayActivity : AppCompatActivity() {
         setContentView(R.layout.activity_play)
         play_deal.setOnClickListener{deal()}
         play_hit_btn.setOnClickListener { hit("user")  }
+        deal()
         play_new_game_btn.setOnClickListener{reset()}
         play_stand_btn.setOnClickListener{stand()}
 
@@ -32,7 +33,7 @@ class PlayActivity : AppCompatActivity() {
             deck.addToHand(card2,"user")
             userCount += deck.getValue(card2)
             var message =
-                "Your cards are: " + deck.cardFormat(card1) + " and " + deck.cardFormat(card2) + ". Card Count: " + deck.count()
+                "Your cards are: " + deck.cardFormat(card1) + " and " + deck.cardFormat(card2)
             Log.d(tag, message)
 
             //******DEALER***********
@@ -45,7 +46,7 @@ class PlayActivity : AppCompatActivity() {
             dealerCount += deck.getValue(card2)
 
             message =
-                "Dealers cards are: " + deck.cardFormat(card1) + " and " + deck.cardFormat(card2) + ". Card Count: " + deck.count()
+                "Dealers cards are: " + deck.cardFormat(card1) + " and " + deck.cardFormat(card2)
             Log.d(tag, message)
         }
 
@@ -64,14 +65,13 @@ class PlayActivity : AppCompatActivity() {
                 Log.d(tag, "You've already lost")
         }
         else{
-            if (dealerCount <= 21) {
                 var newCard = deck.getRandomCard()
                 deck.addToHand(newCard, string)
                 dealerCount += deck.getValue(newCard)
 
                 var message = "Dealers card is: " + deck.cardFormat(newCard)
                 Log.d(tag, message)
-            }
+
         }
 
     }
@@ -85,6 +85,7 @@ class PlayActivity : AppCompatActivity() {
         userCount=0
         dealerCount=0
         deck.newGame()
+        deal()
     }
 
     fun myhand(){
@@ -93,6 +94,7 @@ class PlayActivity : AppCompatActivity() {
     fun stand(){
         Log.d(tag, "User Finished with score of: "+ userCount + "\n Dealers Turn")
         Log.d(tag, "Dealer count: "+ dealerCount)
+        //Log.d(tag, "Dealer cards are: " + deck.getHand("dealer"))
         while (dealerCount<=12)
             hit("dealer")
         if(dealerCount<=21 && userCount>21)
