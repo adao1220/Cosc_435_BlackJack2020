@@ -3,18 +3,19 @@ package com.example.blackjack2020
 import android.util.Log
 import com.example.blackjack2020.Interfaces.ICardRepository
 import com.example.blackjack2020.models.Card
-import com.example.blackjack2020.models.CardsModel
 import kotlin.random.Random.Default.nextInt
 
 class CardRepository :ICardRepository{
     private var cards : MutableList<Card> = mutableListOf()
-    //private var hand : MutableList<Card> = mutableListOf()
+    private var userHand : MutableList<Card> = mutableListOf()
+    private var dealerHand : MutableList<Card> = mutableListOf()
 
     init{
         cards.addAll((1..13).map{Card(1,"$it".toInt())}) //clubs
         cards.addAll((1..13).map{Card(2,"$it".toInt())}) //diamonds
         cards.addAll((1..13).map{Card(3,"$it".toInt())}) //hearts
         cards.addAll((1..13).map{ Card(4,"$it".toInt()) }) //spades
+
     }
     override fun getValue(card:Card):Int{
         if(card.num<10)
@@ -59,22 +60,33 @@ class CardRepository :ICardRepository{
         cards.addAll((1..13).map{Card(4,"$it".toInt())}) //spades
 
     }
-//    fun addToHand(card: Card){
-//        hand.add(card)
-//    }
-    //in progress
-//    override fun getHand()
-//    {
-//        var cardsiterator=cards.iterator()
-//        var message= ""
-//        while(cardsiterator.hasNext())
-//        {
-//            message=cardFormat(cardsiterator.next())
-//            Log.d(PlayActivity.tag, message)
-//            //getNum(cardsiterator.next())
-//        }
-//
-//    }
+    override fun addToHand(card: Card, string: String){
+        if(string.equals("user")){
+            userHand.add(card)
+        }
+        else{
+            dealerHand.add(card)
+        }
+    }
+
+    override fun getHand(string: String)
+    {
+        var cardsiterator = userHand.iterator()
+        if(string.equals("user")) {
+           cardsiterator = userHand.iterator()
+        }
+        else{
+            cardsiterator = dealerHand.iterator()
+        }
+        var message= ""
+        while(cardsiterator.hasNext())
+        {
+            message=cardFormat(cardsiterator.next())
+            Log.d(TAG, message)
+            //getNum(cardsiterator.next())
+        }
+
+    }
 
     private fun getNum(card: Card):String{
         var num=card.num
@@ -105,6 +117,14 @@ class CardRepository :ICardRepository{
         // 5 of Hearts or King of Diamonds format
 
 
+    }
+
+    override fun stand(){
+
+    }
+
+    companion object{
+        var TAG="test123"
     }
 
 }
