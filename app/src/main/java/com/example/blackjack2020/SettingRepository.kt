@@ -1,9 +1,10 @@
 package com.example.blackjack2020
 
-import com.example.blackjack2020.interfaces.ISettingRepository
+import com.example.blackjack2020.Interfaces.ISettingRepository
+
 import com.example.blackjack2020.models.SettingModel
 
-class SettingRepository: ISettingRepository{
+class SettingRepository: ISettingRepository {
     val set: MutableList<SettingModel> = mutableListOf()
     init {
         set.add(

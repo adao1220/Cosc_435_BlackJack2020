@@ -4,13 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import com.example.blackjack2020.interfaces.ISettingRepository
+import com.example.blackjack2020.Interfaces.ISettingRepository
+//import com.example.blackjack2020.interfaces.ISettingRepository
 import com.example.blackjack2020.models.SettingModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(),ISettingRepository {
+class MainActivity : AppCompatActivity(), ISettingRepository {
     private lateinit var settingVar:ISettingRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity(),ISettingRepository {
         val getSet = settingVar.getSetting(index)
         val json = Gson().toJson(getSet)
         val intent = Intent(this, PlayActivity::class.java)
-        startActivityForResult(intent, PLAY_REQUEST_CODE)
         intent.putExtra(LAUNCH_KEY, json)
         startActivityForResult(intent, SETTINGS_REQUEST_CODE)
     }
@@ -78,7 +77,6 @@ class MainActivity : AppCompatActivity(),ISettingRepository {
 
     companion object{
         val HOW_TO_PLAY_REQUEST_CODE=1
-        val PLAY_REQUEST_CODE=1
         val SETTINGS_REQUEST_CODE=1
         val TIPS_REQUEST_CODE=1
         val SET_KEY = "Setting Key"

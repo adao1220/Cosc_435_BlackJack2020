@@ -88,12 +88,6 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/play_deal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/play_deal_btn" />
-
-            <Button
                 android:id="@+id/play_new_game_btn"
                 android:layout_width="126dp"
                 android:layout_height="wrap_content"
