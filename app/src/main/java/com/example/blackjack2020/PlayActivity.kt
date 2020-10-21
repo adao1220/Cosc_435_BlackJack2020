@@ -22,6 +22,8 @@ class PlayActivity : AppCompatActivity() {
         if (options!= null){
             val toSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
             difficulty = toSet.difficulty
+            //ToDo: need to do the decimal stuff
+            play_cash.text = "Total Cash: $" + toSet.funds.toString()
             backCard = toSet.card
         }
 

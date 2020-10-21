@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.blackjack2020.MainActivity.Companion.SET_KEY
@@ -33,8 +32,9 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
                 "cardface2" -> cardface2.isChecked = true
                 "cardface3" -> cardface3.isChecked = true
             }
-            set_name_input.setText(toSet.profileName)
-            music_sw.isChecked = toSet.music
+            set_profile_name.setText(toSet.profileName)
+            set_curr_funds.text = toSet.funds.toString()
+            set_music_sw.isChecked = toSet.music
         }
 
         set_return_btn.setOnClickListener (this)
@@ -69,10 +69,11 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
                         card = "cardface3"
                     }
                 }
-                val name = set_name_input.editableText.toString()
-                val music = music_sw.isChecked
+                val name = set_profile_name.editableText.toString()
+                val music = set_music_sw.isChecked
+                val cash = 40.00
                 try{
-                    val setting = SettingModel(ai, card, name, music)
+                    val setting = SettingModel(ai, card, name,cash, music)
                     val json = Gson().toJson(setting)
                     intent.putExtra(SETTING_EXTRA_KEY,json)
                     setResult(Activity.RESULT_OK,intent)
