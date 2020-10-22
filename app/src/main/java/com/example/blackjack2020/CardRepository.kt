@@ -18,10 +18,18 @@ class CardRepository :ICardRepository{
 
     }
     override fun getValue(card:Card):Int{
-        if(card.num<10)
-            return card.num //will return 1-9
-        else
-            return 10 //will return 10,J,Q,K
+
+        when(card.num){
+            1->{return 11}
+            in 2..9->{return card.num}
+            in 10..13->{return 10}
+            else->{return 0}
+        }
+
+//        if(card.num<10)
+//            return card.num //will return 1-9
+//        else
+//            return 10 //will return 10,J,Q,K
 
         //doesnt account for ace being worth 11 yet
     }
@@ -61,23 +69,23 @@ class CardRepository :ICardRepository{
 
     }
     override fun addToHand(card: Card, string: String){
-        if(string.equals("user")){
-            userHand.add(card)
-        }
-        else{
-            dealerHand.add(card)
+
+        when(string){
+            USER->userHand.add(card)
+            else->dealerHand.add(card)
         }
     }
 
     override fun getHand(string: String)
     {
-        var cardsiterator = userHand.iterator()
-        if(string.equals("user")) {
-           cardsiterator = userHand.iterator()
+        //prints out the users or dealers hand
+        var cardsiterator: MutableIterator<Card>
+
+        when(string){
+            USER->cardsiterator = userHand.iterator()
+            else->cardsiterator = dealerHand.iterator()
         }
-        else{
-            cardsiterator = dealerHand.iterator()
-        }
+
         var message= ""
         while(cardsiterator.hasNext())
         {
@@ -88,29 +96,35 @@ class CardRepository :ICardRepository{
 
     }
 
+    override fun getIterator(string: String): MutableIterator<Card> {
+        when(string){
+            USER->return userHand.iterator()
+            else-> return dealerHand.iterator()
+        }
+    }
+
     private fun getNum(card: Card):String{
         var num=card.num
-        if(num in 2..10)
-            return card.num.toString()
-        else if(num==1)
-            return "Ace"
-        else if( num ==11)
-            return "Jack"
-        else if(num==12)
-            return "Queen"
-        else return "King"
+        when(num){
+            1->return "Ace"
+            in 2..10-> return card.num.toString()
+            11-> return "Jack"
+            12-> return "Queen"
+            13-> return "King"
+            else->return "" // this will never occur
+
+        }
     }
     private fun getSuit(card: Card):String
     {
         var suit=card.suit
-        if(suit==1)
-            return "clubs"
-        else if (suit==2)
-            return "diamonds"
-        else if(suit==3)
-            return "hearts"
-        else
-            return "spades"
+        when(suit){
+            1->return "clubs"
+            2->return "diamonds"
+            3->return "hearts"
+            4->return "spades"
+            else->return ""// this will never occur
+        }
     }
     fun cardFormat(card: Card):String{
         return getNum(card)+ " of "+ getSuit(card)
@@ -119,9 +133,6 @@ class CardRepository :ICardRepository{
 
     }
 
-    override fun stand(){
-
-    }
 
     companion object{
         var TAG="test123"

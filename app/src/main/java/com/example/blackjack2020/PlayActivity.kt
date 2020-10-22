@@ -4,13 +4,15 @@ import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.example.blackjack2020.models.Card
 import com.example.blackjack2020.models.CardsModel
 import com.example.blackjack2020.models.SettingModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_play.*
 
 private var deck= CardsModel(CardRepository())
-
+const val USER="user"
+const val DEALER="dealer"
 class PlayActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +28,8 @@ class PlayActivity : AppCompatActivity() {
         }
 
 
-
-        play_hit_btn.setOnClickListener { hit("user")  }
+        reset()
+        play_hit_btn.setOnClickListener { hit(USER)  }
         deal()
         play_new_game_btn.setOnClickListener{confirm()}
         play_stand_btn.setOnClickListener{stand(difficulty)}
@@ -41,61 +43,101 @@ class PlayActivity : AppCompatActivity() {
         if(deck.count()==52) {
             //******USER********
             var card1 = deck.getRandomCard()
-            deck.addToHand(card1,"user")
+            deck.addToHand(card1,USER)
+            isAce(USER, card1)
             userCount = deck.getValue(card1)
             var card2 = deck.getRandomCard()
-            deck.addToHand(card2,"user")
+            isAce(USER, card2)
+            deck.addToHand(card2,USER)
+
             userCount += deck.getValue(card2)
             play_score.text= userCount.toString()
             var message =
-                "Your cards are: " + deck.cardFormat(card1) + " and " + deck.cardFormat(card2)
+                "Your cards are: " + cardFormat(card1) + " and " + cardFormat(card2)
             Log.d(tag, message)
+
 
             //******DEALER***********
             card1 = deck.getRandomCard()
-            deck.addToHand(card1,"dealer")
-            dealerCount += deck.getValue(card2)
+            isAce(DEALER, card1)
+            deck.addToHand(card1,DEALER)
 
+            dealerCount += deck.getValue(card1)
             card2 = deck.getRandomCard()
-            deck.addToHand(card2,"dealer")
+            isAce(DEALER, card2)
+            deck.addToHand(card2,DEALER)
             dealerCount += deck.getValue(card2)
-
             message =
-                "Dealers cards are: " + deck.cardFormat(card1) + " and " + deck.cardFormat(card2)
+                "Dealers cards are: " + cardFormat(card1) + " and " + cardFormat(card2)
             Log.d(tag, message)
         }
 
     }
 
-    fun hit(string: String){ //will allow a new card unless over score of 21
-        if(string.equals("user")) {
-            if (userCount <= 21) {
-                var newCard = deck.getRandomCard()
-                deck.addToHand(newCard, string)
-                userCount += deck.getValue(newCard)
-                play_score.text= userCount.toString()
 
-                var message = "Your new card is: " + deck.cardFormat(newCard)
-                Log.d(tag, message)
-            } else
-                Log.d(tag, "You've already lost")
-        }
-        else{
-                var newCard = deck.getRandomCard()
-                deck.addToHand(newCard, string)
-                dealerCount += deck.getValue(newCard)
+    fun hit(role: String){
+        when(role){
+            USER->{
+                when(userCount){
+                    in 1..21->{ //will allow a new card unless over score of 21
+                        var newCard = deck.getRandomCard()
+                        isAce(USER, newCard)
+                        deck.addToHand(newCard, USER)
 
-                var message = "Dealers card is: " + deck.cardFormat(newCard)
-                Log.d(tag, message)
+                        userCount += deck.getValue(newCard)
+                        if(userCount>21 && userNumAces>0) //checks for aces
+                        {
+                            userCount-=10 // if the user has an ace, and over 21 will count the ace as 1 rather than 11
+                            Log.d(tag, "TREATING ACE AS 1")
+                            userNumAces--
+                        }
+                        play_score.text= userCount.toString()
+                        var message = "Your new card is: " + cardFormat(newCard)
+                        Log.d(tag, message)
+                    }
+                    else->{
+                        Log.d(tag, "You already lost")
+                    }
+                }
+            }
+            DEALER->{
+                when(dealerCount){
+                    in 1..21->{
+                        var newCard = deck.getRandomCard()
+                        isAce(DEALER, newCard) // increments variable *role*numAces
+                        deck.addToHand(newCard, DEALER)
+                        dealerCount += deck.getValue(newCard)
+                        if(dealerCount>21 && dealerNumAces>0) //checks for aces
+                        {
+                            dealerCount-=10 // if the user has an ace, and over 21 will count the ace as 1 rather than 11
+                            Log.d(tag, "TREATING ACE AS 1")
+                            dealerNumAces--
+                        }
+
+                        var message = "Dealers card is: " + cardFormat(newCard)
+                        Log.d(tag, message)
+                    }
+                    else->{
+                        Log.d(tag, "You already lost")
+
+                    }
+                }
+            }
 
         }
 
     }
 
 
+
+
     fun reset(){
+        play_hit_btn.isClickable=true
+        play_stand_btn.isClickable=true
         userCount=0
         dealerCount=0
+        userNumAces=0
+        dealerNumAces=0
         gameover=false
         deck.newGame()
         deal()
@@ -105,11 +147,11 @@ class PlayActivity : AppCompatActivity() {
 
 
     fun stand(difficultyString:String){
-
         Log.d(tag, "User Finished with score of: "+ userCount + "\n Dealers Turn")
         Log.d(tag, "Dealer count: "+ dealerCount)
-        //Log.d(tag, "Dealer cards are: " + deck.getHand("dealer"))
         difficultyAI(difficultyString)
+        play_hit_btn.isClickable=false
+        play_stand_btn.isClickable=false
         gameover=true
     }
 
@@ -118,7 +160,7 @@ class PlayActivity : AppCompatActivity() {
         when(level){
             "set_ai_easy_btn"->{
                     while (dealerCount<=12)
-                        hit("dealer")
+                        hit(DEALER)
                     if(dealerCount<=21 && userCount>21)
                         Log.d(tag, "Dealer won, user went over 21 ")
                     if(userCount<=21 && dealerCount>21)
@@ -127,13 +169,16 @@ class PlayActivity : AppCompatActivity() {
                         Log.d(tag, "Dealer won with score of: "+ dealerCount)
                     else if ((dealerCount< userCount)&& (userCount<=21))
                         Log.d(tag, "User won with score of: "+ userCount)
+                    else if((dealerCount>21 && userCount>21))
+                        Log.d(tag, "It's a tie")
                     else if((dealerCount== userCount))
                         Log.d(tag, "It's a tie")
                 Log.d(tag, "Easy")
             }
             "set_ai_normal_btn"->{
-                while (dealerCount<=12)
-                    hit("dealer")
+
+                while ((dealerCount<15 || userVisibleTotal()> dealerCount) && userVisibleTotal()<19)
+                    hit(DEALER)
                 if(dealerCount<=21 && userCount>21)
                     Log.d(tag, "Dealer won, user went over 21 ")
                 if(userCount<=21 && dealerCount>21)
@@ -142,15 +187,17 @@ class PlayActivity : AppCompatActivity() {
                     Log.d(tag, "Dealer won with score of: "+ dealerCount)
                 else if ((dealerCount< userCount)&& (userCount<=21))
                     Log.d(tag, "User won with score of: "+ userCount)
+                else if((dealerCount>21 && userCount>21))
+                    Log.d(tag, "It's a tie")
                 else if((dealerCount== userCount))
                     Log.d(tag, "It's a tie")
                 Log.d(tag, "Normal")
-                //Todo Make normal mode
 
             }
             "set_ai_hard_btn"->{
-                while (dealerCount<=12)
-                    hit("dealer")
+                //kinda cheating
+                while (dealerCount<userCount && userCount<=21)
+                    hit(DEALER)
                 if(dealerCount<=21 && userCount>21)
                     Log.d(tag, "Dealer won, user went over 21 ")
                 if(userCount<=21 && dealerCount>21)
@@ -161,8 +208,8 @@ class PlayActivity : AppCompatActivity() {
                     Log.d(tag, "User won with score of: "+ userCount)
                 else if((dealerCount== userCount))
                     Log.d(tag, "It's a tie")
+
                 Log.d(tag, "Hard")
-                //Todo Make hard mode
             }
         }
 
@@ -172,7 +219,7 @@ class PlayActivity : AppCompatActivity() {
     fun confirm()
     {
         when(!gameover){
-            true->{
+            true->{ //stand not pressed yet
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Are you sure you want to start a new game?");
                 builder.setTitle("New Game!")
@@ -183,12 +230,33 @@ class PlayActivity : AppCompatActivity() {
                 val alertDialog = builder.create()
                 alertDialog.show();
             }
-            false->{
+            false->{ // stand already pressed
                 reset()
             }
         }
 
 
+    }
+    private fun isAce(string: String, card: Card)
+    {
+
+        if(string.equals(USER)&& card.num==1){
+            userNumAces+=1
+        }
+        else if (string.equals(DEALER)&& card.num==1){
+            dealerNumAces+=1
+        }
+    }
+    private fun cardFormat(card: Card):String{
+        return deck.getNum(card)+ " of "+ deck.getSuit(card)
+        // 5 of Hearts or King of Diamonds format
+
+
+    }
+    private fun userVisibleTotal():Int
+    {
+        //users total minus their first card (the hidden one)
+        return (userCount-deck.getIterator(USER).next().num)
     }
 
     companion object{
@@ -196,6 +264,8 @@ class PlayActivity : AppCompatActivity() {
         var userCount=0 // holds score of user
         var dealerCount=0 //holds dealers score
         var gameover = false
+        var dealerNumAces=0
+        var userNumAces=0
     }
 
 
