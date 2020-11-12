@@ -4,6 +4,10 @@ import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.SeekBar
+import android.widget.TextView
+import android.widget.Toast
+import com.example.blackjack2020.Interfaces.ISettingRepository
 import com.example.blackjack2020.models.CardsModel
 import com.example.blackjack2020.models.SettingModel
 import com.google.gson.Gson
@@ -12,27 +16,58 @@ import kotlinx.android.synthetic.main.activity_play.*
 private var deck= CardsModel(CardRepository())
 
 class PlayActivity : AppCompatActivity() {
+    private var BetView: TextView? = null
+    private var BetBarView: SeekBar? = null
+
+    private var min = 5
+    private var max = 0
+    private var step = 5
+    private var currentBet = 5
+    private var newBalance = 0.0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
 
+
         var difficulty=""
         var backCard=""
+        var totalFunds = 0.0
         val options = intent.getStringExtra(MainActivity.LAUNCH_KEY)
         if (options!= null){
             val toSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
             difficulty = toSet.difficulty
             //ToDo: need to do the decimal stuff
-            play_cash.text = "Total Cash: $" + toSet.funds.toString()
+            totalFunds = toSet.funds
+            newBalance = totalFunds
+            play_cash.text = "Total Cash: $" + totalFunds.toString()
             backCard = toSet.card
+            max = toSet.funds.toInt()
+
         }
 
+        // Todo: The betting bar code
+        BetView = this.play_current_bet
+        BetBarView = this.play_betbar
+        BetBarView!!.max = (max -min)/ step
+        BetView!!.text = "Current Bet: $$min"
 
+        BetBarView?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean) {
+                currentBet = min + (progress* step)
+                BetView!!.text = "Current Bet: $$currentBet"
 
-        play_hit_btn.setOnClickListener { hit("user")  }
+            }
+            override fun onStartTrackingTouch(seek: SeekBar) {}
+            override fun onStopTrackingTouch(seek: SeekBar) {}
+        })
+
+        //end of betting bar code
+
+        play_hit_btn.setOnClickListener { hit("user", totalFunds, currentBet)  }
         deal()
-        play_new_game_btn.setOnClickListener{confirm()}
-        play_stand_btn.setOnClickListener{stand(difficulty)}
+        play_new_game_btn.setOnClickListener{confirm(newBalance)}
+        play_stand_btn.setOnClickListener{stand(difficulty,totalFunds, currentBet)}
 
 
 
@@ -69,7 +104,7 @@ class PlayActivity : AppCompatActivity() {
 
     }
 
-    fun hit(string: String){ //will allow a new card unless over score of 21
+    fun hit(string: String, totalFunds:Double, currentBet:Int){ //will allow a new card unless over score of 21
         if(string.equals("user")) {
             if (userCount <= 21) {
                 var newCard = deck.getRandomCard()
@@ -79,14 +114,15 @@ class PlayActivity : AppCompatActivity() {
 
                 var message = "Your new card is: " + deck.cardFormat(newCard)
                 Log.d(tag, message)
-            } else
+            } else{
                 Log.d(tag, "You've already lost")
+                lostBet(totalFunds, currentBet)
+            }
         }
         else{
                 var newCard = deck.getRandomCard()
                 deck.addToHand(newCard, string)
                 dealerCount += deck.getValue(newCard)
-
                 var message = "Dealers card is: " + deck.cardFormat(newCard)
                 Log.d(tag, message)
 
@@ -95,47 +131,88 @@ class PlayActivity : AppCompatActivity() {
     }
 
 
-    fun reset(){
+
+    fun dealerHit(string: String){
+        var newCard = deck.getRandomCard()
+        deck.addToHand(newCard, string)
+        dealerCount += deck.getValue(newCard)
+
+        var message = "Dealers card is: " + deck.cardFormat(newCard)
+        Log.d(tag, message)
+    }
+
+    fun reset(newBalance: Double){
         userCount=0
         dealerCount=0
         gameover=false
         deck.newGame()
+        max = newBalance.toInt()
+        Toast.makeText(this@PlayActivity, "Reset Cash: " + max.toString(), Toast.LENGTH_SHORT).show()
+        BetBarView!!.max = (max -min)/ step
         deal()
     }
 
 
 
 
-    fun stand(difficultyString:String){
+    fun stand(difficultyString:String,totalFunds: Double,currentBet: Int){
 
         Log.d(tag, "User Finished with score of: "+ userCount + "\n Dealers Turn")
         Log.d(tag, "Dealer count: "+ dealerCount)
-        //Log.d(tag, "Dealer cards are: " + deck.getHand("dealer"))
-        difficultyAI(difficultyString)
+        val winLose = difficultyAI(difficultyString)
+        when (winLose){
+            0-> wonBet(totalFunds,currentBet)
+            1-> lostBet(totalFunds,currentBet)
+
+        }
         gameover=true
     }
 
-    fun difficultyAI(level: String)
-    {
+    private fun lostBet(totalFunds: Double,currentBet: Int){
+        var newFun = totalFunds
+        newBalance = newFun - currentBet
+        play_cash.text = "Total Cash: $" + newBalance.toString()
+    }
+
+    fun wonBet(totalFunds: Double,currentBet: Int){
+        var newFun = totalFunds
+        newBalance = newFun + currentBet
+        play_cash.text = "Total Cash: $" + newBalance.toString()
+    }
+
+
+
+
+    fun difficultyAI(level: String): Int{
         when(level){
             "set_ai_easy_btn"->{
                     while (dealerCount<=12)
-                        hit("dealer")
-                    if(dealerCount<=21 && userCount>21)
+                        dealerHit("dealer")
+                    if(dealerCount<=21 && userCount>21) {
                         Log.d(tag, "Dealer won, user went over 21 ")
-                    if(userCount<=21 && dealerCount>21)
+                        return 1
+                    }
+                    if(userCount<=21 && dealerCount>21){
                         Log.d(tag, "User won, dealer went over 21 ")
-                    else if ((dealerCount> userCount)&& (dealerCount<=21))
+                        return 0
+                    }
+                    else if ((dealerCount> userCount)&& (dealerCount<=21)){
                         Log.d(tag, "Dealer won with score of: "+ dealerCount)
-                    else if ((dealerCount< userCount)&& (userCount<=21))
+                        return 1
+                    }
+                    else if ((dealerCount< userCount)&& (userCount<=21)){
                         Log.d(tag, "User won with score of: "+ userCount)
-                    else if((dealerCount== userCount))
+                        return 0
+                    }
+                    else if((dealerCount== userCount)){
                         Log.d(tag, "It's a tie")
+                        return 1
+                    }
                 Log.d(tag, "Easy")
             }
             "set_ai_normal_btn"->{
                 while (dealerCount<=12)
-                    hit("dealer")
+                    dealerHit("dealer")
                 if(dealerCount<=21 && userCount>21)
                     Log.d(tag, "Dealer won, user went over 21 ")
                 if(userCount<=21 && dealerCount>21)
@@ -152,7 +229,7 @@ class PlayActivity : AppCompatActivity() {
             }
             "set_ai_hard_btn"->{
                 while (dealerCount<=12)
-                    hit("dealer")
+                    dealerHit("dealer")
                 if(dealerCount<=21 && userCount>21)
                     Log.d(tag, "Dealer won, user went over 21 ")
                 if(userCount<=21 && dealerCount>21)
@@ -167,11 +244,10 @@ class PlayActivity : AppCompatActivity() {
                 //Todo Make hard mode
             }
         }
-
-
+    return 3
     }
 
-    fun confirm()
+    fun confirm(totalFunds:Double)
     {
         when(!gameover){
             true->{
@@ -180,13 +256,13 @@ class PlayActivity : AppCompatActivity() {
                 builder.setTitle("New Game!")
                 builder.setCancelable(false)
 
-                builder.setPositiveButton("Yes") { dialog, which -> reset() }
+                builder.setPositiveButton("Yes") { dialog, which -> reset(totalFunds) }
                 builder.setNegativeButton("No") { dialog, which -> dialog.cancel() }
                 val alertDialog = builder.create()
                 alertDialog.show();
             }
             false->{
-                reset()
+                reset(totalFunds)
             }
         }
 

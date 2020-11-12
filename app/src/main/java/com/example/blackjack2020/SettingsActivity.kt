@@ -38,11 +38,25 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
         }
 
         set_return_btn.setOnClickListener (this)
-
+        set_add_funds.setOnClickListener(this)
     }
+
 
     override fun onClick(view: View?) {
         when(view?.id){
+            R.id.set_add_funds -> {
+                var insertFunds = set_insert_funds.editableText.toString()
+                val fundsAdd = insertFunds.toDouble()
+                var currFund = set_curr_funds.text.toString()
+                val currFunAdd = currFund.toDouble()
+                val newFunds = fundsAdd + currFunAdd
+
+                set_curr_funds.text = newFunds.toString()
+                Toast.makeText(this, newFunds.toString(), Toast.LENGTH_SHORT).show()
+                set_insert_funds.editableText.clear()
+
+
+            }
             R.id.set_return_btn ->{
                 val intent = Intent()
                 var ai =""
@@ -71,9 +85,10 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
                 }
                 val name = set_profile_name.editableText.toString()
                 val music = set_music_sw.isChecked
-                val cash = 40.00
+                val cash = set_curr_funds.text.toString()
                 try{
-                    val setting = SettingModel(ai, card, name,cash, music)
+                    val totalCash = cash.toDouble()
+                    val setting = SettingModel(ai, card, name,totalCash, music)
                     val json = Gson().toJson(setting)
                     intent.putExtra(SETTING_EXTRA_KEY,json)
                     setResult(Activity.RESULT_OK,intent)

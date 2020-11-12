@@ -127,8 +127,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="24sp"
+            android:textSize="18sp"
             tools:text="@string/set_current_funds" />
+
+        <EditText
+            android:id="@+id/set_insert_funds"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName|numberDecimal"
+            android:textSize="18sp"
+            tools:text="@string/set_insert_funds" />
 
         <Button
             android:id="@+id/set_add_funds"

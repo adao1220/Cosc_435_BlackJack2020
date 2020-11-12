@@ -2,6 +2,8 @@ package com.example.blackjack2020
 
 import android.app.Activity
 import android.content.Intent
+import android.media.MediaPlayer
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.blackjack2020.Interfaces.ISettingRepository
@@ -12,11 +14,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), ISettingRepository {
     private lateinit var settingVar:ISettingRepository
+//    private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         settingVar = SettingRepository()
+
+//        mediaPlayer = MediaPlayer.create(this, Uri.parse(""))
 
         hp_play_btn.setOnClickListener{launchPlay()}
         hp_how_to_play_btn.setOnClickListener{launchHowToPlay()}

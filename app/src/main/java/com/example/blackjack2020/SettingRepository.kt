@@ -8,7 +8,7 @@ class SettingRepository: ISettingRepository {
     val set: MutableList<SettingModel> = mutableListOf()
     init {
         set.add(
-            SettingModel("set_ai_easy_btn", "cardface3", "Alex",30.00, true)
+            SettingModel("set_ai_easy_btn", "cardface3", "Alex",50.00, true)
         )
     }
 
