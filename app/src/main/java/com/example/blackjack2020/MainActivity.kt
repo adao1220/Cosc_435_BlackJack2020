@@ -23,6 +23,9 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
         hp_settings_btn.setOnClickListener{launchSettings()}
         hp_tips_btn.setOnClickListener{launchTipsNTricks()}
 
+
+
+
     }
 
     fun launchPlay() {

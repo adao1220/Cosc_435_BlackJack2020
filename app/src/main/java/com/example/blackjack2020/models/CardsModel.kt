@@ -80,5 +80,4 @@ class CardsModel(private val cardrepo: ICardRepository) {
     }
 
 
-
 }

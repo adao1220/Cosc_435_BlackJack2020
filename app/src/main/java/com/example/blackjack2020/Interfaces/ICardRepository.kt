@@ -16,7 +16,4 @@ interface ICardRepository {
     fun addToHand(card: Card, string: String)
     fun stand()
 
-
-
-
 }

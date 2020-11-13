@@ -1,17 +1,29 @@
 package com.example.blackjack2020
 
 import android.app.AlertDialog
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
+import com.example.blackjack2020.models.Card
 import com.example.blackjack2020.models.CardsModel
 import com.example.blackjack2020.models.SettingModel
+
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_play.*
 
+
 private var deck= CardsModel(CardRepository())
 
+
+
 class PlayActivity : AppCompatActivity() {
+    private lateinit var cardOneImage : ImageView
+    private lateinit var cardTwoImage : ImageView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
@@ -22,20 +34,23 @@ class PlayActivity : AppCompatActivity() {
         if (options!= null){
             val toSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
             difficulty = toSet.difficulty
-            backCard = toSet.card
+            backCard = toSet.card //string
         }
+        Log.d(tag, backCard)
 
-
+        this.cardOneImage = findViewById(R.id.card1)
+        //TODO change backcard to default card back onCreate
+        //cardOneImage.setImageResource(drawableResource)
 
         play_hit_btn.setOnClickListener { hit("user")  }
         deal()
         play_new_game_btn.setOnClickListener{confirm()}
         play_stand_btn.setOnClickListener{stand(difficulty)}
 
-
-
+        //this.cardOneImage = findViewById(R.id.card1)
 
     }
+
 
     fun deal(){ //can only "deal" from a full deck, if less than full you need a new game
         if(deck.count()==52) {
@@ -59,13 +74,91 @@ class PlayActivity : AppCompatActivity() {
             card2 = deck.getRandomCard()
             deck.addToHand(card2,"dealer")
             dealerCount += deck.getValue(card2)
-
             message =
                 "Dealers cards are: " + deck.cardFormat(card1) + " and " + deck.cardFormat(card2)
             Log.d(tag, message)
+            //*********
+            changeImage(card1)
+
         }
 
+
     }
+
+    fun changeImage(card: Card) {
+
+        val drawableResource = when(card.suit){
+            1 -> when(card.num){
+                1 -> R.drawable.ac
+                2 -> R.drawable.n2c
+                3 -> R.drawable.n3c
+                4 -> R.drawable.n4c
+                5 -> R.drawable.n5c
+                6 -> R.drawable.n6c
+                7 -> R.drawable.n7c
+                8 -> R.drawable.n8c
+                9 -> R.drawable.n9c
+                10 -> R.drawable.n10c
+                11 -> R.drawable.jc
+                12 -> R.drawable.qc
+                13 -> R.drawable.kc
+                else -> R.drawable.card_face_3 // TODO need to handle fail
+            }
+            2 -> when(card.num){
+                1 -> R.drawable.ad
+                2 -> R.drawable.n2d
+                3 -> R.drawable.n3d
+                4 -> R.drawable.n4d
+                5 -> R.drawable.n5d
+                6 -> R.drawable.n6d
+                7 -> R.drawable.n7d
+                8 -> R.drawable.n8d
+                9 -> R.drawable.n9d
+                10 -> R.drawable.n10d
+                11 -> R.drawable.jd
+                12 -> R.drawable.qd
+                13 -> R.drawable.kd
+                else -> R.drawable.card_face_3 // TODO need to handle fail
+            }
+            3 -> when(card.num){
+                1 -> R.drawable.ah
+                2 -> R.drawable.n2h
+                3 -> R.drawable.n3h
+                4 -> R.drawable.n4h
+                5 -> R.drawable.n5h
+                6 -> R.drawable.n6h
+                7 -> R.drawable.n7h
+                8 -> R.drawable.n8h
+                9 -> R.drawable.n9h
+                10 -> R.drawable.n10h
+                11 -> R.drawable.jh
+                12 -> R.drawable.qh
+                13 -> R.drawable.kh
+                else -> R.drawable.card_face_3 // TODO need to handle fail
+            }
+            3 -> when(card.num){
+                1 -> R.drawable.`as`
+                2 -> R.drawable.n2s
+                3 -> R.drawable.n3s
+                4 -> R.drawable.n4s
+                5 -> R.drawable.n5s
+                6 -> R.drawable.n6s
+                7 -> R.drawable.n7s
+                8 -> R.drawable.n8s
+                9 -> R.drawable.n9s
+                10 -> R.drawable.n10s
+                11 -> R.drawable.js
+                12 -> R.drawable.qs
+                13 -> R.drawable.ks
+                else -> R.drawable.card_face_3 // TODO need to handle fail
+            }
+            else -> R.drawable.card_face_3 // TODO need to handle fail
+        }
+        cardOneImage.setImageResource(drawableResource)
+        return
+    }
+
+
 
     fun hit(string: String){ //will allow a new card unless over score of 21
         if(string.equals("user")) {
@@ -191,12 +284,19 @@ class PlayActivity : AppCompatActivity() {
 
     }
 
+    fun getCardImage(int: Int){
+
+    }
+
     companion object{
         const val tag="test"
         var userCount=0 // holds score of user
         var dealerCount=0 //holds dealers score
         var gameover = false
     }
+
+
+
 
 
 //    Old Code
