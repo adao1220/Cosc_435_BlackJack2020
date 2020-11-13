@@ -32,7 +32,7 @@ class PlayActivity : AppCompatActivity() {
 
         var difficulty=""
         var backCard=""
-        var totalFunds = 0.0
+
         val options = intent.getStringExtra(MainActivity.LAUNCH_KEY)
         if (options!= null){
             val toSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
@@ -42,7 +42,7 @@ class PlayActivity : AppCompatActivity() {
             newBalance = totalFunds
             play_cash.text = "Total Cash: $" + totalFunds.toString()
             backCard = toSet.card
-            max = toSet.funds.toInt()
+            max = totalFunds.toInt()
 
         }
 
@@ -63,11 +63,11 @@ class PlayActivity : AppCompatActivity() {
         })
 
         //end of betting bar code
-
-        play_hit_btn.setOnClickListener { hit("user", totalFunds, currentBet)  }
+        //Todo refactor total funds
+        play_hit_btn.setOnClickListener { hit("user", currentBet)  }
         deal()
-        play_new_game_btn.setOnClickListener{confirm(newBalance)}
-        play_stand_btn.setOnClickListener{stand(difficulty,totalFunds, currentBet)}
+        play_new_game_btn.setOnClickListener{confirm()}
+        play_stand_btn.setOnClickListener{stand(difficulty, currentBet)}
 
 
 
@@ -104,7 +104,7 @@ class PlayActivity : AppCompatActivity() {
 
     }
 
-    fun hit(string: String, totalFunds:Double, currentBet:Int){ //will allow a new card unless over score of 21
+    fun hit(string: String, currentBet:Int){ //will allow a new card unless over score of 21
         if(string.equals("user")) {
             if (userCount <= 21) {
                 var newCard = deck.getRandomCard()
@@ -116,7 +116,7 @@ class PlayActivity : AppCompatActivity() {
                 Log.d(tag, message)
             } else{
                 Log.d(tag, "You've already lost")
-                lostBet(totalFunds, currentBet)
+                lostBet(currentBet)
             }
         }
         else{
@@ -141,21 +141,12 @@ class PlayActivity : AppCompatActivity() {
         Log.d(tag, message)
     }
 
-    fun reset(newBalance: Double){
-        userCount=0
-        dealerCount=0
-        gameover=false
-        deck.newGame()
-        max = newBalance.toInt()
-        Toast.makeText(this@PlayActivity, "Reset Cash: " + max.toString(), Toast.LENGTH_SHORT).show()
-        BetBarView!!.max = (max -min)/ step
-        deal()
-    }
 
 
 
 
-    fun stand(difficultyString:String,totalFunds: Double,currentBet: Int){
+
+    fun stand(difficultyString:String,currentBet: Int){
 
         Log.d(tag, "User Finished with score of: "+ userCount + "\n Dealers Turn")
         Log.d(tag, "Dealer count: "+ dealerCount)
@@ -163,23 +154,23 @@ class PlayActivity : AppCompatActivity() {
         play_stand_btn.isClickable = false
         val winLose = difficultyAI(difficultyString)
         when (winLose){
-            0-> wonBet(totalFunds,currentBet)
-            1-> lostBet(totalFunds,currentBet)
+            0-> wonBet(currentBet)
+            1-> lostBet(currentBet)
 
         }
         gameover=true
     }
 
-    private fun lostBet(totalFunds: Double,currentBet: Int){
+    private fun lostBet(currentBet: Int){
         var newFun = totalFunds
-        newBalance = newFun - currentBet
-        play_cash.text = "Total Cash: $" + newBalance.toString()
+        totalFunds = newFun - currentBet
+        play_cash.text = "Total Cash: $" + totalFunds.toString()
     }
 
-    fun wonBet(totalFunds: Double,currentBet: Int){
+    fun wonBet(currentBet: Int){
         var newFun = totalFunds
-        newBalance = newFun + currentBet
-        play_cash.text = "Total Cash: $" + newBalance.toString()
+        totalFunds = newFun + currentBet
+        play_cash.text = "Total Cash: $" + totalFunds.toString()
     }
 
 
@@ -248,8 +239,20 @@ class PlayActivity : AppCompatActivity() {
         }
     return 3
     }
-
-    fun confirm(totalFunds:Double)
+    fun reset(){
+        userCount=0
+        play_hit_btn.isClickable = true
+        play_stand_btn.isClickable = true
+        dealerCount=0
+        gameover=false
+        deck.newGame()
+        max = totalFunds.toInt()
+        //totalFunds=max.toDouble()
+        Toast.makeText(this@PlayActivity, "Reset Cash: " + max.toString(), Toast.LENGTH_SHORT).show()
+        BetBarView!!.max = (max -min)/ step
+        deal()
+    }
+    fun confirm()
     {
         when(!gameover){
             true->{
@@ -258,13 +261,13 @@ class PlayActivity : AppCompatActivity() {
                 builder.setTitle("New Game!")
                 builder.setCancelable(false)
 
-                builder.setPositiveButton("Yes") { dialog, which -> reset(totalFunds) }
+                builder.setPositiveButton("Yes") { dialog, which -> reset() }
                 builder.setNegativeButton("No") { dialog, which -> dialog.cancel() }
                 val alertDialog = builder.create()
                 alertDialog.show();
             }
             false->{
-                reset(totalFunds)
+                reset()
             }
         }
 

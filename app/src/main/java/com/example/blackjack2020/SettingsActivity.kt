@@ -33,7 +33,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
                 "cardface3" -> cardface3.isChecked = true
             }
             set_profile_name.setText(toSet.profileName)
-            set_curr_funds.text = toSet.funds.toString()
+            set_curr_funds.text = totalFunds.toString()
             set_music_sw.isChecked = toSet.music
             set_insert_funds.setText("0")
         }

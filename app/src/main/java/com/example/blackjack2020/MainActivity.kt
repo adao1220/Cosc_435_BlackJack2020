@@ -11,7 +11,7 @@ import com.example.blackjack2020.Interfaces.ISettingRepository
 import com.example.blackjack2020.models.SettingModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
-
+var totalFunds=25.0
 class MainActivity : AppCompatActivity(), ISettingRepository {
     private lateinit var settingVar:ISettingRepository
 //    private var mediaPlayer: MediaPlayer? = null
