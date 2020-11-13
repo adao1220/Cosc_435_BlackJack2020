@@ -35,6 +35,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
             set_profile_name.setText(toSet.profileName)
             set_curr_funds.text = toSet.funds.toString()
             set_music_sw.isChecked = toSet.music
+            set_insert_funds.setText("0")
         }
 
         set_return_btn.setOnClickListener (this)
@@ -53,8 +54,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
 
                 set_curr_funds.text = newFunds.toString()
                 Toast.makeText(this, newFunds.toString(), Toast.LENGTH_SHORT).show()
-                set_insert_funds.editableText.clear()
-
+                set_insert_funds.setText("0")
 
             }
             R.id.set_return_btn ->{

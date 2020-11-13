@@ -159,6 +159,8 @@ class PlayActivity : AppCompatActivity() {
 
         Log.d(tag, "User Finished with score of: "+ userCount + "\n Dealers Turn")
         Log.d(tag, "Dealer count: "+ dealerCount)
+        play_hit_btn.isClickable = false
+        play_stand_btn.isClickable = false
         val winLose = difficultyAI(difficultyString)
         when (winLose){
             0-> wonBet(totalFunds,currentBet)
