@@ -2,21 +2,28 @@ package com.example.blackjack2020
 
 import android.app.Activity
 import android.content.Intent
+import android.media.MediaPlayer
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.blackjack2020.Interfaces.ISettingRepository
 //import com.example.blackjack2020.interfaces.ISettingRepository
 import com.example.blackjack2020.models.SettingModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
-
+var totalFunds=25.0
 class MainActivity : AppCompatActivity(), ISettingRepository {
     private lateinit var settingVar:ISettingRepository
+//    private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         settingVar = SettingRepository()
+
+//        mediaPlayer = MediaPlayer.create(this, Uri.parse(""))
 
         hp_play_btn.setOnClickListener{launchPlay()}
         hp_how_to_play_btn.setOnClickListener{launchHowToPlay()}
@@ -29,11 +36,18 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
     }
 
     fun launchPlay() {
-        val getSet = settingVar.getSetting(index)
-        val json = Gson().toJson(getSet)
-        val intent = Intent(this, PlayActivity::class.java)
-        intent.putExtra(LAUNCH_KEY, json)
-        startActivityForResult(intent, SETTINGS_REQUEST_CODE)
+        if (totalFunds <=0 ){
+            Toast.makeText(this@MainActivity, "HA, you are poor... You cant play", Toast.LENGTH_SHORT).show()
+
+        }else{
+            val getSet = settingVar.getSetting(index)
+            val json = Gson().toJson(getSet)
+            val intent = Intent(this, PlayActivity::class.java)
+            intent.putExtra(LAUNCH_KEY, json)
+            startActivityForResult(intent, SETTINGS_REQUEST_CODE)
+            finish()
+        }
+
     }
 
     fun launchHowToPlay(){
