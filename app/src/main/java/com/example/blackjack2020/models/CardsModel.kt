@@ -8,10 +8,12 @@ import kotlin.random.Random
 
 class CardsModel(private val cardrepo: ICardRepository) {
     fun getValue(card:Card):Int{
-        if(card.num<10)
-            return card.num //will return 1-9
-        else
-            return 10 //will return 10,J,Q,K
+        return cardrepo.getValue(card)
+
+//        if(card.num<10)
+//            return card.num //will return 1-9
+//        else
+//            return 10 //will return 10,J,Q,K
 
         //doesnt account for ace being worth 11 yet
     }
@@ -20,6 +22,7 @@ class CardsModel(private val cardrepo: ICardRepository) {
 
        return cardrepo.getRandomCard()
     }
+
     fun newGame(){
         cardrepo.newGame()
     }
