@@ -6,23 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".PlayActivity">
 
+    <ImageView
+        android:id="@+id/dealer_card_2"
+        android:layout_width="75dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="8dp"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/dealer_card_1"
+        app:srcCompat="@drawable/card_face_3"
+        tools:layout_editor_absoluteY="90dp" />
+
     <TextView
         android:id="@+id/play_my_hand"
         android:layout_width="314dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="156dp"
         android:text="Hellome"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/play_betbar"
+        app:layout_constraintBottom_toTopOf="@+id/play_score"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.628"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="PlayersHand" />
 
     <TextView
         android:id="@+id/play_ai_hand"
-        android:layout_width="318dp"
-        android:layout_height="85dp"
+        android:layout_width="253dp"
+        android:layout_height="47dp"
         android:layout_marginTop="30dp"
         android:text="Hellome"
         android:textSize="24sp"
@@ -115,28 +124,40 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/card1"
-        android:layout_width="100dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="101dp"
-        android:layout_marginBottom="72dp"
-        app:layout_constraintBottom_toBottomOf="@+id/play_my_hand"
+        android:id="@+id/dealer_card_1"
+        android:layout_width="75dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/play_ai_hand"
-        app:srcCompat="@drawable/card_face_3" />
+        app:srcCompat="@drawable/card_face_3"
+        tools:layout_editor_absoluteY="90dp" />
 
     <ImageView
-        android:id="@+id/card2"
-        android:layout_width="100dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="73dp"
-        app:layout_constraintBottom_toBottomOf="@+id/play_my_hand"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/play_ai_hand"
-        app:srcCompat="@drawable/card_face_3" />
+        android:id="@+id/dealer_card_3"
+        android:layout_width="75dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/dealer_card_2"
+        app:srcCompat="@drawable/card_face_3"
+        tools:layout_editor_absoluteY="90dp" />
+
+    <ImageView
+        android:id="@+id/dealer_card_4"
+        android:layout_width="75dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/dealer_card_3"
+        app:srcCompat="@drawable/card_face_3"
+        tools:layout_editor_absoluteY="90dp" />
+
+    <ImageView
+        android:id="@+id/dealer_card_5"
+        android:layout_width="75dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@+id/dealer_card_4"
+        app:srcCompat="@drawable/card_face_3"
+        tools:layout_editor_absoluteY="90dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

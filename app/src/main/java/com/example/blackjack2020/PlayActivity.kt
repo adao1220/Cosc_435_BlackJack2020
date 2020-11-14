@@ -1,13 +1,10 @@
 package com.example.blackjack2020
 
 import android.app.AlertDialog
-import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
 import com.example.blackjack2020.models.Card
 import com.example.blackjack2020.models.CardsModel
 import com.example.blackjack2020.models.SettingModel
@@ -21,7 +18,7 @@ private var deck= CardsModel(CardRepository())
 
 
 class PlayActivity : AppCompatActivity() {
-    private lateinit var cardOneImage : ImageView
+    private lateinit var cardImage : ImageView
     private lateinit var cardTwoImage : ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +35,7 @@ class PlayActivity : AppCompatActivity() {
         }
         Log.d(tag, backCard)
 
-        this.cardOneImage = findViewById(R.id.card1)
+        this.cardImage = findViewById(R.id.dealer_card_1)
         //TODO change backcard to default card back onCreate
         //cardOneImage.setImageResource(drawableResource)
 
@@ -48,7 +45,7 @@ class PlayActivity : AppCompatActivity() {
         play_stand_btn.setOnClickListener{stand(difficulty)}
 
         //this.cardOneImage = findViewById(R.id.card1)
-
+        this.cardImage.visibility
     }
 
 
@@ -154,7 +151,7 @@ class PlayActivity : AppCompatActivity() {
             }
             else -> R.drawable.card_face_3 // TODO need to handle fail
         }
-        cardOneImage.setImageResource(drawableResource)
+        cardImage.setImageResource(drawableResource)
         return
     }
 
