@@ -279,6 +279,10 @@ class PlayActivity : AppCompatActivity() {
                 lostBet(currentBet)
 
             }
+            if(userCount>21)
+            {
+                play_hit_btn.isClickable = false
+            }
         }
         else{
                 var newCard = deck.getRandomCard()
