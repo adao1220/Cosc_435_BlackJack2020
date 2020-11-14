@@ -52,14 +52,13 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
                 val newFunds = fundsAdd + currFunAdd
 
                 set_curr_funds.text = newFunds.toString()
-                Toast.makeText(this, newFunds.toString(), Toast.LENGTH_SHORT).show()
                 set_insert_funds.setText("0")
 
             }
             R.id.set_return_btn ->{
                 val intent = Intent()
                 var ai =""
-                var card = "heh"
+                var card = ""
                 when(aiGroup.checkedRadioButtonId){
                     R.id.set_ai_easy_btn-> {
                          ai = "set_ai_easy_btn"
@@ -87,6 +86,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
                 val cash = set_curr_funds.text.toString()
                 try{
                     val totalCash = cash.toDouble()
+                    totalFunds = totalCash
                     val setting = SettingModel(ai, card, name,totalCash, music)
                     val json = Gson().toJson(setting)
                     intent.putExtra(SETTING_EXTRA_KEY,json)

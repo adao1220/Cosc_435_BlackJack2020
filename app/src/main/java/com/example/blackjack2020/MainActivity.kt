@@ -71,8 +71,8 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
-            SETTINGS_REQUEST_CODE ->{
-                when(resultCode) {
+                    SETTINGS_REQUEST_CODE ->{
+                        when(resultCode) {
                     Activity.RESULT_OK -> {
                         val json = data?.getStringExtra(SettingsActivity.SETTING_EXTRA_KEY)
                         when(json){

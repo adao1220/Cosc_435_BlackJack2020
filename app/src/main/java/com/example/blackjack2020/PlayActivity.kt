@@ -123,7 +123,7 @@ class PlayActivity : AppCompatActivity() {
             card1 = deck.getRandomCard()
             isAce(DEALER, card1)
             deck.addToHand(card1,"dealer")
-            dealerCount += deck.getValue(card2)
+            dealerCount += deck.getValue(card1)
             this.cardImage = findViewById(R.id.dealer_card_1)
             changeImage(card1)
             card2 = deck.getRandomCard()
