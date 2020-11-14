@@ -42,7 +42,6 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
         set_add_funds.setOnClickListener(this)
     }
 
-
     override fun onClick(view: View?) {
         when(view?.id){
             R.id.set_add_funds -> {

@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         settingVar = SettingRepository()
 
 //        mediaPlayer = MediaPlayer.create(this, Uri.parse(""))
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
         val intent = Intent(this, PlayActivity::class.java)
         intent.putExtra(LAUNCH_KEY, json)
         startActivityForResult(intent, SETTINGS_REQUEST_CODE)
+        finish()
     }
 
     fun launchHowToPlay(){
