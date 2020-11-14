@@ -6,6 +6,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.blackjack2020.Interfaces.ISettingRepository
 //import com.example.blackjack2020.interfaces.ISettingRepository
 import com.example.blackjack2020.models.SettingModel
@@ -32,12 +33,18 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
     }
 
     fun launchPlay() {
-        val getSet = settingVar.getSetting(index)
-        val json = Gson().toJson(getSet)
-        val intent = Intent(this, PlayActivity::class.java)
-        intent.putExtra(LAUNCH_KEY, json)
-        startActivityForResult(intent, SETTINGS_REQUEST_CODE)
-        finish()
+        if (totalFunds <=0 ){
+            Toast.makeText(this@MainActivity, "HA, you are poor... You cant play", Toast.LENGTH_SHORT).show()
+
+        }else{
+            val getSet = settingVar.getSetting(index)
+            val json = Gson().toJson(getSet)
+            val intent = Intent(this, PlayActivity::class.java)
+            intent.putExtra(LAUNCH_KEY, json)
+            startActivityForResult(intent, SETTINGS_REQUEST_CODE)
+            finish()
+        }
+
     }
 
     fun launchHowToPlay(){

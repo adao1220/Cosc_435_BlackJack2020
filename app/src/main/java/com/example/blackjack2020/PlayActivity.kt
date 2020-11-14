@@ -243,7 +243,7 @@ class PlayActivity : AppCompatActivity() {
     return 3
     }
     fun reset(){
-        if(totalFunds < 5.0){
+        if(totalFunds <= 0.0){
             play_hit_btn.isClickable = false
             play_stand_btn.isClickable = false
             play_new_game_btn.isClickable = false
