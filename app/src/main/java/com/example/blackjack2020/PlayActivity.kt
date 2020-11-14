@@ -19,6 +19,8 @@ import kotlinx.android.synthetic.main.activity_play.*
 
 
 private var deck= CardsModel(CardRepository())
+const val USER="user"
+const val DEALER="dealer"
 
 class PlayActivity : AppCompatActivity() {
     private lateinit var cardImage : ImageView
@@ -345,42 +347,61 @@ class PlayActivity : AppCompatActivity() {
 
 
 
-    fun difficultyAI(level: String)
+    fun difficultyAI(level: String): Int
     {
         when(level){
             "set_ai_easy_btn"->{
                 while (dealerCount<=12)
                     dealerHit("Dealer")
-                if(dealerCount<=21 && userCount>21)
+                if(dealerCount<=21 && userCount>21){
                     Log.d(tag, "Dealer won, user went over 21 ")
-                if(userCount<=21 && dealerCount>21)
+                    return 1
+                }
+                if(userCount<=21 && dealerCount>21){
                     Log.d(tag, "User won, dealer went over 21 ")
-                else if ((dealerCount> userCount)&& (dealerCount<=21))
+                    return 0
+                }
+                else if ((dealerCount> userCount)&& (dealerCount<=21)){
                     Log.d(tag, "Dealer won with score of: "+ dealerCount)
-                else if ((dealerCount< userCount)&& (userCount<=21))
+                    return 1
+                }
+                else if ((dealerCount< userCount)&& (userCount<=21)) {
                     Log.d(tag, "User won with score of: "+ userCount)
-                else if((dealerCount>21 && userCount>21))
+                    return 0
+                }
+                else if((dealerCount>21 && userCount>21)){
                     Log.d(tag, "It's a tie")
-                else if((dealerCount== userCount))
+                    return 1
+                }
+                else if((dealerCount== userCount)){
                     Log.d(tag, "It's a tie")
+                    return 1
+                }
                 Log.d(tag, "Easy")
             }
             "set_ai_normal_btn"->{
 
                 while ((dealerCount<15 || userVisibleTotal()> dealerCount) && userVisibleTotal()<19)
                     dealerHit("Dealer")
-                if(dealerCount<=21 && userCount>21)
+                if(dealerCount<=21 && userCount>21){
                     Log.d(tag, "Dealer won, user went over 21 ")
-                if(userCount<=21 && dealerCount>21)
+                }
+                if(userCount<=21 && dealerCount>21){
                     Log.d(tag, "User won, dealer went over 21 ")
-                else if ((dealerCount> userCount)&& (dealerCount<=21))
+                }
+                else if ((dealerCount> userCount)&& (dealerCount<=21)){
                     Log.d(tag, "Dealer won with score of: "+ dealerCount)
-                else if ((dealerCount< userCount)&& (userCount<=21))
+                }
+                else if ((dealerCount< userCount)&& (userCount<=21)){
                     Log.d(tag, "User won with score of: "+ userCount)
-                else if((dealerCount>21 && userCount>21))
+                }
+                else if((dealerCount>21 && userCount>21)){
                     Log.d(tag, "It's a tie")
-                else if((dealerCount== userCount))
+                }
+                else if((dealerCount== userCount)){
                     Log.d(tag, "It's a tie")
+
+                }
                 Log.d(tag, "Normal")
 
             }
@@ -402,11 +423,10 @@ class PlayActivity : AppCompatActivity() {
                 Log.d(tag, "Hard")
             }
         }
-
+        return 3
 
     }
-    private fun userVisibleTotal():Int
-    {
+    private fun userVisibleTotal():Int {
         //users total minus their first card (the hidden one)
         return (userCount-deck.getIterator(USER).next().num)
     }

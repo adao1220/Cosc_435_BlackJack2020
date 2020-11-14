@@ -15,5 +15,7 @@ interface ICardRepository {
     fun getHand(string: String)
     fun addToHand(card: Card, string: String)
     fun stand()
+    fun getIterator(string: String): MutableIterator<Card>
+
 
 }

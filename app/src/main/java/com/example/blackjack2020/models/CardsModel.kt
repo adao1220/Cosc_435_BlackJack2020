@@ -1,7 +1,9 @@
 package com.example.blackjack2020.models
 
 import com.example.blackjack2020.CardRepository
+import com.example.blackjack2020.DEALER
 import com.example.blackjack2020.Interfaces.ICardRepository
+import com.example.blackjack2020.USER
 import kotlin.random.Random
 
 class CardsModel(private val cardrepo: ICardRepository) {
@@ -79,5 +81,10 @@ class CardsModel(private val cardrepo: ICardRepository) {
         return cardrepo.getCount()
     }
 
-
+    fun getIterator(string: String): MutableIterator<Card> {
+        when (string) {
+            USER -> return cardrepo.getIterator(USER)
+            else -> return cardrepo.getIterator(DEALER)
+        }
+    }
 }

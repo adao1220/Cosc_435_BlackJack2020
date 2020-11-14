@@ -17,6 +17,14 @@ class CardRepository :ICardRepository{
         cards.addAll((1..13).map{ Card(4,"$it".toInt()) }) //spades
 
     }
+
+    override fun getIterator(string: String): MutableIterator<Card> {
+        when(string){
+            USER->return userHand.iterator()
+            else-> return dealerHand.iterator()
+        }
+    }
+
     override fun getValue(card:Card):Int{
         if(card.num<10)
             return card.num //will return 1-9
