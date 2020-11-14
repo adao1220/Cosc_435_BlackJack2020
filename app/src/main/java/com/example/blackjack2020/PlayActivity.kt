@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import com.example.blackjack2020.models.Card
 import com.example.blackjack2020.models.CardsModel
@@ -19,7 +20,8 @@ private var deck= CardsModel(CardRepository())
 
 class PlayActivity : AppCompatActivity() {
     private lateinit var cardImage : ImageView
-    private lateinit var cardTwoImage : ImageView
+    private var numPlayerCards : Int = 2
+    private var numDealerCards : Int = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +47,7 @@ class PlayActivity : AppCompatActivity() {
         play_stand_btn.setOnClickListener{stand(difficulty)}
 
         //this.cardOneImage = findViewById(R.id.card1)
-        this.cardImage.visibility
+
     }
 
 
@@ -54,9 +56,13 @@ class PlayActivity : AppCompatActivity() {
             //******USER********
             var card1 = deck.getRandomCard()
             deck.addToHand(card1,"user")
+            this.cardImage = findViewById(R.id.player_card_1)
+            changeImage(card1)
             userCount = deck.getValue(card1)
             var card2 = deck.getRandomCard()
             deck.addToHand(card2,"user")
+            this.cardImage = findViewById(R.id.player_card_2)
+            changeImage(card2)
             userCount += deck.getValue(card2)
             play_score.text= userCount.toString()
             var message =
@@ -67,15 +73,18 @@ class PlayActivity : AppCompatActivity() {
             card1 = deck.getRandomCard()
             deck.addToHand(card1,"dealer")
             dealerCount += deck.getValue(card2)
-
+            this.cardImage = findViewById(R.id.dealer_card_1)
+            changeImage(card1)
             card2 = deck.getRandomCard()
             deck.addToHand(card2,"dealer")
             dealerCount += deck.getValue(card2)
+//            this.cardImage = findViewById(R.id.dealer_card_2)
+//            changeImage(card2)
             message =
                 "Dealers cards are: " + deck.cardFormat(card1) + " and " + deck.cardFormat(card2)
             Log.d(tag, message)
             //*********
-            changeImage(card1)
+
 
         }
 
@@ -162,6 +171,29 @@ class PlayActivity : AppCompatActivity() {
             if (userCount <= 21) {
                 var newCard = deck.getRandomCard()
                 deck.addToHand(newCard, string)
+                when(numPlayerCards){
+                    2 -> {
+                        this.cardImage = findViewById(R.id.player_card_3)
+                        this.cardImage.visibility = View.VISIBLE
+                        numPlayerCards ++
+                    }
+                    3 -> {
+                        this.cardImage = findViewById(R.id.player_card_4)
+                        this.cardImage.visibility = View.VISIBLE
+                        numPlayerCards ++
+                    }
+                    4 -> {
+                        this.cardImage = findViewById(R.id.player_card_5)
+                        this.cardImage.visibility = View.VISIBLE
+                        numPlayerCards ++
+                    }
+                    else -> {
+                        Log.d(tag, "No more cards to flip")
+                    }
+
+                }
+                changeImage(newCard)
+
                 userCount += deck.getValue(newCard)
                 play_score.text= userCount.toString()
 
@@ -189,6 +221,13 @@ class PlayActivity : AppCompatActivity() {
         gameover=false
         deck.newGame()
         deal()
+        numPlayerCards = 2
+        this.cardImage = findViewById(R.id.player_card_3)
+        this.cardImage.visibility = View.INVISIBLE
+        this.cardImage = findViewById(R.id.player_card_4)
+        this.cardImage.visibility = View.INVISIBLE
+        this.cardImage = findViewById(R.id.player_card_5)
+        this.cardImage.visibility = View.INVISIBLE
     }
 
 
