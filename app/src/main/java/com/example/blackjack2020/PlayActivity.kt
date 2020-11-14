@@ -22,6 +22,7 @@ private var deck= CardsModel(CardRepository())
 
 class PlayActivity : AppCompatActivity() {
     private lateinit var cardImage : ImageView
+    private lateinit var backcardImage : ImageView
     private var numPlayerCards : Int = 2
     private var numDealerCards : Int = 2
 
@@ -33,7 +34,7 @@ class PlayActivity : AppCompatActivity() {
     private var step = 5
     private var currentBet = 5
     private var newBalance = 0.0
-
+    private var backCard=""
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
@@ -44,7 +45,7 @@ class PlayActivity : AppCompatActivity() {
         setContentView(R.layout.activity_play)
 
         var difficulty=""
-        var backCard=""
+
 
 
         val options = intent.getStringExtra(MainActivity.LAUNCH_KEY)
@@ -58,6 +59,14 @@ class PlayActivity : AppCompatActivity() {
             backCard = FromSet.card
             max = totalFunds.toInt()
         }
+        //Log.d(tag, backCard)
+
+
+
+
+
+
+        //this.backcardImage = findViewById(R.id.dealer_card_2)
 
         this.cardImage = findViewById(R.id.dealer_card_1)
         //TODO change backcard to default card back onCreate
@@ -114,8 +123,22 @@ class PlayActivity : AppCompatActivity() {
             card2 = deck.getRandomCard()
             deck.addToHand(card2,"dealer")
             dealerCount += deck.getValue(card2)
-//            this.cardImage = findViewById(R.id.dealer_card_2)
-//            changeImage(card2)
+            this.cardImage = findViewById(R.id.dealer_card_2)
+            changeImage(card2)
+            when(backCard){
+                "cardface1"->{
+                    Log.d(tag, " 1. Dealer second selected!")
+                    cardImage.setImageResource(R.drawable.card_face_1)
+                }
+                "cardface2"->{
+                    Log.d(tag, " 2. Dealer second selected!")
+                    cardImage.setImageResource(R.drawable.card_face_2)                }
+                "cardface3"->{
+                    Log.d(tag, " 3. Dealer second selected!")
+                    cardImage.setImageResource(R.drawable.card_face_3)                }
+            }
+
+
             message =
                 "Dealers cards are: " + deck.cardFormat(card1) + " and " + deck.cardFormat(card2)
             Log.d(tag, message)
@@ -144,7 +167,7 @@ class PlayActivity : AppCompatActivity() {
                 11 -> R.drawable.jc
                 12 -> R.drawable.qc
                 13 -> R.drawable.kc
-                else -> R.drawable.card_face_3 // TODO need to handle fail
+                else -> R.drawable.card_face_1 // TODO need to handle fail
             }
             2 -> when(card.num){
                 1 -> R.drawable.ad
@@ -160,7 +183,7 @@ class PlayActivity : AppCompatActivity() {
                 11 -> R.drawable.jd
                 12 -> R.drawable.qd
                 13 -> R.drawable.kd
-                else -> R.drawable.card_face_3 // TODO need to handle fail
+                else -> R.drawable.card_face_1 // TODO need to handle fail
             }
             3 -> when(card.num){
                 1 -> R.drawable.ah
@@ -176,9 +199,9 @@ class PlayActivity : AppCompatActivity() {
                 11 -> R.drawable.jh
                 12 -> R.drawable.qh
                 13 -> R.drawable.kh
-                else -> R.drawable.card_face_3 // TODO need to handle fail
+                else -> R.drawable.card_face_1 // TODO need to handle fail
             }
-            3 -> when(card.num){
+            4 -> when(card.num){
                 1 -> R.drawable.`as`
                 2 -> R.drawable.n2s
                 3 -> R.drawable.n3s
@@ -192,9 +215,9 @@ class PlayActivity : AppCompatActivity() {
                 11 -> R.drawable.js
                 12 -> R.drawable.qs
                 13 -> R.drawable.ks
-                else -> R.drawable.card_face_3 // TODO need to handle fail
+                else -> R.drawable.card_face_1 // TODO need to handle fail
             }
-            else -> R.drawable.card_face_3 // TODO need to handle fail
+            else -> R.drawable.card_face_1 // TODO need to handle fail
         }
         cardImage.setImageResource(drawableResource)
         return
@@ -255,13 +278,36 @@ class PlayActivity : AppCompatActivity() {
 
 
     fun dealerHit(string: String){
-        var newCard = deck.getRandomCard()
-        deck.addToHand(newCard, string)
-        dealerCount += deck.getValue(newCard)
+            var newCard = deck.getRandomCard()
+            deck.addToHand(newCard, string)
+            when (numDealerCards) {
+                2 -> {
+                    this.cardImage = findViewById(R.id.dealer_card_3)
+                    this.cardImage.visibility = View.VISIBLE
+                    numDealerCards++
+                }
+                3 -> {
+                    this.cardImage = findViewById(R.id.dealer_card_4)
+                    this.cardImage.visibility = View.VISIBLE
+                    numDealerCards++
+                }
+                4 -> {
+                    this.cardImage = findViewById(R.id.dealer_card_5)
+                    this.cardImage.visibility = View.VISIBLE
+                    numDealerCards++
+                }
+                else -> {
+                    Log.d(tag, "No more cards to flip")
+                }
 
-        var message = "Dealers card is: " + deck.cardFormat(newCard)
-        Log.d(tag, message)
-    }
+            }
+            changeImage(newCard)
+
+            dealerCount += deck.getValue(newCard)
+
+            var message = "Dealers card is: " + deck.cardFormat(newCard)
+            Log.d(tag, message)
+        }
 
 
 
@@ -299,65 +345,70 @@ class PlayActivity : AppCompatActivity() {
 
 
 
-    fun difficultyAI(level: String): Int{
+    fun difficultyAI(level: String)
+    {
         when(level){
-            "set_ai_easy_btn" -> {
-                while (dealerCount <= 12)
-                    dealerHit("dealer")
-                if (dealerCount <= 21 && userCount > 21) {
+            "set_ai_easy_btn"->{
+                while (dealerCount<=12)
+                    dealerHit("Dealer")
+                if(dealerCount<=21 && userCount>21)
                     Log.d(tag, "Dealer won, user went over 21 ")
-                    return 1
-                }
-                if (userCount <= 21 && dealerCount > 21) {
+                if(userCount<=21 && dealerCount>21)
                     Log.d(tag, "User won, dealer went over 21 ")
-                    return 0
-                } else if ((dealerCount > userCount) && (dealerCount <= 21)) {
-                    Log.d(tag, "Dealer won with score of: " + dealerCount)
-                    return 1
-                } else if ((dealerCount < userCount) && (userCount <= 21)) {
-                    Log.d(tag, "User won with score of: " + userCount)
-                    return 0
-                } else if ((dealerCount == userCount)) {
+                else if ((dealerCount> userCount)&& (dealerCount<=21))
+                    Log.d(tag, "Dealer won with score of: "+ dealerCount)
+                else if ((dealerCount< userCount)&& (userCount<=21))
+                    Log.d(tag, "User won with score of: "+ userCount)
+                else if((dealerCount>21 && userCount>21))
                     Log.d(tag, "It's a tie")
-                    return 1
-                }
+                else if((dealerCount== userCount))
+                    Log.d(tag, "It's a tie")
                 Log.d(tag, "Easy")
             }
-            "set_ai_normal_btn" -> {
-                while (dealerCount <= 12)
-                    dealerHit("dealer")
-                if (dealerCount <= 21 && userCount > 21)
+            "set_ai_normal_btn"->{
+
+                while ((dealerCount<15 || userVisibleTotal()> dealerCount) && userVisibleTotal()<19)
+                    dealerHit("Dealer")
+                if(dealerCount<=21 && userCount>21)
                     Log.d(tag, "Dealer won, user went over 21 ")
-                if (userCount <= 21 && dealerCount > 21)
+                if(userCount<=21 && dealerCount>21)
                     Log.d(tag, "User won, dealer went over 21 ")
-                else if ((dealerCount > userCount) && (dealerCount <= 21))
-                    Log.d(tag, "Dealer won with score of: " + dealerCount)
-                else if ((dealerCount < userCount) && (userCount <= 21))
-                    Log.d(tag, "User won with score of: " + userCount)
-                else if ((dealerCount == userCount))
+                else if ((dealerCount> userCount)&& (dealerCount<=21))
+                    Log.d(tag, "Dealer won with score of: "+ dealerCount)
+                else if ((dealerCount< userCount)&& (userCount<=21))
+                    Log.d(tag, "User won with score of: "+ userCount)
+                else if((dealerCount>21 && userCount>21))
+                    Log.d(tag, "It's a tie")
+                else if((dealerCount== userCount))
                     Log.d(tag, "It's a tie")
                 Log.d(tag, "Normal")
-                //Todo Make normal mode
 
             }
-            "set_ai_hard_btn" -> {
-                while (dealerCount <= 12)
-                    dealerHit("dealer")
-                if (dealerCount <= 21 && userCount > 21)
+            "set_ai_hard_btn"->{
+                //kinda cheating
+                while (dealerCount<userCount && userCount<=21)
+                    dealerHit("Dealer")
+                if(dealerCount<=21 && userCount>21)
                     Log.d(tag, "Dealer won, user went over 21 ")
-                if (userCount <= 21 && dealerCount > 21)
+                if(userCount<=21 && dealerCount>21)
                     Log.d(tag, "User won, dealer went over 21 ")
-                else if ((dealerCount > userCount) && (dealerCount <= 21))
-                    Log.d(tag, "Dealer won with score of: " + dealerCount)
-                else if ((dealerCount < userCount) && (userCount <= 21))
-                    Log.d(tag, "User won with score of: " + userCount)
-                else if ((dealerCount == userCount))
+                else if ((dealerCount> userCount)&& (dealerCount<=21))
+                    Log.d(tag, "Dealer won with score of: "+ dealerCount)
+                else if ((dealerCount< userCount)&& (userCount<=21))
+                    Log.d(tag, "User won with score of: "+ userCount)
+                else if((dealerCount== userCount))
                     Log.d(tag, "It's a tie")
+
                 Log.d(tag, "Hard")
-                //Todo Make hard mode
             }
         }
-    return 3
+
+
+    }
+    private fun userVisibleTotal():Int
+    {
+        //users total minus their first card (the hidden one)
+        return (userCount-deck.getIterator(USER).next().num)
     }
     fun reset(){
 
