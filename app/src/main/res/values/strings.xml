@@ -11,6 +11,10 @@
     <string name="set_ai_low">Easy</string>
     <string name="set_ai_mid">Normal</string>
     <string name="set_ai_high">Hard</string>
+    <string name="set_funds">Funds: </string>
+    <string name="set_current_funds">Poor(test) </string>
+    <string name="set_funds_btn">+</string>
+    <string name= "set_insert_funds">Add me</string>
 
     <string name="set_card_img">Select Card Design:</string>
     <string name="set_name">Input your Name: </string>
@@ -41,11 +45,17 @@
 
     //****************Tips N Tricks Page***************
     <string name="tips_n_tricks_title">Tips N Tricks!</string>
+    <string name="tips_n_tricks_tip_1">Tip 1:</string>
     <string name="tips_n_tricks_1">Stand when your hand is 12 through 16 and the dealer has a 2 through 6.</string>
+    <string name="tips_n_tricks_tip_2">Tip 2:</string>
     <string name="tips_n_tricks_2">Hit when your hand is 12 through 16 and the dealer has 7 through Ace.</string>
+    <string name="tips_n_tricks_tip_3">Tip 3:</string>
     <string name="tips_n_tricks_3">Always split Aces and 8s.</string>
-    <string name="tips_n_tricks_4">Double down when you have 11 and the dealer has 2 through 10</string>
-    <string name="tips_n_tricks_5">Hit or double down if the dealer Aces through 6</string>
+    <string name="tips_n_tricks_tip_4">Tip 4:</string>
+    <string name="tips_n_tricks_4">Double down when you have 11 and the dealer has 2 through 10.</string>
+    <string name="tips_n_tricks_tip_5">Tip 5:</string>
+    <string name="tips_n_tricks_5">Hit if the dealer has Aces through 6.</string>
+
 
     //*******************Play Page************************
     <string name="play_deal_btn">Deal</string>
@@ -54,5 +64,7 @@
     <string name="play_new_game_btn">New Game</string>
     <string name="play_my_hand_btn">My Hand</string>
     <string name="play_stand_btn">Stand</string>
+    <string name="play_my_hand">Players Hand</string>
+    <string name="play_ai_hand">Dealers Hand</string>
 
 </resources>

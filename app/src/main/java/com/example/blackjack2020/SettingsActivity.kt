@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.blackjack2020.MainActivity.Companion.SET_KEY
@@ -33,20 +32,33 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
                 "cardface2" -> cardface2.isChecked = true
                 "cardface3" -> cardface3.isChecked = true
             }
-            set_name_input.setText(toSet.profileName)
-            music_sw.isChecked = toSet.music
+            set_profile_name.setText(toSet.profileName)
+            set_curr_funds.text = totalFunds.toString()
+            set_music_sw.isChecked = toSet.music
+            set_insert_funds.setText("0")
         }
 
         set_return_btn.setOnClickListener (this)
-
+        set_add_funds.setOnClickListener(this)
     }
 
     override fun onClick(view: View?) {
         when(view?.id){
+            R.id.set_add_funds -> {
+                var insertFunds = set_insert_funds.editableText.toString()
+                val fundsAdd = insertFunds.toDouble()
+                var currFund = set_curr_funds.text.toString()
+                val currFunAdd = currFund.toDouble()
+                val newFunds = fundsAdd + currFunAdd
+
+                set_curr_funds.text = newFunds.toString()
+                set_insert_funds.setText("0")
+
+            }
             R.id.set_return_btn ->{
                 val intent = Intent()
                 var ai =""
-                var card = "heh"
+                var card = ""
                 when(aiGroup.checkedRadioButtonId){
                     R.id.set_ai_easy_btn-> {
                          ai = "set_ai_easy_btn"
@@ -69,10 +81,13 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
                         card = "cardface3"
                     }
                 }
-                val name = set_name_input.editableText.toString()
-                val music = music_sw.isChecked
+                val name = set_profile_name.editableText.toString()
+                val music = set_music_sw.isChecked
+                val cash = set_curr_funds.text.toString()
                 try{
-                    val setting = SettingModel(ai, card, name, music)
+                    val totalCash = cash.toDouble()
+                    totalFunds = totalCash
+                    val setting = SettingModel(ai, card, name,totalCash, music)
                     val json = Gson().toJson(setting)
                     intent.putExtra(SETTING_EXTRA_KEY,json)
                     setResult(Activity.RESULT_OK,intent)

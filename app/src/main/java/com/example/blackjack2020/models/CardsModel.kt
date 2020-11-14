@@ -1,15 +1,19 @@
 package com.example.blackjack2020.models
 
 import com.example.blackjack2020.CardRepository
+import com.example.blackjack2020.DEALER
 import com.example.blackjack2020.Interfaces.ICardRepository
+import com.example.blackjack2020.USER
 import kotlin.random.Random
 
 class CardsModel(private val cardrepo: ICardRepository) {
     fun getValue(card:Card):Int{
-        if(card.num<10)
-            return card.num //will return 1-9
-        else
-            return 10 //will return 10,J,Q,K
+        return cardrepo.getValue(card)
+
+//        if(card.num<10)
+//            return card.num //will return 1-9
+//        else
+//            return 10 //will return 10,J,Q,K
 
         //doesnt account for ace being worth 11 yet
     }
@@ -18,6 +22,7 @@ class CardsModel(private val cardrepo: ICardRepository) {
 
        return cardrepo.getRandomCard()
     }
+
     fun newGame(){
         cardrepo.newGame()
     }
@@ -79,6 +84,10 @@ class CardsModel(private val cardrepo: ICardRepository) {
         return cardrepo.getCount()
     }
 
-
-
+    fun getIterator(string: String): MutableIterator<Card> {
+        when (string) {
+            USER -> return cardrepo.getIterator(USER)
+            else -> return cardrepo.getIterator(DEALER)
+        }
+    }
 }
