@@ -34,9 +34,12 @@ class PlayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
 
-
         var difficulty=""
         var backCard=""
+
+
+
+
 
         val options = intent.getStringExtra(MainActivity.LAUNCH_KEY)
         if (options!= null){
@@ -49,14 +52,12 @@ class PlayActivity : AppCompatActivity() {
             backCard = FromSet.card
             max = totalFunds.toInt()
         }
-        deal()
-        // Todo: The betting bar code
+//        deal()
 
         BetView = this.play_current_bet
         BetBarView = this.play_betbar
         BetBarView!!.max = (max -min)/ step
         BetView!!.text = "Current Bet: $$min"
-
         BetBarView?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean) {
                 currentBet = min + (progress * step)
@@ -67,16 +68,13 @@ class PlayActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seek: SeekBar) {}
             override fun onStopTrackingTouch(seek: SeekBar) {}
         })
+        reset()
+
 
         //Todo refactor total funds
         play_hit_btn.setOnClickListener { hit("user", currentBet)  }
         play_new_game_btn.setOnClickListener{confirm()}
         play_stand_btn.setOnClickListener{stand(difficulty, currentBet)}
-
-
-
-
-
     }
 
     fun deal(){ //can only "deal" from a full deck, if less than full you need a new game
@@ -172,6 +170,7 @@ class PlayActivity : AppCompatActivity() {
         var newFun = totalFunds
         totalFunds = newFun - currentBet
         play_cash.text = "Total Cash: $" + totalFunds.toString()
+
     }
 
     fun wonBet(currentBet: Int){
@@ -244,35 +243,27 @@ class PlayActivity : AppCompatActivity() {
     return 3
     }
     fun reset(){
-        userCount=0
-        play_hit_btn.isClickable = true
-        play_stand_btn.isClickable = true
-        dealerCount=0
-        gameover=false
-        deck.newGame()
-        max = totalFunds.toInt()
-
-        Toast.makeText(this@PlayActivity, "Reset Cash: " + max.toString(), Toast.LENGTH_SHORT).show()
-        BetBarView!!.max = (max -min)/ step
-        saveData();
-        deal()
-    }
-
-    fun saveData(){
-        val options = intent.getStringExtra(MainActivity.LAUNCH_KEY)
-        if (options!= null){
-            val FromSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
-            val difficulty = FromSet.difficulty
-            val card = FromSet.card
-            val name = FromSet.profileName
-            totalFunds
-            val music = true
-
-
-            val settings = SettingModel(difficulty, card, name, totalFunds, music)
-            SettingRepository().editSettings(0, settings)
+        if(totalFunds < 5.0){
+            play_hit_btn.isClickable = false
+            play_stand_btn.isClickable = false
+            play_new_game_btn.isClickable = false
+            Toast.makeText(this@PlayActivity, "You are poor, add more funds", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            userCount=0
+            play_hit_btn.isClickable = true
+            play_stand_btn.isClickable = true
+            play_new_game_btn.isClickable = true
+            dealerCount=0
+            gameover=false
+            deck.newGame()
+            max = totalFunds.toInt()
+            BetBarView!!.max = (max -min)/ step
+            deal()
         }
     }
+
+
     fun confirm()
     {
         when(!gameover){
