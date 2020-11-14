@@ -114,7 +114,7 @@ class PlayActivity : AppCompatActivity() {
             this.cardImage = findViewById(R.id.player_card_2)
             changeImage(card2)
             userCount += deck.getValue(card2)
-            play_score.text= userCount.toString()
+//            play_score.text= userCount.toString()
             var message =
                 "Your cards are: " + deck.cardFormat(card1) + " and " + deck.cardFormat(card2)
             Log.d(tag, message)
@@ -233,6 +233,7 @@ class PlayActivity : AppCompatActivity() {
 
 
     fun hit(string: String, currentBet: Int){ //will allow a new card unless over score of 21
+        this.play_betbar.visibility=View.INVISIBLE
         if(string.equals("user")) {
             if (userCount <= 21) {
                 var newCard = deck.getRandomCard()
@@ -268,7 +269,7 @@ class PlayActivity : AppCompatActivity() {
                     Log.d(tag, "TREATING ACE AS 1")
                     userNumAces--
                 }
-                play_score.text= userCount.toString()
+//                play_score.text= userCount.toString()
 
                 var message = "Your new card is: " + deck.cardFormat(newCard)
                 Log.d(tag, message)
@@ -354,12 +355,32 @@ class PlayActivity : AppCompatActivity() {
         totalFunds = newFun - currentBet
         play_cash.text = "Total Cash: $" + totalFunds.toString()
 
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("You lost :(  Do you want to play again? ");
+        builder.setTitle("Loser!")
+        builder.setCancelable(false)
+
+        builder.setPositiveButton("Yes") { dialog, which -> reset() }
+        builder.setNegativeButton("No") { dialog, which -> dialog.cancel() }
+        val alertDialog = builder.create()
+        alertDialog.show();
+
     }
 
     fun wonBet(currentBet: Int){
         var newFun = totalFunds
         totalFunds = newFun + currentBet
         play_cash.text = "Total Cash: $" + totalFunds.toString()
+
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("You won:)  Do you want to play again? ");
+        builder.setTitle("Winner!")
+        builder.setCancelable(false)
+
+        builder.setPositiveButton("Yes") { dialog, which -> reset() }
+        builder.setNegativeButton("No") { dialog, which -> dialog.cancel() }
+        val alertDialog = builder.create()
+        alertDialog.show();
     }
 
 
@@ -469,6 +490,7 @@ class PlayActivity : AppCompatActivity() {
         userNumAces=0
         dealerNumAces=0
 
+        this.play_betbar.visibility=View.VISIBLE
         dealer_card_3.visibility = View.INVISIBLE
         dealer_card_4.visibility = View.INVISIBLE
         dealer_card_5.visibility = View.INVISIBLE

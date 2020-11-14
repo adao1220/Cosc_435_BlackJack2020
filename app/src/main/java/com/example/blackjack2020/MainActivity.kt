@@ -15,23 +15,16 @@ import kotlinx.android.synthetic.main.activity_main.*
 var totalFunds=25.0
 class MainActivity : AppCompatActivity(), ISettingRepository {
     private lateinit var settingVar:ISettingRepository
-//    private var mediaPlayer: MediaPlayer? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         settingVar = SettingRepository()
 
-//        mediaPlayer = MediaPlayer.create(this, Uri.parse(""))
-
         hp_play_btn.setOnClickListener{launchPlay()}
         hp_how_to_play_btn.setOnClickListener{launchHowToPlay()}
         hp_settings_btn.setOnClickListener{launchSettings()}
         hp_tips_btn.setOnClickListener{launchTipsNTricks()}
-
-
-
 
     }
 
