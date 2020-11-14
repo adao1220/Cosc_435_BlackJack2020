@@ -360,6 +360,17 @@ class PlayActivity : AppCompatActivity() {
     return 3
     }
     fun reset(){
+
+        numPlayerCards = 2 //reset the players hand
+        numDealerCards = 2//
+        dealer_card_3.visibility = View.INVISIBLE
+        dealer_card_4.visibility = View.INVISIBLE
+        dealer_card_5.visibility = View.INVISIBLE
+        player_card_3.visibility = View.INVISIBLE
+        player_card_4.visibility = View.INVISIBLE
+        player_card_5.visibility = View.INVISIBLE
+
+
         if(totalFunds <= 0.0){
             play_hit_btn.isClickable = false
             play_stand_btn.isClickable = false
