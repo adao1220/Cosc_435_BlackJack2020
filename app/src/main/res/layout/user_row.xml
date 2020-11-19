@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/llMain"
     android:layout_width="match_parent"
@@ -51,4 +52,14 @@
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:scaleType="center"
         android:src="@drawable/ic_action_delete" />
+
+    <ImageView
+        android:id="@+id/ivUse"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="image"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="center"
+        android:src="@drawable/ic_action_use" />
+
 </LinearLayout>

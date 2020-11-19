@@ -7,12 +7,14 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.example.blackjack2020.SettingsActivity
 import com.example.blackjack2020.models.SettingModel
 
 class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase?) {
-        //creating table with fields
+        //creating the table
+        //Watch out, if you change anything in this code, you might need to change the DATABASE_VERSION...DONT MESS WITH IT
         val CREATE_USER_TABLE = (
                 "CREATE TABLE "
                 + TABLE_USER + "("
@@ -36,25 +38,84 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         contentValues.put(KEY_NAME, set.profileName)
         contentValues.put(KEY_FUNDS, set.funds)
         contentValues.put(KEY_MUSIC, set.music)
-        Log.i(TAG, contentValues.toString())
-        // Inserting user data.
+
         val success = db.insert(TABLE_USER, null, contentValues)
         Log.i(TAG, success.toString())
 
         db.close()
         return success
     }
-    fun viewEmployee(): ArrayList<SettingModel> {
 
+    fun deleteUser(set: SettingModel): Int {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(KEY_ID, set.id)
+        // Deleting Row
+        val success = db.delete(TABLE_USER, KEY_ID + "=" + set.id, null)
+        db.close()
+        return success
+    }
+    fun updateUser(set: SettingModel): Int {
+        val db = this.writableDatabase
+        val contentValues = ContentValues()
+        contentValues.put(KEY_AI, set.difficulty)
+        contentValues.put(KEY_CARD, set.card)
+        contentValues.put(KEY_NAME, set.profileName)
+        contentValues.put(KEY_FUNDS, set.funds)
+        contentValues.put(KEY_MUSIC, set.music)
+
+        // Updating Row
+        val success = db.update(TABLE_USER, contentValues, KEY_ID + "=" + set.id, null)
+        db.close()
+        return success
+    }
+
+    fun getUser(set: SettingModel): ArrayList<SettingModel>{
         val setList: ArrayList<SettingModel> = ArrayList<SettingModel>()
+        val selectQuery = "SELECT * FROM " + TABLE_USER + " WHERE " + KEY_ID + "=" + set.id
 
-        // Query to select all the records from the table.
+        val db = this.readableDatabase
+        var cursor: Cursor?
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var id: Int
+        var ai : String
+        var card : String
+        var name: String
+        var funds : Double
+        var music: String
+
+        if (cursor.moveToFirst()) {
+            do {
+                id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
+                ai = cursor.getString(cursor.getColumnIndex(KEY_AI))
+                card = cursor.getString(cursor.getColumnIndex(KEY_CARD))
+                name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
+                funds = cursor.getDouble(cursor.getColumnIndex(KEY_FUNDS))
+                music = cursor.getString(cursor.getColumnIndex(KEY_MUSIC))
+
+                val set = SettingModel(id = id, difficulty = ai, card = card, profileName = name, funds = funds, music = music)
+                setList.add(set)
+
+            } while (cursor.moveToNext())
+        }
+        return setList
+    }
+
+//    val selectQuery = "SELECT * FROM " + TABLE_USER + " WHERE " + KEY_ID + "=" + set.id
+
+    fun viewAll(): ArrayList<SettingModel> {
+        val setList: ArrayList<SettingModel> = ArrayList<SettingModel>()
         val selectQuery = "SELECT  * FROM $TABLE_USER"
 
         val db = this.readableDatabase
-        // Cursor is used to read the record one by one. Add them to data model class.
-        var cursor: Cursor? = null
-
+        var cursor: Cursor?
         try {
             cursor = db.rawQuery(selectQuery, null)
 
@@ -91,11 +152,11 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         db!!.execSQL("DROP TABLE IF EXISTS $TABLE_USER")
         onCreate(db)
     }
+
     companion object {
         private val DATABASE_VERSION = 2
         private val DATABASE_NAME = "UserInfoDatabase"
         private val TABLE_USER = "UsersTable"
-
         private val KEY_ID = "_id"
         private val KEY_AI = "difficulty"
         private val KEY_CARD = "card"

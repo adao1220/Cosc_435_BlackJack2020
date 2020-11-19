@@ -30,6 +30,22 @@ class ProfileAdapter(val context: Context, val items: ArrayList<SettingModel>):
             holder.userName.text = item.profileName
             holder.userFunds.text = item.funds.toString()
 
+            holder.Delete.setOnClickListener { view ->
+                if (context is SettingsActivity) {
+                    context.deleteRecord(item)
+                }
+            }
+            holder.Edit.setOnClickListener { view ->
+                if (context is SettingsActivity) {
+                    context.updateRecord(item)
+                }
+            }
+            holder.Use.setOnClickListener({ view ->
+                if (context is SettingsActivity) {
+                    context.getUser(item)
+                }
+            })
+
             // Updating the background color according to the odd/even positions in list.
 //            if (position % 2 == 0) {
 //                holder.llMain.setBackgroundColor(
@@ -58,8 +74,9 @@ class ProfileAdapter(val context: Context, val items: ArrayList<SettingModel>):
             val llMain = view.llMain
             val userName = view.user_name
             val userFunds = view.user_funds
-            val ivEdit = view.ivEdit
-            val ivDelete = view.ivDelete
+            val Edit = view.ivEdit
+            val Delete = view.ivDelete
+            val Use = view.ivUse
         }
 
 

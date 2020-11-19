@@ -1,6 +1,8 @@
 package com.example.blackjack2020
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -47,6 +49,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
         btnAdd.setOnClickListener { view ->
             addRecord()
         }
+
         setupListofDataIntoRecyclerView()
     }
 
@@ -152,9 +155,80 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener{
             }
     }
 
+    fun deleteRecord(settingModel: SettingModel) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Delete Record")
+        builder.setMessage("Are you sure you wants to delete ${settingModel.profileName}.")
+        builder.setIcon(android.R.drawable.ic_dialog_alert)
+
+        //Code for the Delete part
+        builder.setPositiveButton("Yes") { dialogInterface, which ->
+            val databaseHandler = DatabaseHandler(this)
+            val status = databaseHandler.deleteUser(SettingModel(settingModel.id, "", "","",0.0,""))
+            if (status > -1) {
+                Toast.makeText(applicationContext, "Record deleted successfully.", Toast.LENGTH_LONG).show()
+                setupListofDataIntoRecyclerView()
+            }
+            dialogInterface.dismiss() // Dialog will go poof
+        }
+        builder.setNegativeButton("No") { dialogInterface, which ->
+            dialogInterface.dismiss() // Dialog will go poof
+        }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        // Will not allow user to cancel after clicking on remaining screen area.
+        alertDialog.show()
+    }
+
+    fun updateRecord(settingModel: SettingModel) {
+
+            val difficulty = set_ai.text.toString()
+            val card = set_card.text.toString()
+            val name = set_profile_name.text.toString()
+            val funds = set_curr_funds.text.toString()
+            val music = set_music_sw.text.toString()
+
+            val databaseHandler = DatabaseHandler(this)
+
+            if (!name.isEmpty()) {
+                val cash = funds.toDouble()
+                val status = databaseHandler.updateUser(SettingModel(settingModel.id, difficulty,card , name, cash,music))
+                if (status > -1) {
+                    Toast.makeText(applicationContext, "Record Updated.", Toast.LENGTH_LONG).show()
+                    setupListofDataIntoRecyclerView()
+                }
+            } else {
+                Toast.makeText(applicationContext, "Name or Email cannot be blank", Toast.LENGTH_LONG).show()
+            }
+    }
+    fun getUser(settingModel: SettingModel): ArrayList<SettingModel>{
+        val databaseHandler = DatabaseHandler(this)
+        Log.i(TAG + "TESTING", "before")
+
+        val list: ArrayList<SettingModel> = databaseHandler.getUser(SettingModel(settingModel.id, settingModel.difficulty, settingModel.card, settingModel.profileName, settingModel.funds, settingModel.music))
+        Log.i(TAG + "TESTING", settingModel.id.toString())
+        when(settingModel.difficulty){
+            "set_ai_easy_btn" -> set_ai_easy_btn.isChecked = true
+            "set_ai_normal_btn" -> set_ai_normal_btn.isChecked = true
+            "set_ai_hard_btn" -> set_ai_hard_btn.isChecked = true
+        }
+
+        when(settingModel.card){
+            "cardface1" -> cardface1.isChecked = true
+            "cardface2" -> cardface2.isChecked = true
+            "cardface3" -> cardface3.isChecked = true
+        }
+        set_profile_name.setText(settingModel.profileName)
+        set_curr_funds.text = settingModel.funds.toString()
+
+//            set_music_sw.isChecked = toSet.music
+        set_insert_funds.setText("0")
+
+        return list
+    }
     private fun getItemsList(): ArrayList<SettingModel> {
-        val databaseHandler: DatabaseHandler = DatabaseHandler(this)
-        val setList: ArrayList<SettingModel> = databaseHandler.viewEmployee()
+        val databaseHandler = DatabaseHandler(this)
+        val setList: ArrayList<SettingModel> = databaseHandler.viewAll()
 
         return setList
     }
