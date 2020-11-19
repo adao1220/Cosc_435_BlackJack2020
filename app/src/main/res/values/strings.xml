@@ -14,7 +14,7 @@
     <string name="set_funds">Funds: </string>
     <string name="set_current_funds">Poor(test) </string>
     <string name="set_funds_btn">+</string>
-    <string name= "set_insert_funds">Add me</string>
+    <string name="set_insert_funds">Add me</string>
 
     <string name="set_card_img">Select Card Design:</string>
     <string name="set_name">Input your Name: </string>
@@ -66,5 +66,7 @@
     <string name="play_stand_btn">Stand</string>
     <string name="play_my_hand">Players Hand</string>
     <string name="play_ai_hand">Dealers Hand</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

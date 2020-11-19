@@ -11,6 +11,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.blackjack2020.Play_Settings_fragment.Companion.cardface
 import com.example.blackjack2020.models.CardsModel
 import com.example.blackjack2020.models.SettingModel
 
@@ -37,7 +38,8 @@ class PlayActivity : AppCompatActivity() {
     private var step = 5
     private var currentBet = 5
     private var newBalance = 0.0
-    private var backCard=""
+
+
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
@@ -47,7 +49,7 @@ class PlayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
 
-        var difficulty=""
+
 
 
 
@@ -55,6 +57,8 @@ class PlayActivity : AppCompatActivity() {
         if (options!= null){
             val FromSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
             difficulty = FromSet.difficulty
+            name=FromSet.profileName
+            music=FromSet.music
             //ToDo: need to do the decimal stuff
             totalFunds = FromSet.funds
             newBalance = totalFunds
@@ -94,10 +98,32 @@ class PlayActivity : AppCompatActivity() {
 
 
         //Todo refactor total funds
+
+        play_changeSetting.setOnClickListener{ launchfragment() }
+
+        play_cash.text = "Total Cash: $" + totalFunds.toString()
+
         play_hit_btn.setOnClickListener { hit("user", currentBet)  }
         play_new_game_btn.setOnClickListener{confirm()}
         play_stand_btn.setOnClickListener{stand(difficulty, currentBet)}
     }
+
+    fun launchfragment(){
+        val frag= Play_Settings_fragment()
+        val args= Bundle()
+        args.putString(Play_Settings_fragment.cardface,backCard)
+        args.putString(Play_Settings_fragment.difficulty,difficulty)
+        args.putString(Play_Settings_fragment.funds, totalFunds.toString())
+        args.putString(Play_Settings_fragment.name, name)
+        args.putString(Play_Settings_fragment.music, music.toString())
+        frag.arguments=args
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.flfragment,frag,null)
+            //.addToBackStack(null)
+            .commit()
+    }
+
 
 
     fun deal(){ //can only "deal" from a full deck, if less than full you need a new game
@@ -489,6 +515,8 @@ class PlayActivity : AppCompatActivity() {
         numDealerCards = 2//
         userNumAces=0
         dealerNumAces=0
+        play_cash.text = "Total Cash: $" + totalFunds.toString()
+
 
         this.play_betbar.visibility=View.VISIBLE
         dealer_card_3.visibility = View.INVISIBLE
@@ -549,15 +577,25 @@ class PlayActivity : AppCompatActivity() {
     }
     companion object{
         const val tag="test"
+
         var userCount=0 // holds score of user
         var dealerCount=0 //holds dealers score
         var gameover = false
         var dealerNumAces=0
         var userNumAces=0
+        var backCard=" "
+        var name=" "
+        var music= false
+        var difficulty=" "
+
+
     }
 
 
+ fun updateCash(){
+    play_cash.text = "Total Cash: $" + totalFunds.toString()
 
+}
 
 
 //    Old Code
