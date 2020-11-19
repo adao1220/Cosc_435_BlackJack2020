@@ -8,9 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.example.blackjack2020.models.Card
 import com.example.blackjack2020.models.SettingModel
 import com.google.gson.Gson
@@ -125,6 +123,7 @@ class Play_Settings_fragment : Fragment() {
             PlayActivity.difficulty = ai
             PlayActivity.name = name
             PlayActivity.music = music.toBoolean()
+            PlayActivity.max= totalFunds.toInt()
 
 
         } catch (ex: Exception) {
@@ -145,7 +144,25 @@ class Play_Settings_fragment : Fragment() {
         }
 
 
+        //var betview: TextView
+        var betbarview: SeekBar
+        //betview=activity!!.findViewById(R.id.play_current_bet)
+        betbarview=activity!!.findViewById(R.id.play_betbar)
 
+        betbarview!!.max = (PlayActivity.max - PlayActivity.min)/ PlayActivity.step
+        //betview!!.text = "Current Bet: $${PlayActivity.min}"
+        var playhitbtn : Button
+        playhitbtn=activity!!.findViewById(R.id.play_hit_btn)
+        var playstandbtn : Button
+        playstandbtn=activity!!.findViewById(R.id.play_stand_btn)
+        var playnewgamebtn : Button
+        playnewgamebtn=activity!!.findViewById(R.id.play_new_game_btn)
+
+        if(totalFunds>=5) {
+            playhitbtn.isClickable = true
+            playstandbtn.isClickable = true
+            playnewgamebtn.isClickable = true
+        }
 
         getFragmentManager()!!.beginTransaction().remove(this).commit()
     }

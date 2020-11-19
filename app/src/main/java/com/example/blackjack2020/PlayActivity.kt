@@ -33,10 +33,7 @@ class PlayActivity : AppCompatActivity() {
     private var BetView: TextView? = null
     private var BetBarView: SeekBar? = null
 
-    private var min = 5
-    private var max = 0
-    private var step = 5
-    private var currentBet = 5
+
     private var newBalance = 0.0
 
 
@@ -351,6 +348,12 @@ class PlayActivity : AppCompatActivity() {
             changeImage(newCard)
 
             dealerCount += deck.getValue(newCard)
+        if(dealerCount>21 && dealerNumAces>0) //checks for aces
+        {
+            dealerCount-=10 // if the user has an ace, and over 21 will count the ace as 1 rather than 11
+            Log.d(tag, "TREATING ACE AS 1")
+            dealerNumAces--
+        }
 
             var message = "Dealers card is: " + deck.cardFormat(newCard)
             Log.d(tag, message)
@@ -374,6 +377,7 @@ class PlayActivity : AppCompatActivity() {
             1 -> lostBet(currentBet)
         }
         gameover=true
+
     }
 
     private fun lostBet(currentBet: Int){
@@ -515,7 +519,6 @@ class PlayActivity : AppCompatActivity() {
         numDealerCards = 2//
         userNumAces=0
         dealerNumAces=0
-        play_cash.text = "Total Cash: $" + totalFunds.toString()
 
 
         this.play_betbar.visibility=View.VISIBLE
@@ -527,7 +530,7 @@ class PlayActivity : AppCompatActivity() {
         player_card_5.visibility = View.INVISIBLE
 
 
-        if(totalFunds <= 0.0){
+        if(totalFunds <5){
             play_hit_btn.isClickable = false
             play_stand_btn.isClickable = false
             play_new_game_btn.isClickable = false
@@ -538,13 +541,14 @@ class PlayActivity : AppCompatActivity() {
             play_hit_btn.isClickable = true
             play_stand_btn.isClickable = true
             play_new_game_btn.isClickable = true
-            dealerCount=0
-            gameover=false
-            deck.newGame()
-            max = totalFunds.toInt()
-            BetBarView!!.max = (max -min)/ step
-            deal()
+
         }
+        dealerCount=0
+        gameover=false
+        deck.newGame()
+        max = totalFunds.toInt()
+        BetBarView!!.max = (max -min)/ step
+        deal()
     }
 
 
@@ -553,6 +557,7 @@ class PlayActivity : AppCompatActivity() {
             true -> {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Are you sure you want to start a new game?");
+                builder.setMessage("You will lose $5");
                 builder.setTitle("New Game!")
                 builder.setCancelable(false)
 
@@ -587,6 +592,10 @@ class PlayActivity : AppCompatActivity() {
         var name=" "
         var music= false
         var difficulty=" "
+        var max=0
+        var min = 5
+        var step = 1
+        var currentBet = 5
 
 
     }
