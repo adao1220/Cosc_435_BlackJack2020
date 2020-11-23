@@ -5,6 +5,5 @@ class SettingModel(
     val difficulty: String,
     val card: String,
     val profileName: String,
-    val funds: Double,
-    val music: String
+    val funds: Double
 )

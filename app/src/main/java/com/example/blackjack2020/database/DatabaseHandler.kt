@@ -8,6 +8,10 @@ import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.example.blackjack2020.SettingsActivity
+import com.example.blackjack2020.SettingsActivity.Companion.ProfileName
+import com.example.blackjack2020.SettingsActivity.Companion.TotalFunds
+import com.example.blackjack2020.SettingsActivity.Companion.card
+import com.example.blackjack2020.SettingsActivity.Companion.difficulty
 import com.example.blackjack2020.models.SettingModel
 
 class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -36,12 +40,13 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         contentValues.put(KEY_AI, set.difficulty)
         contentValues.put(KEY_CARD, set.card)
         contentValues.put(KEY_NAME, set.profileName)
-        contentValues.put(KEY_FUNDS, set.funds)
-        contentValues.put(KEY_MUSIC, set.music)
-
+        contentValues.put(KEY_FUNDS, TotalFunds)
+        Log.i(SettingsActivity.TAG+ "add" , set.card.toString())
+        Log.i(SettingsActivity.TAG+ "add" , set.difficulty.toString())
+        Log.i(SettingsActivity.TAG+ "add" , set.profileName.toString())
+        Log.i(SettingsActivity.TAG+ "add" , TotalFunds.toString())
         val success = db.insert(TABLE_USER, null, contentValues)
         Log.i(TAG, success.toString())
-
         db.close()
         return success
     }
@@ -61,9 +66,11 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         contentValues.put(KEY_AI, set.difficulty)
         contentValues.put(KEY_CARD, set.card)
         contentValues.put(KEY_NAME, set.profileName)
-        contentValues.put(KEY_FUNDS, set.funds)
-        contentValues.put(KEY_MUSIC, set.music)
-
+        contentValues.put(KEY_FUNDS, TotalFunds)
+        Log.i(SettingsActivity.TAG+ "edit" , set.card.toString())
+        Log.i(SettingsActivity.TAG+ "edit" , set.difficulty.toString())
+        Log.i(SettingsActivity.TAG+ "edit" , set.profileName.toString())
+        Log.i(SettingsActivity.TAG+ "edit" , TotalFunds.toString())
         // Updating Row
         val success = db.update(TABLE_USER, contentValues, KEY_ID + "=" + set.id, null)
         db.close()
@@ -89,7 +96,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         var card : String
         var name: String
         var funds : Double
-        var music: String
 
         if (cursor.moveToFirst()) {
             do {
@@ -98,9 +104,14 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                 card = cursor.getString(cursor.getColumnIndex(KEY_CARD))
                 name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
                 funds = cursor.getDouble(cursor.getColumnIndex(KEY_FUNDS))
-                music = cursor.getString(cursor.getColumnIndex(KEY_MUSIC))
+                Log.i(SettingsActivity.TAG+ "load" , id.toString())
+                Log.i(SettingsActivity.TAG+ "load" , card.toString())
+                Log.i(SettingsActivity.TAG+ "load" , name.toString())
+                Log.i(SettingsActivity.TAG+ "load" , funds.toString())
+                Log.i(SettingsActivity.TAG+ "load" , ai.toString())
 
-                val set = SettingModel(id = id, difficulty = ai, card = card, profileName = name, funds = funds, music = music)
+                val set = SettingModel(id = id, difficulty = ai, card = card, profileName = name, funds = funds)
+
                 setList.add(set)
 
             } while (cursor.moveToNext())
@@ -108,7 +119,41 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         return setList
     }
 
-//    val selectQuery = "SELECT * FROM " + TABLE_USER + " WHERE " + KEY_ID + "=" + set.id
+
+    fun viewfirst(): ArrayList<SettingModel> {
+        val setList: ArrayList<SettingModel> = ArrayList<SettingModel>()
+        val selectQuery = "SELECT  * FROM $TABLE_USER"
+
+        val db = this.readableDatabase
+        var cursor: Cursor?
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
+        var id: Int
+        var ai : String
+        var card : String
+        var name: String
+        var funds : Double
+
+        if (cursor.moveToFirst()) {
+                id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
+                ai = cursor.getString(cursor.getColumnIndex(KEY_AI))
+                card = cursor.getString(cursor.getColumnIndex(KEY_CARD))
+                name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
+                funds = cursor.getDouble(cursor.getColumnIndex(KEY_FUNDS))
+
+                val set = SettingModel(id = id, difficulty = ai, card = card, profileName = name, funds = funds)
+                setList.add(set)
+
+        }
+        return setList
+    }
+
 
     fun viewAll(): ArrayList<SettingModel> {
         val setList: ArrayList<SettingModel> = ArrayList<SettingModel>()
@@ -129,7 +174,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         var card : String
         var name: String
         var funds : Double
-        var music: String
 
         if (cursor.moveToFirst()) {
             do {
@@ -138,9 +182,8 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                 card = cursor.getString(cursor.getColumnIndex(KEY_CARD))
                 name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
                 funds = cursor.getDouble(cursor.getColumnIndex(KEY_FUNDS))
-                music = cursor.getString(cursor.getColumnIndex(KEY_MUSIC))
 
-                val set = SettingModel(id = id, difficulty = ai, card = card, profileName = name, funds = funds, music = music)
+                val set = SettingModel(id = id, difficulty = ai, card = card, profileName = name, funds = funds)
                 setList.add(set)
 
             } while (cursor.moveToNext())

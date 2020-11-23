@@ -17,9 +17,12 @@
     <string name= "set_insert_funds">Add me</string>
 
     <string name="set_card_img">Select Card Design:</string>
-    <string name="set_name">Input your Name: </string>
+    <string name="set_name">Name: </string>
     <string name="set_back">Save and Return</string>
     <string name="set_music">Music</string>
+    <string name="btnAdd">Add</string>
+
+
 
     //****************How to Play Page***************
     <string name="how_to_play_title">How to Play!</string>

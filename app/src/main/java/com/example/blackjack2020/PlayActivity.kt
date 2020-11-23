@@ -11,6 +11,9 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.blackjack2020.SettingsActivity.Companion.TotalFunds
+import com.example.blackjack2020.SettingsActivity.Companion.card
+import com.example.blackjack2020.SettingsActivity.Companion.difficulty
 import com.example.blackjack2020.models.CardsModel
 import com.example.blackjack2020.models.SettingModel
 
@@ -55,12 +58,15 @@ class PlayActivity : AppCompatActivity() {
         if (options!= null){
             val FromSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
             difficulty = FromSet.difficulty
-            //ToDo: need to do the decimal stuff
-            totalFunds = FromSet.funds
-            newBalance = totalFunds
-            play_cash.text = "Total Cash: $" + totalFunds.toString()
+            SettingsActivity.difficulty = difficulty
             backCard = FromSet.card
-            max = totalFunds.toInt()
+            card = backCard
+            TotalFunds = FromSet.funds
+            newBalance = TotalFunds
+            play_cash.text = "Total Cash: $" + TotalFunds.toString()
+
+
+            max = TotalFunds.toInt()
         }
         //Log.d(tag, backCard)
 
@@ -351,9 +357,9 @@ class PlayActivity : AppCompatActivity() {
     }
 
     private fun lostBet(currentBet: Int){
-        var newFun = totalFunds
-        totalFunds = newFun - currentBet
-        play_cash.text = "Total Cash: $" + totalFunds.toString()
+        var newFun = TotalFunds
+        TotalFunds = newFun - currentBet
+        play_cash.text = "Total Cash: $" + TotalFunds.toString()
 
         val builder = AlertDialog.Builder(this)
         builder.setMessage("You lost :(  Do you want to play again? ");
@@ -368,9 +374,9 @@ class PlayActivity : AppCompatActivity() {
     }
 
     fun wonBet(currentBet: Int){
-        var newFun = totalFunds
-        totalFunds = newFun + currentBet
-        play_cash.text = "Total Cash: $" + totalFunds.toString()
+        var newFun = TotalFunds
+        TotalFunds = newFun + currentBet
+        play_cash.text = "Total Cash: $" + TotalFunds.toString()
 
         val builder = AlertDialog.Builder(this)
         builder.setMessage("You won:)  Do you want to play again? ");
@@ -499,7 +505,7 @@ class PlayActivity : AppCompatActivity() {
         player_card_5.visibility = View.INVISIBLE
 
 
-        if(totalFunds <= 0.0){
+        if(TotalFunds <= 0.0){
             play_hit_btn.isClickable = false
             play_stand_btn.isClickable = false
             play_new_game_btn.isClickable = false
@@ -513,7 +519,7 @@ class PlayActivity : AppCompatActivity() {
             dealerCount=0
             gameover=false
             deck.newGame()
-            max = totalFunds.toInt()
+            max = TotalFunds.toInt()
             BetBarView!!.max = (max -min)/ step
             deal()
         }

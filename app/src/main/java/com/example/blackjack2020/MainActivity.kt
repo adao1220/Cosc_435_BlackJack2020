@@ -8,11 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.blackjack2020.Interfaces.ISettingRepository
+import com.example.blackjack2020.SettingsActivity.Companion.TotalFunds
 //import com.example.blackjack2020.interfaces.ISettingRepository
 import com.example.blackjack2020.models.SettingModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
-var totalFunds=25.0
+//var totalFunds=25.0
 class MainActivity : AppCompatActivity(), ISettingRepository {
     private lateinit var settingVar:ISettingRepository
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
     }
 
     fun launchPlay() {
-        if (totalFunds <=0 ){
+        if (TotalFunds <=0 ){
             Toast.makeText(this@MainActivity, "HA, you are poor... You cant play", Toast.LENGTH_SHORT).show()
 
         }else{

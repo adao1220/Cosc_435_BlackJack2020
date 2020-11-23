@@ -90,29 +90,29 @@
     </RadioGroup>
 
     <LinearLayout
-        android:layout_width="393dp"
+        android:layout_width="match_parent"
         android:layout_height="53dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/set_name"
-            android:layout_width="wrap_content"
+            android:layout_width="77dp"
             android:layout_height="wrap_content"
             android:text="@string/set_name"
             android:textSize="18sp" />
 
         <EditText
             android:id="@+id/set_profile_name"
-            android:layout_width="121dp"
+            android:layout_width="153dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName" />
 
         <Button
             android:id="@+id/btnAdd"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Change" />
+            android:text="@string/btnAdd" />
     </LinearLayout>
 
     <LinearLayout
@@ -156,7 +156,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="83dp">
+        android:layout_height="53dp">
 
         <Button
             android:id="@+id/set_return_btn"
@@ -168,27 +168,18 @@
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Switch
-            android:id="@+id/set_music_sw"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/set_music"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvItemsList"
+        android:id="@+id/set_ItemsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible"
         tools:visibility="gone" />
 
     <TextView
-        android:id="@+id/tvNoRecordsAvailable"
-        android:layout_width="388dp"
+        android:id="@+id/set_NoRecordsAvailable"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
         android:text="No records available!!!"
