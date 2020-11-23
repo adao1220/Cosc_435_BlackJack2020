@@ -30,7 +30,10 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
     }
 
     fun launchPlay() {
-        if (TotalFunds <=0 ){
+
+
+        if (TotalFunds <5 ){
+
             Toast.makeText(this@MainActivity, "HA, you are poor... You cant play", Toast.LENGTH_SHORT).show()
 
         }else{

@@ -20,7 +20,6 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
         val options = intent.getStringExtra(SET_KEY)
         if (options != null) {
             val toSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
