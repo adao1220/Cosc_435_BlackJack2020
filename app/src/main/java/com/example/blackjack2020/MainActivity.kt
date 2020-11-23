@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.blackjack2020.Interfaces.ISettingRepository
+import com.example.blackjack2020.SettingsActivity.Companion.ProfileName
 import com.example.blackjack2020.SettingsActivity.Companion.TotalFunds
 //import com.example.blackjack2020.interfaces.ISettingRepository
 import com.example.blackjack2020.models.SettingModel
@@ -32,10 +33,14 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
 
 
         if (TotalFunds <5 ){
+            if (ProfileName=="")
+            Toast.makeText(this@MainActivity, "You need to login: Go to Settings", Toast.LENGTH_SHORT).show()
 
-            Toast.makeText(this@MainActivity, "HA, you are poor... You cant play", Toast.LENGTH_SHORT).show()
+            else Toast.makeText(this@MainActivity, "Add more money: Go to Settings", Toast.LENGTH_SHORT).show()
 
-        }else{
+
+        }
+        else{
             val getSet = settingVar.getSetting(index)
             val json = Gson().toJson(getSet)
             val intent = Intent(this, PlayActivity::class.java)
