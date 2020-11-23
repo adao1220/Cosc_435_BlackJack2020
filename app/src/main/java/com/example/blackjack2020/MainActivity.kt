@@ -13,7 +13,6 @@ import com.example.blackjack2020.SettingsActivity.Companion.TotalFunds
 import com.example.blackjack2020.models.SettingModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
-//var totalFunds=25.0
 class MainActivity : AppCompatActivity(), ISettingRepository {
     private lateinit var settingVar:ISettingRepository
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -31,7 +31,6 @@ const val DEALER="dealer"
 
 class PlayActivity : AppCompatActivity() {
     private lateinit var cardImage: ImageView
-    private lateinit var backcardImage: ImageView
     private var numPlayerCards: Int = 2
     private var numDealerCards: Int = 2
 
@@ -58,11 +57,9 @@ class PlayActivity : AppCompatActivity() {
         if (options != null) {
             val FromSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
             difficulty = FromSet.difficulty
-            SettingsActivity.difficulty = difficulty
+            difficulty = difficulty
             name = FromSet.profileName
-
-            backCard = FromSet.card
-            card = backCard
+            card = FromSet.card
             TotalFunds = FromSet.funds
             newBalance = TotalFunds
             play_cash.text = "Total Cash: $" + TotalFunds.toString()
@@ -111,11 +108,10 @@ class PlayActivity : AppCompatActivity() {
     fun launchfragment() {
         val frag = Play_Settings_fragment()
         val args = Bundle()
-        args.putString(Play_Settings_fragment.cardface, backCard)
+        args.putString(Play_Settings_fragment.cardface, card)
         args.putString(Play_Settings_fragment.difficulty, difficulty)
         args.putString(Play_Settings_fragment.funds, TotalFunds.toString())
         args.putString(Play_Settings_fragment.name, name)
-        args.putString(Play_Settings_fragment.music, music.toString())
         frag.arguments = args
         supportFragmentManager
             .beginTransaction()
@@ -158,7 +154,7 @@ class PlayActivity : AppCompatActivity() {
             dealerCount += deck.getValue(card2)
             this.cardImage = findViewById(R.id.dealer_card_2)
             changeImage(card2)
-            when (backCard) {
+            when (card) {
                 "cardface1" -> {
                     Log.d(tag, " 1. Dealer second selected!")
                     cardImage.setImageResource(R.drawable.card_face_1)
@@ -576,16 +572,10 @@ class PlayActivity : AppCompatActivity() {
             var gameover = false
             var dealerNumAces = 0
             var userNumAces = 0
-            var backCard = " "
-            var name = " "
-            var music = false
-            var difficulty = " "
             var max = 0
             var min = 5
             var step = 1
             var currentBet = 5
-
-
         }
 
 

@@ -30,7 +30,6 @@ class Play_Settings_fragment : Fragment() {
         val cardface = "cardface"
         val difficulty = "difficulty"
         val funds = "funds"
-        val music = "music"
         var name = "name"
     }
 
@@ -45,7 +44,6 @@ class Play_Settings_fragment : Fragment() {
         val difficulty = arguments?.getString("difficulty")
         val funds = arguments?.getString("funds")
         val name = arguments?.getString("name")
-        val music = arguments?.getString("music")
 
 
         when (cardface) {
@@ -120,11 +118,10 @@ class Play_Settings_fragment : Fragment() {
         try {
             val totalCash = cash.toDouble()
             TotalFunds = totalCash
-            PlayActivity.backCard = card
-            PlayActivity.difficulty = ai
-            PlayActivity.name = name
-            PlayActivity.music = music.toBoolean()
-            PlayActivity.max= TotalFunds.toInt()
+            SettingsActivity.card = card
+            SettingsActivity.difficulty = ai
+            SettingsActivity.ProfileName = name
+            SettingsActivity.TotalFunds= TotalFunds
 
 
         } catch (ex: Exception) {
