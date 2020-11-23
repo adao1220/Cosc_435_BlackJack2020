@@ -29,7 +29,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                 + KEY_FUNDS + " REAL,"
                 + KEY_MUSIC + " TEXT"
                 + ")")
-        Log.i(TAG, CREATE_USER_TABLE)
         db?.execSQL(CREATE_USER_TABLE)
     }
 
@@ -115,41 +114,6 @@ class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                 setList.add(set)
 
             } while (cursor.moveToNext())
-        }
-        return setList
-    }
-
-
-    fun viewfirst(): ArrayList<SettingModel> {
-        val setList: ArrayList<SettingModel> = ArrayList<SettingModel>()
-        val selectQuery = "SELECT  * FROM $TABLE_USER"
-
-        val db = this.readableDatabase
-        var cursor: Cursor?
-        try {
-            cursor = db.rawQuery(selectQuery, null)
-
-        } catch (e: SQLiteException) {
-            db.execSQL(selectQuery)
-            return ArrayList()
-        }
-
-        var id: Int
-        var ai : String
-        var card : String
-        var name: String
-        var funds : Double
-
-        if (cursor.moveToFirst()) {
-                id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
-                ai = cursor.getString(cursor.getColumnIndex(KEY_AI))
-                card = cursor.getString(cursor.getColumnIndex(KEY_CARD))
-                name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
-                funds = cursor.getDouble(cursor.getColumnIndex(KEY_FUNDS))
-
-                val set = SettingModel(id = id, difficulty = ai, card = card, profileName = name, funds = funds)
-                setList.add(set)
-
         }
         return setList
     }

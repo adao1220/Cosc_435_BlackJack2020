@@ -15,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.blackjack2020.SettingsActivity.Companion.TotalFunds
 import com.example.blackjack2020.SettingsActivity.Companion.card
 import com.example.blackjack2020.SettingsActivity.Companion.difficulty
-
-import com.example.blackjack2020.Play_Settings_fragment.Companion.cardface
 import com.example.blackjack2020.Play_Settings_fragment.Companion.name
 import com.example.blackjack2020.SettingsActivity.Companion.TAG
 import com.example.blackjack2020.models.CardsModel
@@ -64,20 +62,10 @@ class PlayActivity : AppCompatActivity() {
             TotalFunds = FromSet.funds
             newBalance = TotalFunds
             play_cash.text = "Total Cash: $" + TotalFunds.toString()
-
-
             max = TotalFunds.toInt()
         }
-        //Log.d(tag, backCard)
-
-
-        //this.backcardImage = findViewById(R.id.dealer_card_2)
 
         this.cardImage = findViewById(R.id.dealer_card_1)
-        //TODO change backcard to default card back onCreate
-        //cardOneImage.setImageResource(drawableResource)
-
-
         BetView = this.play_current_bet
         BetBarView = this.play_betbar
         BetBarView!!.max = (max - min) / step

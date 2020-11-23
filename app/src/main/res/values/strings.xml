@@ -4,7 +4,7 @@
     <string name="hp_play_btn">Play</string>
     <string name="hp_how_to_play_btn">How to play</string>
     <string name="hp_settings_btn">Settings</string>
-    <string name="hp_tips_btn">Tips N Tricks</string>
+    <string name="hp_tips_btn">Tips and Tricks</string>
 
     <string name="set_title">BlackJack2020 Settings</string>
     <string name="set_ai">Set AI difficulty:</string>

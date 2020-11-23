@@ -138,8 +138,6 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         val totalCash = cash.toDouble()
         TotalFunds = totalCash
         val status = databaseHandler.addUser(SettingModel(0, ai, card, name, TotalFunds))
-        Log.i(TAG, status.toString())
-
         if (status > -1) {
             Toast.makeText(applicationContext, "Record saved", Toast.LENGTH_LONG).show()
             set_profile_name.text.clear()
