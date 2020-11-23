@@ -122,6 +122,8 @@ class Play_Settings_fragment : Fragment() {
             SettingsActivity.difficulty = ai
             SettingsActivity.ProfileName = name
             SettingsActivity.TotalFunds= TotalFunds
+            Log.i(SettingsActivity.TAG, "Total funds:" +TotalFunds.toString())
+            PlayActivity.currentBet= TotalFunds.toInt()
 
 
         } catch (ex: Exception) {
@@ -147,7 +149,9 @@ class Play_Settings_fragment : Fragment() {
         //betview=activity!!.findViewById(R.id.play_current_bet)
         betbarview=activity!!.findViewById(R.id.play_betbar)
 
-        betbarview!!.max = (PlayActivity.max - PlayActivity.min)/ PlayActivity.step
+        //betbarview!!.max = (PlayActivity.max - PlayActivity.min)/ PlayActivity.step
+        betbarview!!.max = TotalFunds.toInt()-5
+        Log.i(SettingsActivity.TAG, "Total funds:" +TotalFunds.toString())
         //betview!!.text = "Current Bet: $${PlayActivity.min}"
         var playhitbtn : Button
         playhitbtn=activity!!.findViewById(R.id.play_hit_btn)

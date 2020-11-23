@@ -18,6 +18,7 @@ import com.example.blackjack2020.SettingsActivity.Companion.difficulty
 
 import com.example.blackjack2020.Play_Settings_fragment.Companion.cardface
 import com.example.blackjack2020.Play_Settings_fragment.Companion.name
+import com.example.blackjack2020.SettingsActivity.Companion.TAG
 import com.example.blackjack2020.models.CardsModel
 import com.example.blackjack2020.models.SettingModel
 
@@ -262,6 +263,7 @@ class PlayActivity : AppCompatActivity() {
                 var newCard = deck.getRandomCard()
                 isAce(USER, newCard)
                 deck.addToHand(newCard, string)
+                //numPlayerCards++
                 when (numPlayerCards) {
                     2 -> {
                         this.cardImage = findViewById(R.id.player_card_3)
@@ -540,12 +542,14 @@ class PlayActivity : AppCompatActivity() {
             when (!gameover) {
                 true -> {
                     val builder = AlertDialog.Builder(this)
-                    builder.setMessage("Are you sure you want to start a new game?");
-                    builder.setMessage("You will lose $5");
+                    Log.i(TAG,"UserCount: "+ numPlayerCards)
+                    if(numPlayerCards>2){builder.setMessage("You will lose $"+ currentBet)}
+                    else{builder.setMessage("You will lose $5")}
+
                     builder.setTitle("New Game!")
                     builder.setCancelable(false)
 
-                    builder.setPositiveButton("Yes") { dialog, which -> reset() }
+                    builder.setPositiveButton("Yes") { dialog, which -> prematureloss() }
                     builder.setNegativeButton("No") { dialog, which -> dialog.cancel() }
                     val alertDialog = builder.create()
                     alertDialog.show();
@@ -555,6 +559,17 @@ class PlayActivity : AppCompatActivity() {
                 }
             }
         }
+
+    private fun prematureloss(){
+        var newFun = TotalFunds
+        if(numPlayerCards>2){
+            TotalFunds = newFun - currentBet
+        }
+        else
+            TotalFunds=newFun-5
+        play_cash.text = "Total Cash: $" + TotalFunds.toString()
+        reset()
+    }
 
         private fun isAce(string: String, card: Card) {
             if (string.equals(USER) && card.num == 1) {
