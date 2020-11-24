@@ -1,9 +1,13 @@
 package com.example.blackjack2020
 
-import android.app.Activity
+import android.app.*
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -16,11 +20,28 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), ISettingRepository {
     private lateinit var settingVar:ISettingRepository
+
+    //notification start
+
+    lateinit var notificationManager : NotificationManager
+    lateinit var notificationChannel : NotificationChannel
+    lateinit var builder : Notification.Builder
+    private val channelId = "com.example.blackjack2020"
+    private val description = "Test notification"
+
+    //notification end
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         settingVar = SettingRepository()
+
+
+
+
+
+
+
+
 
         hp_play_btn.setOnClickListener{launchPlay()}
         hp_how_to_play_btn.setOnClickListener{launchHowToPlay()}
@@ -29,16 +50,43 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
 
     }
 
+    fun notification(string:String){
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val intent = Intent(this,SettingsActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT)
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel = NotificationChannel(channelId,description,NotificationManager.IMPORTANCE_HIGH)
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.GREEN
+            notificationChannel.enableVibration(false)
+            notificationManager.createNotificationChannel(notificationChannel)
+
+            builder = Notification.Builder(this,channelId)
+                .setContentTitle(string)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setContentIntent(pendingIntent)
+        }else{
+
+            builder = Notification.Builder(this)
+                .setContentTitle(string)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setContentIntent(pendingIntent)
+        }
+        notificationManager.notify(1234,builder.build())
+
+    }
     fun launchPlay() {
-
-
         if (TotalFunds <5 ){
-            if (ProfileName=="")
-            Toast.makeText(this@MainActivity, "You need to login: Go to Settings", Toast.LENGTH_SHORT).show()
-
-            else Toast.makeText(this@MainActivity, "Add more money: Go to Settings", Toast.LENGTH_SHORT).show()
-
-
+            if (ProfileName==""){
+                Toast.makeText(this@MainActivity, "You need to login: Go to Settings", Toast.LENGTH_SHORT).show()
+                notification("Log in: Click to go to settings")
+            }
+            else{
+                Toast.makeText(this@MainActivity, "Add more money: Go to Settings", Toast.LENGTH_SHORT).show()
+                notification("Add more funds: Click to go to settings")
+            }
         }
         else{
             val getSet = settingVar.getSetting(index)
