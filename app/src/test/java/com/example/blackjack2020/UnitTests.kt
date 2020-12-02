@@ -82,7 +82,7 @@ class UnitTests{
     }
 
     @Test
-    fun `10) Ace Found, increments userNumofAces`(){
+    fun `10) 3 of diamonds is worth 3`(){
         var deck= CardRepository()
         var card= Card(2,3)
         assertThat(deck.getValue(card)).isEqualTo(3)
