@@ -97,6 +97,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                     val json = Gson().toJson(setting)
                     intent.putExtra(SETTING_EXTRA_KEY, json)
                     setResult(Activity.RESULT_OK, intent)
+                    Log.i(TAG, intent.toString())
                     finish()
                 } catch (ex: Exception) {
                     Toast.makeText(this, "Invalid somehow", Toast.LENGTH_SHORT).show()

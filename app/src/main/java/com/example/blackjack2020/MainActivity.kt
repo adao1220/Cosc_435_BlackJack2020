@@ -1,6 +1,7 @@
 package com.example.blackjack2020
 
 import android.app.*
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -10,6 +11,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.example.blackjack2020.Interfaces.ISettingRepository
 import com.example.blackjack2020.SettingsActivity.Companion.ProfileName
@@ -34,14 +36,11 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         settingVar = SettingRepository()
-
-
-
-
-
-
-
-
+        if(load == 1){
+            load = 0
+            finish()
+            startActivity(getIntent())
+        }
 
         hp_play_btn.setOnClickListener{launchPlay()}
         hp_how_to_play_btn.setOnClickListener{launchHowToPlay()}
@@ -49,43 +48,42 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
         hp_tips_btn.setOnClickListener{launchTipsNTricks()}
 
     }
+//
+//    fun notification(string:String){
+//        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//        val intent = Intent(this,SettingsActivity::class.java)
+//        val pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT)
+//
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            notificationChannel = NotificationChannel(channelId,description,NotificationManager.IMPORTANCE_HIGH)
+//            notificationChannel.enableLights(true)
+//            notificationChannel.lightColor = Color.GREEN
+//            notificationChannel.enableVibration(false)
+//            notificationManager.createNotificationChannel(notificationChannel)
+//
+//            builder = Notification.Builder(this,channelId)
+//                .setContentTitle(string)
+//                .setSmallIcon(R.mipmap.ic_launcher_round)
+//                .setContentIntent(pendingIntent)
+//        }else{
+//
+//            builder = Notification.Builder(this)
+//                .setContentTitle(string)
+//                .setSmallIcon(R.mipmap.ic_launcher_round)
+//                .setContentIntent(pendingIntent)
+//        }
+//        notificationManager.notify(1234,builder.build())
+//
+//    }
 
-    fun notification(string:String){
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val intent = Intent(this,SettingsActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT)
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel = NotificationChannel(channelId,description,NotificationManager.IMPORTANCE_HIGH)
-            notificationChannel.enableLights(true)
-            notificationChannel.lightColor = Color.GREEN
-            notificationChannel.enableVibration(false)
-            notificationManager.createNotificationChannel(notificationChannel)
-
-            builder = Notification.Builder(this,channelId)
-                .setContentTitle(string)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentIntent(pendingIntent)
-        }else{
-
-            builder = Notification.Builder(this)
-                .setContentTitle(string)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentIntent(pendingIntent)
-        }
-        notificationManager.notify(1234,builder.build())
-
-    }
     fun launchPlay() {
         if (TotalFunds <5 ){
             if (ProfileName==""){
-                Toast.makeText(this@MainActivity, "You need to login: Go to Settings", Toast.LENGTH_SHORT).show()
-                notification("Log in: Click to go to settings")
+                startService(Intent(this, NotificationServices::class.java))
             }
             else{
                 Toast.makeText(this@MainActivity, "Add more money: Go to Settings", Toast.LENGTH_SHORT).show()
-                notification("Add more funds: Click to go to settings")
             }
         }
         else{
@@ -120,6 +118,7 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
+
                     SETTINGS_REQUEST_CODE ->{
                         when(resultCode) {
                     Activity.RESULT_OK -> {
@@ -147,9 +146,11 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
         val TIPS_REQUEST_CODE=1
         val SET_KEY = "Setting Key"
         val LAUNCH_KEY= "Launch Key"
+        val LOGIN_KEY = "Login"
+        val FUNDS_KEY = "funds"
         val TAG = "Test"
         var index=0;
-
+        var load = 0;
 
 
     }
