@@ -39,7 +39,7 @@ class PlayActivity : AppCompatActivity() {
     private var BetBarView: SeekBar? = null
 
 
-    private var newBalance = 0.0
+    var newBalance = 0.0
 
 
     override fun onBackPressed() {
@@ -57,7 +57,6 @@ class PlayActivity : AppCompatActivity() {
         if (options != null) {
             val FromSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
             difficulty = FromSet.difficulty
-            difficulty = difficulty
             name = FromSet.profileName
             card = FromSet.card
             TotalFunds = FromSet.funds
@@ -369,9 +368,9 @@ class PlayActivity : AppCompatActivity() {
 
     }
 
-    private fun lostBet(currentBet: Int) {
-        var newFun = TotalFunds
-        TotalFunds = newFun - currentBet
+    fun lostBet(currentBet: Int) {
+        BetCalculation(currentBet, "lost")
+
         play_cash.text = "Total Cash: $" + TotalFunds.toString()
 
         val builder = AlertDialog.Builder(this)
@@ -386,9 +385,11 @@ class PlayActivity : AppCompatActivity() {
 
     }
 
+
+
     fun wonBet(currentBet: Int) {
-        var newFun = TotalFunds
-        TotalFunds = newFun + currentBet
+        BetCalculation(currentBet, "won")
+
         play_cash.text = "Total Cash: $" + TotalFunds.toString()
 
         val builder = AlertDialog.Builder(this)
@@ -402,6 +403,17 @@ class PlayActivity : AppCompatActivity() {
         alertDialog.show();
     }
 
+    fun BetCalculation(CurrentBet: Int,result: String): Double{
+        var newFun = TotalFunds
+        if(result.equals("lost")){
+            TotalFunds = newFun - CurrentBet
+        }
+        else if(result.equals("won")){
+            TotalFunds = newFun + CurrentBet
+        }
+        newBalance = TotalFunds
+        return TotalFunds
+    }
 
     fun difficultyAI(level: String): Int {
         when (level) {
@@ -409,11 +421,11 @@ class PlayActivity : AppCompatActivity() {
                 while (dealerCount <= 12)
                     hit(DEALER, currentBet)
                 if (dealerCount <= 21 && userCount > 21) {
-                    Log.d(tag, "Dealer won, user went over 21 ")
+                    //Log.d(tag, "Dealer won, user went over 21 ")
                     return 1
                 }
                 if (userCount <= 21 && dealerCount > 21) {
-                    Log.d(tag, "User won, dealer went over 21 ")
+                    //Log.d(tag, "User won, dealer went over 21 ")
                     return 0
                 }
                 if(numDealerCards>4)
@@ -421,26 +433,26 @@ class PlayActivity : AppCompatActivity() {
                 if(numPlayerCards>4)
                     return 0
                 else if ((dealerCount > userCount) && (dealerCount <= 21)) {
-                    Log.d(tag, "Dealer won with score of: " + dealerCount)
+                    //Log.d(tag, "Dealer won with score of: " + dealerCount)
                     return 1
                 } else if ((dealerCount < userCount) && (userCount <= 21)) {
-                    Log.d(tag, "User won with score of: " + userCount)
+                    //Log.d(tag, "User won with score of: " + userCount)
                     return 0
                 } else if ((dealerCount > 21 && userCount > 21)) {
-                    Log.d(tag, "It's a tie")
+                    //Log.d(tag, "It's a tie")
                     return 1
                 } else if ((dealerCount == userCount)) {
-                    Log.d(tag, "It's a tie")
+                    //Log.d(tag, "It's a tie")
                     return 1
                 }
-                Log.d(tag, "Easy")
+                //Log.d(tag, "Easy")
             }
             "set_ai_normal_btn" -> {
 
                 while ((dealerCount < 15 || userVisibleTotal() > dealerCount) && userVisibleTotal() < 19)
                     hit(DEALER, currentBet)
                 if (dealerCount <= 21 && userCount > 21) {
-                    Log.d(tag, "Dealer won, user went over 21 ")
+                    //Log.d(tag, "Dealer won, user went over 21 ")
                     return 1
                 }
                 if (userCount <= 21 && dealerCount > 21) {
@@ -484,7 +496,7 @@ class PlayActivity : AppCompatActivity() {
                 if(numPlayerCards>4)
                     return 0
                 else if ((dealerCount > userCount) && (dealerCount <= 21)) {
-                    Log.d(tag, "Dealer won with score of: " + dealerCount)
+                    //Log.d(tag, "Dealer won with score of: " + dealerCount)
                     return 1
                 } else if ((dealerCount < userCount) && (userCount <= 21)) {
                     Log.d(tag, "User won with score of: " + userCount)
@@ -579,9 +591,9 @@ class PlayActivity : AppCompatActivity() {
         reset()
     }
 
-        private fun isAce(string: String, card: Card) {
+         fun isAce(string: String, card: Card) {
             if (string.equals(USER) && card.num == 1) {
-                Log.i(TAG,"ACE FOUND : USER")
+                //Log.i(TAG,"ACE FOUND : USER")
                 userNumAces += 1
             } else if (string.equals(DEALER) && card.num == 1) {
                 dealerNumAces += 1
@@ -590,7 +602,7 @@ class PlayActivity : AppCompatActivity() {
         }
 
         companion object{
-            const val tag = "test"
+            var tag = "test"
 
             var userCount = 0 // holds score of user
             var dealerCount = 0 //holds dealers score
@@ -601,6 +613,7 @@ class PlayActivity : AppCompatActivity() {
             var min = 5
             var step = 1
             var currentBet = 5
+
         }
 
 
@@ -610,11 +623,54 @@ class PlayActivity : AppCompatActivity() {
         }
 
 
-        fun update(x:Int, y: Int){
-            userCount=x
-            dealerCount=y
-
-        }
+    fun setUserCount(user:Int){
+        userCount=user
+    }
+    fun setDealerCount(dealer: Int)
+    {
+        dealerCount=dealer
+    }
+    fun setDifficulty(Difficulty: String)
+    {
+        difficulty=Difficulty
+    }
+    fun setGameover(flag: Boolean)
+    {
+        gameover=flag
+    }
+    fun setDealerNumAces(num: Int)
+    {
+        dealerNumAces=num
+    }
+    fun setUserNumAces(num: Int)
+    {
+        userNumAces=num
+    }
+    fun setTotalFunds(money: Double)
+    {
+        newBalance=money
+        TotalFunds = money
+    }
+    fun setCurrentBet(money: Int)
+    {
+        currentBet=money
+    }
+    fun setTag()
+    {
+        tag="test"
+    }
+    fun setDeck(){
+        deck= CardsModel(CardRepository())
+    }
+    fun setNumofPlayerCards(num: Int){
+        numPlayerCards= num
+    }
+    fun getNumofPlayerCards():Int{
+        return numPlayerCards
+    }
+    fun setNumofDealerCards(num: Int){
+        numDealerCards= num
+    }
 
 
 

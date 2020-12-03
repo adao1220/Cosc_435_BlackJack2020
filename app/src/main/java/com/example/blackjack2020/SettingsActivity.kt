@@ -58,7 +58,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 val fundsAdd = insertFunds.toDouble()
                 var currFund = set_curr_funds.text.toString()
                 val currFunAdd = currFund.toDouble()
-                val newFunds = fundsAdd + currFunAdd
+                val newFunds = addToFunds(currFunAdd, fundsAdd)
 
                 set_curr_funds.text = newFunds.toString()
                 set_insert_funds.setText("0")
@@ -82,7 +82,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                         card = "cardface1"
                     }
                     R.id.cardface2 -> {
-                        card = "cardface2"
+                        card = "cardface1"
                     }
                     R.id.cardface3 -> {
                         card = "cardface3"
@@ -93,6 +93,9 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 try {
                     val totalCash = cash.toDouble()
                     TotalFunds = totalCash
+                    setProfileName(ProfileName)
+                    setDifficulty(difficulty)
+                    setCard(card)
                     val setting = SettingModel(1, difficulty, card, ProfileName, TotalFunds)
                     val json = Gson().toJson(setting)
                     intent.putExtra(SETTING_EXTRA_KEY, json)
@@ -107,7 +110,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    private fun addRecord() {
+    fun addRecord() {
         var ai = ""
         var card = ""
         when (aiGroup.checkedRadioButtonId) {
@@ -279,6 +282,23 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
             set_NoRecordsAvailable.visibility = View.VISIBLE
         }
         return
+    }
+
+    fun setDifficulty(Diff: String){
+        difficulty= Diff
+    }
+    fun setCard(cardChoice: String){
+        card= cardChoice
+    }
+    fun setProfileName(name: String){
+        ProfileName= name
+    }
+    fun setTotalFunds(funds: Double){
+        TotalFunds = funds
+    }
+    fun addToFunds(current: Double, adding: Double):Double{
+        val newFunds = adding + current
+        return newFunds
     }
 
 
