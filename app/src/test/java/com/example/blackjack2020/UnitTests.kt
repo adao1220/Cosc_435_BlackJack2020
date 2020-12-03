@@ -1,7 +1,13 @@
 package com.example.blackjack2020
 
+import android.provider.ContactsContract
+import com.example.blackjack2020.SettingsActivity.Companion.TotalFunds
+import com.example.blackjack2020.database.DatabaseHandler
 import com.example.blackjack2020.models.Card
+import com.example.blackjack2020.models.SettingModel
 import com.google.common.truth.Truth.assertThat
+import kotlinx.android.synthetic.main.activity_play.*
+import kotlinx.android.synthetic.main.activity_settings.*
 import org.junit.Test
 
 
@@ -88,5 +94,28 @@ class UnitTests{
         assertThat(deck.getValue(card)).isEqualTo(3)
     }
 
+    @Test
+    fun `11) Addings funds to your current Pool of money`(){
+        var Setting= SettingsActivity()
+        val currFunds = 10.0
+        val addFunds = 20.0
+        val total = Setting.addToFunds(currFunds,addFunds)
+        Setting.setTotalFunds(total)
+        assertThat(TotalFunds).isEqualTo(30.0)
+    }
 
+    @Test
+    fun `12) Betting system Losing side `(){
+        var Game = PlayActivity()
+        Game.setTotalFunds(40.0)
+        Game.BetCalculation(10, "lost")
+        assertThat(Game.newBalance).isEqualTo(30.0)
+    }
+
+    @Test
+    fun `13) Checking the preset initial Values in Settings`(){
+        var Setting = SettingRepository()
+        val count = Setting.getCount()
+        assertThat(count).isEqualTo(1)
+    }
 }

@@ -39,7 +39,7 @@ class PlayActivity : AppCompatActivity() {
     private var BetBarView: SeekBar? = null
 
 
-    private var newBalance = 0.0
+    var newBalance = 0.0
 
 
     override fun onBackPressed() {
@@ -368,9 +368,9 @@ class PlayActivity : AppCompatActivity() {
 
     }
 
-    private fun lostBet(currentBet: Int) {
-        var newFun = TotalFunds
-        TotalFunds = newFun - currentBet
+    fun lostBet(currentBet: Int) {
+        BetCalculation(currentBet, "lost")
+
         play_cash.text = "Total Cash: $" + TotalFunds.toString()
 
         val builder = AlertDialog.Builder(this)
@@ -385,9 +385,11 @@ class PlayActivity : AppCompatActivity() {
 
     }
 
+
+
     fun wonBet(currentBet: Int) {
-        var newFun = TotalFunds
-        TotalFunds = newFun + currentBet
+        BetCalculation(currentBet, "won")
+
         play_cash.text = "Total Cash: $" + TotalFunds.toString()
 
         val builder = AlertDialog.Builder(this)
@@ -401,6 +403,17 @@ class PlayActivity : AppCompatActivity() {
         alertDialog.show();
     }
 
+    fun BetCalculation(CurrentBet: Int,result: String): Double{
+        var newFun = TotalFunds
+        if(result.equals("lost")){
+            TotalFunds = newFun - CurrentBet
+        }
+        else if(result.equals("won")){
+            TotalFunds = newFun + CurrentBet
+        }
+        newBalance = TotalFunds
+        return TotalFunds
+    }
 
     fun difficultyAI(level: String): Int {
         when (level) {
@@ -635,7 +648,8 @@ class PlayActivity : AppCompatActivity() {
     }
     fun setTotalFunds(money: Double)
     {
-        TotalFunds=money
+        newBalance=money
+        TotalFunds = money
     }
     fun setCurrentBet(money: Int)
     {
@@ -650,6 +664,9 @@ class PlayActivity : AppCompatActivity() {
     }
     fun setNumofPlayerCards(num: Int){
         numPlayerCards= num
+    }
+    fun getNumofPlayerCards():Int{
+        return numPlayerCards
     }
     fun setNumofDealerCards(num: Int){
         numDealerCards= num
