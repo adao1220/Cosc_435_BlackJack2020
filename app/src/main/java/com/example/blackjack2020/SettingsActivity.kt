@@ -20,6 +20,11 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
+        val adapter = ProfileAdapter(this,getItemsList())
+        set_ItemsList.adapter = adapter
+        set_ItemsList.layoutManager = LinearLayoutManager(this)
+
         val options = intent.getStringExtra(SET_KEY)
         if (options != null) {
             val toSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
@@ -44,6 +49,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
 
         set_return_btn.setOnClickListener(this)
         set_add_funds.setOnClickListener(this)
+        set_clear_btn.setOnClickListener(this)
         btnAdd.setOnClickListener { view ->
             addRecord()
         }
@@ -53,6 +59,14 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when (view?.id) {
+            R.id.set_clear_btn -> {
+                set_ai_easy_btn.isChecked = true
+                cardface1.isChecked = true
+                set_profile_name.setText("")
+                set_curr_funds.text = "0.0"
+                set_insert_funds.setText("0")
+
+            }
             R.id.set_add_funds -> {
                 var insertFunds = set_insert_funds.editableText.toString()
                 val fundsAdd = insertFunds.toDouble()
@@ -82,7 +96,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                         card = "cardface1"
                     }
                     R.id.cardface2 -> {
-                        card = "cardface1"
+                        card = "cardface2"
                     }
                     R.id.cardface3 -> {
                         card = "cardface3"
@@ -148,6 +162,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
             set_curr_funds.setText("0")
             set_insert_funds.setText("0")
         }
+        set_ItemsList.adapter?.notifyDataSetChanged()
         setupListofDataIntoRecyclerView()
     }
 
@@ -178,6 +193,8 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         alertDialog.setCancelable(false)
         // Will not allow user to cancel after clicking on remaining screen area.
         alertDialog.show()
+        set_ItemsList.adapter?.notifyDataSetChanged()
+
     }
 
     fun updateRecord(settingModel: SettingModel) {
@@ -225,6 +242,8 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
             if (status > -1) {
                 Toast.makeText(applicationContext, "Record Updated.", Toast.LENGTH_LONG).show()
                 setupListofDataIntoRecyclerView()
+                set_ItemsList.adapter?.notifyDataSetChanged()
+
             }
         } else {
             Toast.makeText(applicationContext, "Name cannot be blank", Toast.LENGTH_LONG).show()
@@ -259,7 +278,9 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         set_curr_funds.text = settingModel.funds.toString()
 
         set_insert_funds.setText("0")
+
         return list
+
     }
 
 
@@ -281,6 +302,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
             set_ItemsList.visibility = View.GONE
             set_NoRecordsAvailable.visibility = View.VISIBLE
         }
+
         return
     }
 

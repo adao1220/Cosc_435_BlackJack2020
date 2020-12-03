@@ -71,5 +71,6 @@
     <string name="play_ai_hand">Dealers Hand</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="set_clear_btn">Clear</string>
 
 </resources>

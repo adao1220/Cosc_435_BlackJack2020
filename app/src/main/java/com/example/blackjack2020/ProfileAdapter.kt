@@ -24,6 +24,7 @@ class ProfileAdapter(val context: Context, val items: ArrayList<SettingModel>) :
 
             )
         )
+
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -52,7 +53,6 @@ class ProfileAdapter(val context: Context, val items: ArrayList<SettingModel>) :
             if (context is SettingsActivity) {
                 context.getUser(item)
                 context.setupListofDataIntoRecyclerView()
-                Log.i("TESTING SHITTTTTTT", "HEH")
             }
         }
 

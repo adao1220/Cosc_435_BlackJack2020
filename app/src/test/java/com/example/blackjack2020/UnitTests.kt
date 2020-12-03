@@ -9,6 +9,7 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.android.synthetic.main.activity_play.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import org.junit.Test
+import java.lang.Exception
 
 
 class UnitTests{
@@ -118,4 +119,5 @@ class UnitTests{
         val count = Setting.getCount()
         assertThat(count).isEqualTo(1)
     }
+
 }
