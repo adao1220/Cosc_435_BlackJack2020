@@ -45,7 +45,8 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 "cardface3" -> cardface3.isChecked = true
             }
             ProfileName = toSet.profileName
-            if (id!=0){
+            Log.i(TAG+ "SHIIIT",id.toString())
+            if (id>0){
                 btnAdd.visibility = View.GONE
             }
             set_profile_name.setText(ProfileName)
@@ -68,13 +69,19 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
 
         when (view?.id) {
             R.id.set_clear_btn -> {
+                id = -1
+                difficulty = "set_ai_easy_btn"
+                ProfileName = ""
+                card = "cardface1"
+                TotalFunds = 0.0
                 set_ai_easy_btn.isChecked = true
                 cardface1.isChecked = true
                 set_profile_name.setText("")
+
                 set_curr_funds.text = "0.0"
                 set_insert_funds.setText("0")
                 btnAdd.visibility = View.VISIBLE
-
+                setupListofDataIntoRecyclerView()
 
             }
             R.id.set_add_funds -> {
@@ -175,18 +182,24 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 card = "cardface3"
             }
         }
-        val ProfileName = set_profile_name.editableText.toString()
+        ProfileName = set_profile_name.editableText.toString()
         val cash = set_curr_funds.text.toString()
 
         val databaseHandler = DatabaseHandler(this)
         val totalCash = cash.toDouble()
         TotalFunds = totalCash
         id=getItemsList().size+1
-        val status = databaseHandler.addUser(SettingModel(id, difficulty, card, ProfileName, TotalFunds))
-        if (status > -1) {
-            Toast.makeText(applicationContext, "Record saved", Toast.LENGTH_LONG).show()
-            Log.i(TAG + "ID NUMBER:", id.toString())
-            set_insert_funds.setText("0")
+        if(ProfileName.equals("")) {
+            Toast.makeText(applicationContext, " Please enter name", Toast.LENGTH_LONG).show()
+        }
+        else {
+            val status =
+                databaseHandler.addUser(SettingModel(id, difficulty, card, ProfileName, TotalFunds))
+            if (status > -1) {
+                Toast.makeText(applicationContext, "Record saved", Toast.LENGTH_LONG).show()
+                Log.i(TAG + "ID NUMBER:", id.toString())
+                set_insert_funds.setText("0")
+            }
         }
         setupListofDataIntoRecyclerView()
     }
@@ -353,7 +366,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         var ProfileName = ""
         var difficulty = "set_ai_easy_btn"
         var card = "cardface1"
-        var id = 0
+        var id = -1
         var TotalFunds = 0.0
     }
 }
