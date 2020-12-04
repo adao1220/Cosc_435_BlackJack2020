@@ -51,8 +51,9 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
             }
             set_profile_name.setText(ProfileName)
             set_curr_funds.text = TotalFunds.toString()
+            set_insert_funds.setText("")
+            set_insert_funds.setHint("0")
 
-            set_insert_funds.setText("0")
         }
 
         set_return_btn.setOnClickListener(this)
@@ -79,20 +80,24 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 set_profile_name.setText("")
 
                 set_curr_funds.text = "0.0"
-                set_insert_funds.setText("0")
+                set_insert_funds.setText("")
+                set_insert_funds.setHint("0")
                 btnAdd.visibility = View.VISIBLE
                 setupListofDataIntoRecyclerView()
 
             }
             R.id.set_add_funds -> {
                 var insertFunds = set_insert_funds.editableText.toString()
-                val fundsAdd = insertFunds.toDouble()
-                var currFund = set_curr_funds.text.toString()
-                val currFunAdd = currFund.toDouble()
-                TotalFunds = addToFunds(currFunAdd, fundsAdd)
+                if( insertFunds.toDouble()>0.0) {
+                    val fundsAdd = insertFunds.toDouble()
+                    var currFund = set_curr_funds.text.toString()
+                    val currFunAdd = currFund.toDouble()
+                    TotalFunds = addToFunds(currFunAdd, fundsAdd)
 
-                set_curr_funds.text = TotalFunds.toString()
-                set_insert_funds.setText("0")
+                    set_curr_funds.text = TotalFunds.toString()
+                    set_insert_funds.setText("")
+                    set_insert_funds.setHint("0")
+                }
                 setupListofDataIntoRecyclerView()
 
             }
@@ -198,7 +203,9 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
             if (status > -1) {
                 Toast.makeText(applicationContext, "Record saved", Toast.LENGTH_LONG).show()
                 Log.i(TAG + "ID NUMBER:", id.toString())
-                set_insert_funds.setText("0")
+                btnAdd.visibility=View.GONE
+                set_insert_funds.setText("")
+                set_insert_funds.setHint("0")
             }
         }
         setupListofDataIntoRecyclerView()
@@ -309,9 +316,13 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         }
         id=settingModel.id
         ProfileName=settingModel.profileName
+        difficulty = settingModel.difficulty
+        card = settingModel.card
+        TotalFunds = settingModel.funds
         set_profile_name.setText(settingModel.profileName)
         set_curr_funds.text = settingModel.funds.toString()
-        set_insert_funds.setText("0")
+        set_insert_funds.setText("")
+        set_insert_funds.setHint("0")
 
         btnAdd.visibility = View.GONE
         return list
