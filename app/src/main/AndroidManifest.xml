@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PlayActivity"></activity>
+        <service
+            android:name=".NotificationServices"
+            android:enabled="true"
+            android:exported="false"></service>
+
+        <activity android:name=".PlayActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".TipsNTricksActivity" />
         <activity android:name=".HowToPlayActivity" />
