@@ -110,6 +110,7 @@ class PlayActivity : AppCompatActivity() {
     }
 
     fun launchfragment() {
+        play_changeSetting.visibility = View.GONE
         val frag = Play_Settings_fragment()
         val args = Bundle()
         args.putString(Play_Settings_fragment.cardface, card)
@@ -122,10 +123,13 @@ class PlayActivity : AppCompatActivity() {
             .add(R.id.flfragment, frag, null)
             //.addToBackStack(null)
             .commit()
+
     }
 
 
     fun deal() { //can only "deal" from a full deck, if less than full you need a new game
+        play_changeSetting.visibility = View.VISIBLE
+
         if (deck.count() == 52) {
             var card1 = deck.getRandomCard()
             //var card1=(Card(1,1))

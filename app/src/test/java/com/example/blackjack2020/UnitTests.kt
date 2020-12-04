@@ -119,5 +119,9 @@ class UnitTests{
         val count = Setting.getCount()
         assertThat(count).isEqualTo(1)
     }
-
+//    @Test
+//    fun `14) Tests to check how many rows are in the database`(){
+//        var Setting = SettingsActivity()
+//        var Set = Setting.getItemsList()
+//    }
 }
