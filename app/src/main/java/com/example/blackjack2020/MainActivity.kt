@@ -48,34 +48,7 @@ class MainActivity : AppCompatActivity(), ISettingRepository {
         hp_tips_btn.setOnClickListener{launchTipsNTricks()}
 
     }
-//
-//    fun notification(string:String){
-//        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//        val intent = Intent(this,SettingsActivity::class.java)
-//        val pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT)
-//
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            notificationChannel = NotificationChannel(channelId,description,NotificationManager.IMPORTANCE_HIGH)
-//            notificationChannel.enableLights(true)
-//            notificationChannel.lightColor = Color.GREEN
-//            notificationChannel.enableVibration(false)
-//            notificationManager.createNotificationChannel(notificationChannel)
-//
-//            builder = Notification.Builder(this,channelId)
-//                .setContentTitle(string)
-//                .setSmallIcon(R.mipmap.ic_launcher_round)
-//                .setContentIntent(pendingIntent)
-//        }else{
-//
-//            builder = Notification.Builder(this)
-//                .setContentTitle(string)
-//                .setSmallIcon(R.mipmap.ic_launcher_round)
-//                .setContentIntent(pendingIntent)
-//        }
-//        notificationManager.notify(1234,builder.build())
-//
-//    }
+
 
     fun launchPlay() {
         if (TotalFunds <5 ){

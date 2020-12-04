@@ -45,11 +45,11 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 "cardface3" -> cardface3.isChecked = true
             }
             ProfileName = toSet.profileName
-            Log.i(TAG+ "SHIIIT",id.toString())
             if (id>0){
                 btnAdd.visibility = View.GONE
             }
             set_profile_name.setText(ProfileName)
+            TotalFunds = toSet.funds
             set_curr_funds.text = TotalFunds.toString()
             set_insert_funds.setText("")
             set_insert_funds.setHint("0")
@@ -146,6 +146,8 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                                 TotalFunds
                             )
                         )
+                        Log.i(TAG+ "SHIIIT Ret", TotalFunds.toString())
+
                         val json = Gson().toJson(setting)
                         intent.putExtra(SETTING_EXTRA_KEY, json)
                         setResult(Activity.RESULT_OK, intent)
@@ -263,19 +265,18 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 card = "cardface3"
             }
         }
-        val name = set_profile_name.text.toString()
-        val funds = TotalFunds.toString()
+        ProfileName = set_profile_name.text.toString()
+        TotalFunds
         val databaseHandler = DatabaseHandler(this)
 
-        if (!name.isEmpty()) {
-            val cash = funds.toDouble()
+        if (!ProfileName.isEmpty()) {
             val status = databaseHandler.updateUser(
                 SettingModel(
                     settingModel.id,
                     difficulty,
                     card,
-                    name,
-                    cash
+                    ProfileName,
+                    TotalFunds
                 )
             )
             if (status > -1) {
