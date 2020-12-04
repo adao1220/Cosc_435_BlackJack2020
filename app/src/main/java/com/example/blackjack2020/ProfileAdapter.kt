@@ -53,6 +53,7 @@ class ProfileAdapter(val context: Context, val items: ArrayList<SettingModel>) :
             if (context is SettingsActivity) {
                 context.getUser(item)
                 context.setupListofDataIntoRecyclerView()
+
             }
         }
 

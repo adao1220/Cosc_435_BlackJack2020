@@ -12,17 +12,20 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.blackjack2020.Play_Settings_fragment.Companion.name
+import com.example.blackjack2020.SettingsActivity.Companion.ProfileName
 
 import com.example.blackjack2020.SettingsActivity.Companion.TotalFunds
 import com.example.blackjack2020.SettingsActivity.Companion.card
 import com.example.blackjack2020.SettingsActivity.Companion.difficulty
-import com.example.blackjack2020.Play_Settings_fragment.Companion.name
 import com.example.blackjack2020.SettingsActivity.Companion.TAG
+import com.example.blackjack2020.database.DatabaseHandler
 import com.example.blackjack2020.models.CardsModel
 import com.example.blackjack2020.models.SettingModel
 
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_play.*
+import kotlinx.android.synthetic.main.activity_settings.*
 
 
 private var deck= CardsModel(CardRepository())
@@ -41,7 +44,6 @@ class PlayActivity : AppCompatActivity() {
 
     var newBalance = 0.0
 
-
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
@@ -51,11 +53,11 @@ class PlayActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
-
-
+        
         val options = intent.getStringExtra(MainActivity.LAUNCH_KEY)
         if (options != null) {
             val FromSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
+            id
             difficulty = FromSet.difficulty
             name = FromSet.profileName
             card = FromSet.card
@@ -603,7 +605,7 @@ class PlayActivity : AppCompatActivity() {
 
         companion object{
             var tag = "test"
-
+            var id = 0
             var userCount = 0 // holds score of user
             var dealerCount = 0 //holds dealers score
             var gameover = false
@@ -629,10 +631,6 @@ class PlayActivity : AppCompatActivity() {
     fun setDealerCount(dealer: Int)
     {
         dealerCount=dealer
-    }
-    fun setDifficulty(Difficulty: String)
-    {
-        difficulty=Difficulty
     }
     fun setGameover(flag: Boolean)
     {
@@ -672,7 +670,33 @@ class PlayActivity : AppCompatActivity() {
         numDealerCards= num
     }
 
+    fun setId(Id: Int){
+        id = Id
+    }
+    fun getid():Int{
+        return id
+    }
+    fun setDifficulty(Difficulty: String){
+        difficulty=Difficulty
+    }
+    fun getDifficulty():String{
+        return difficulty
+    }
 
-
-
+    fun cardface(cardface: String)
+    {
+        card=cardface
+    }
+    fun getcard():String{
+        return card
+    }
+    fun setProfileName(ProfileName: String){
+        name = ProfileName
+    }
+    fun getProfileName():String{
+        return name
+    }
+    fun getTotalFunds():Double{
+        return TotalFunds
+    }
 }

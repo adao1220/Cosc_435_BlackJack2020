@@ -3,6 +3,7 @@ package com.example.blackjack2020
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -25,9 +26,10 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         set_ItemsList.adapter = adapter
         set_ItemsList.layoutManager = LinearLayoutManager(this)
 
+
         val options = intent.getStringExtra(SET_KEY)
         if (options != null) {
-            val toSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
+            val toSet = Gson().fromJson(options, SettingModel::class.java)
             difficulty = toSet.difficulty
             when (difficulty) {
                 "set_ai_easy_btn" -> set_ai_easy_btn.isChecked = true
@@ -41,6 +43,9 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 "cardface3" -> cardface3.isChecked = true
             }
             ProfileName = toSet.profileName
+            if (!ProfileName.equals("")){
+                btnAdd.visibility = View.GONE
+            }
             set_profile_name.setText(ProfileName)
             set_curr_funds.text = TotalFunds.toString()
 
@@ -53,7 +58,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         btnAdd.setOnClickListener { view ->
             addRecord()
         }
-
+        set_ItemsList.adapter?.notifyDataSetChanged()
         setupListofDataIntoRecyclerView()
     }
 
@@ -65,6 +70,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 set_profile_name.setText("")
                 set_curr_funds.text = "0.0"
                 set_insert_funds.setText("0")
+                btnAdd.visibility = View.VISIBLE
 
             }
             R.id.set_add_funds -> {
@@ -72,10 +78,11 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 val fundsAdd = insertFunds.toDouble()
                 var currFund = set_curr_funds.text.toString()
                 val currFunAdd = currFund.toDouble()
-                val newFunds = addToFunds(currFunAdd, fundsAdd)
+                TotalFunds = addToFunds(currFunAdd, fundsAdd)
 
-                set_curr_funds.text = newFunds.toString()
+                set_curr_funds.text = TotalFunds.toString()
                 set_insert_funds.setText("0")
+                setupListofDataIntoRecyclerView()
 
             }
             R.id.set_return_btn -> {
@@ -103,21 +110,27 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
                 ProfileName = set_profile_name.editableText.toString()
-                val cash = set_curr_funds.text.toString()
-                try {
-                    val totalCash = cash.toDouble()
-                    TotalFunds = totalCash
-                    setProfileName(ProfileName)
-                    setDifficulty(difficulty)
-                    setCard(card)
-                    val setting = SettingModel(1, difficulty, card, ProfileName, TotalFunds)
-                    val json = Gson().toJson(setting)
-                    intent.putExtra(SETTING_EXTRA_KEY, json)
-                    setResult(Activity.RESULT_OK, intent)
-                    Log.i(TAG, intent.toString())
-                    finish()
-                } catch (ex: Exception) {
-                    Toast.makeText(this, "Invalid somehow", Toast.LENGTH_SHORT).show()
+                if(!ProfileName.equals("")){
+                    val cash = set_curr_funds.text.toString()
+                    try {
+                        val totalCash = cash.toDouble()
+                        TotalFunds = totalCash
+                        setProfileName(ProfileName)
+                        setDifficulty(difficulty)
+                        setCard(card)
+
+                        val setting = SettingModel(id, difficulty, card, ProfileName, TotalFunds)
+                        val json = Gson().toJson(setting)
+                        intent.putExtra(SETTING_EXTRA_KEY, json)
+                        setResult(Activity.RESULT_OK, intent)
+                        Log.i(TAG, intent.toString())
+                        finish()
+                    } catch (ex: Exception) {
+                        Toast.makeText(this, "Invalid somehow", Toast.LENGTH_SHORT).show()
+                    }
+                }else{
+                    Toast.makeText(this, "Profile Name needed", Toast.LENGTH_SHORT).show()
+
                 }
             }
         }
@@ -125,17 +138,15 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     fun addRecord() {
-        var ai = ""
-        var card = ""
         when (aiGroup.checkedRadioButtonId) {
             R.id.set_ai_easy_btn -> {
-                ai = "set_ai_easy_btn"
+                difficulty = "set_ai_easy_btn"
             }
             R.id.set_ai_normal_btn -> {
-                ai = "set_ai_normal_btn"
+                difficulty = "set_ai_normal_btn"
             }
             R.id.set_ai_hard_btn -> {
-                ai = "set_ai_hard_btn"
+                difficulty = "set_ai_hard_btn"
             }
         }
         when (cardGroup.checkedRadioButtonId) {
@@ -149,20 +160,18 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 card = "cardface3"
             }
         }
-        val name = set_profile_name.editableText.toString()
+        val ProfileName = set_profile_name.editableText.toString()
         val cash = set_curr_funds.text.toString()
 
         val databaseHandler = DatabaseHandler(this)
         val totalCash = cash.toDouble()
         TotalFunds = totalCash
-        val status = databaseHandler.addUser(SettingModel(0, ai, card, name, TotalFunds))
+        val status = databaseHandler.addUser(SettingModel(id, difficulty, card, ProfileName, TotalFunds))
         if (status > -1) {
             Toast.makeText(applicationContext, "Record saved", Toast.LENGTH_LONG).show()
-            set_profile_name.text.clear()
-            set_curr_funds.setText("0")
+            Log.i(TAG + "ID NUMBER:", id.toString())
             set_insert_funds.setText("0")
         }
-        set_ItemsList.adapter?.notifyDataSetChanged()
         setupListofDataIntoRecyclerView()
     }
 
@@ -193,13 +202,9 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         alertDialog.setCancelable(false)
         // Will not allow user to cancel after clicking on remaining screen area.
         alertDialog.show()
-        set_ItemsList.adapter?.notifyDataSetChanged()
-
     }
 
     fun updateRecord(settingModel: SettingModel) {
-
-        var difficulty = ""
         when (aiGroup.checkedRadioButtonId) {
             R.id.set_ai_easy_btn -> {
                 difficulty = "set_ai_easy_btn"
@@ -211,7 +216,6 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 difficulty = "set_ai_hard_btn"
             }
         }
-        var card = ""
         when (cardGroup.checkedRadioButtonId) {
             R.id.cardface1 -> {
                 card = "cardface1"
@@ -224,8 +228,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
         val name = set_profile_name.text.toString()
-        val funds = set_curr_funds.text.toString()
-
+        val funds = TotalFunds.toString()
         val databaseHandler = DatabaseHandler(this)
 
         if (!name.isEmpty()) {
@@ -242,11 +245,12 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
             if (status > -1) {
                 Toast.makeText(applicationContext, "Record Updated.", Toast.LENGTH_LONG).show()
                 setupListofDataIntoRecyclerView()
-                set_ItemsList.adapter?.notifyDataSetChanged()
 
             }
         } else {
             Toast.makeText(applicationContext, "Name cannot be blank", Toast.LENGTH_LONG).show()
+            setupListofDataIntoRecyclerView()
+
         }
     }
 
@@ -276,9 +280,9 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         }
         set_profile_name.setText(settingModel.profileName)
         set_curr_funds.text = settingModel.funds.toString()
-
         set_insert_funds.setText("0")
 
+        btnAdd.visibility = View.GONE
         return list
 
     }
@@ -294,6 +298,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
     fun setupListofDataIntoRecyclerView() {
         if (getItemsList().size > 0) {
             set_ItemsList.visibility = View.VISIBLE
+
             set_NoRecordsAvailable.visibility = View.GONE
             set_ItemsList.layoutManager = LinearLayoutManager(this)
             val profileAdapter = ProfileAdapter(this, getItemsList())
@@ -330,6 +335,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         var ProfileName = ""
         var difficulty = "set_ai_easy_btn"
         var card = "cardface1"
+        var id = 0
         var TotalFunds = 0.0
     }
 }
