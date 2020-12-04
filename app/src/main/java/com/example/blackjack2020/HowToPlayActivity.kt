@@ -17,27 +17,16 @@ class HowToPlayActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_how_to_play)
-
         viewPager = findViewById(R.id.pager)
-
         val pagerAdapter = PagerAdapter(this)
         viewPager.adapter = pagerAdapter
-
-
 //        val pAdapter = PagerAdapter(supportFragmentManager)
 //        pAdapter.addfragment(FragmentOneHtpOne(), "Goal")
 //        pAdapter.addfragment(FragmentTwoHtp(), "Rules")
 //        viewPager.adapter = pAdapter
 
     }
-    override fun onBackPressed() {
-        if(viewPager.currentItem == 0){
-            super.onBackPressed()
-        }else{
-            viewPager.currentItem = viewPager.currentItem - 1
-        }
 
-    }
     private inner class PagerAdapter(manager: FragmentActivity) : FragmentStateAdapter(manager) {
 
         override fun getItemCount(): Int = NUM_PAGES

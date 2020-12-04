@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:backgroundTint="#0D6891"
     tools:context=".HowToPlayActivity">
 
     <LinearLayout
@@ -26,6 +28,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/how_to_play_title"
+            android:textColor="#FFFFFF"
             android:textSize="36sp" />
 
         <androidx.viewpager2.widget.ViewPager2
@@ -38,8 +41,6 @@
         </androidx.viewpager2.widget.ViewPager2>
 
     </LinearLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

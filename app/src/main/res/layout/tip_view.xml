@@ -23,6 +23,7 @@
             android:paddingRight="5dp"
             android:paddingBottom="10dp"
             android:text="@string/tip_label_text"
+            android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -35,6 +36,7 @@
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
             android:text="1"
+            android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -47,6 +49,7 @@
             android:paddingRight="5dp"
             android:paddingBottom="5dp"
             android:text="tip is here"
+            android:textColor="#FFFFFF"
             android:textSize="24sp" />
 
     </LinearLayout>

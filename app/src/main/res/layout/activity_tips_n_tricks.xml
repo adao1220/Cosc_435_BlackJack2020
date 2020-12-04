@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#0D6891"
     tools:context=".TipsNTricksActivity">
 
     <LinearLayout
@@ -23,6 +24,7 @@
             android:id="@+id/Recycler_View"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#000000"
             tools:listitem="@layout/tip_view" />
     </LinearLayout>
 

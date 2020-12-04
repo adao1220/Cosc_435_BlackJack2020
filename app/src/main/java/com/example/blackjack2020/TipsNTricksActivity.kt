@@ -16,9 +16,10 @@ class TipsNTricksActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tips_n_tricks)
-
         Recycler_View.layoutManager = LinearLayoutManager(this)
         fetchJson()
+        supportActionBar?.hide()
+
 
     }
     fun fetchJson() {
@@ -27,24 +28,18 @@ class TipsNTricksActivity : AppCompatActivity() {
         val client = OkHttpClient()
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-
                 val body = response.body?.string()
-
                 val gson = GsonBuilder().create()
-
                 val tipsFeed = gson.fromJson(body, TipsFeed::class.java)
-
                 runOnUiThread {
                     Recycler_View.adapter = TipsAdapter(tipsFeed)
                 }
             }
-
             override fun onFailure(call: Call, e: IOException) {
                 Log.d("test", "Failed to connect to Rest API")
             }
         })
     }
-
     public class TipsFeed(val newTips: List<TipsNew>)
     class TipsNew(val tipName: Int, val tipText: String)
 }

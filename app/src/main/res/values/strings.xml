@@ -45,16 +45,16 @@
 
     //****************Tips N Tricks Page***************
     <string name="tips_n_tricks_title">Tips N Tricks!</string>
-    <string name="tips_n_tricks_tip_1">Tip 1:</string>
-    <string name="tips_n_tricks_1">Stand when your hand is 12 through 16 and the dealer has a 2 through 6.</string>
-    <string name="tips_n_tricks_tip_2">Tip 2:</string>
-    <string name="tips_n_tricks_2">Hit when your hand is 12 through 16 and the dealer has 7 through Ace.</string>
-    <string name="tips_n_tricks_tip_3">Tip 3:</string>
-    <string name="tips_n_tricks_3">Always split Aces and 8s.</string>
-    <string name="tips_n_tricks_tip_4">Tip 4:</string>
-    <string name="tips_n_tricks_4">Double down when you have 11 and the dealer has 2 through 10.</string>
-    <string name="tips_n_tricks_tip_5">Tip 5:</string>
-    <string name="tips_n_tricks_5">Hit if the dealer has Aces through 6.</string>
+<!--    <string name="tips_n_tricks_tip_1">Tip 1:</string>-->
+<!--    <string name="tips_n_tricks_1">Stand when your hand is 12 through 16 and the dealer has a 2 through 6.</string>-->
+<!--    <string name="tips_n_tricks_tip_2">Tip 2:</string>-->
+<!--    <string name="tips_n_tricks_2">Hit when your hand is 12 through 16 and the dealer has 7 through Ace.</string>-->
+<!--    <string name="tips_n_tricks_tip_3">Tip 3:</string>-->
+<!--    <string name="tips_n_tricks_3">Always split Aces and 8s.</string>-->
+<!--    <string name="tips_n_tricks_tip_4">Tip 4:</string>-->
+<!--    <string name="tips_n_tricks_4">Double down when you have 11 and the dealer has 2 through 10.</string>-->
+<!--    <string name="tips_n_tricks_tip_5"></string>-->
+<!--    <string name="tips_n_tricks_5"></string>-->
     <string name="tip_label_text">Tip </string>
 
 
