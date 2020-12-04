@@ -15,6 +15,8 @@ import com.example.blackjack2020.database.DatabaseHandler
 import com.example.blackjack2020.models.SettingModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.android.synthetic.main.user_row.*
+import okhttp3.internal.notify
 
 class SettingsActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -43,7 +45,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 "cardface3" -> cardface3.isChecked = true
             }
             ProfileName = toSet.profileName
-            if (!ProfileName.equals("")){
+            if (id!=0){
                 btnAdd.visibility = View.GONE
             }
             set_profile_name.setText(ProfileName)
@@ -63,6 +65,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
+
         when (view?.id) {
             R.id.set_clear_btn -> {
                 set_ai_easy_btn.isChecked = true
@@ -71,6 +74,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 set_curr_funds.text = "0.0"
                 set_insert_funds.setText("0")
                 btnAdd.visibility = View.VISIBLE
+
 
             }
             R.id.set_add_funds -> {
@@ -87,6 +91,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.set_return_btn -> {
                 val intent = Intent()
+
                 when (aiGroup.checkedRadioButtonId) {
                     R.id.set_ai_easy_btn -> {
                         difficulty = "set_ai_easy_btn"
@@ -118,13 +123,23 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                         setProfileName(ProfileName)
                         setDifficulty(difficulty)
                         setCard(card)
-
                         val setting = SettingModel(id, difficulty, card, ProfileName, TotalFunds)
+                        val databaseHandler = DatabaseHandler(this)
+                        databaseHandler.updateUser(
+                            SettingModel(
+                                id,
+                                difficulty,
+                                card,
+                                ProfileName,
+                                TotalFunds
+                            )
+                        )
                         val json = Gson().toJson(setting)
                         intent.putExtra(SETTING_EXTRA_KEY, json)
                         setResult(Activity.RESULT_OK, intent)
                         Log.i(TAG, intent.toString())
                         finish()
+
                     } catch (ex: Exception) {
                         Toast.makeText(this, "Invalid somehow", Toast.LENGTH_SHORT).show()
                     }
@@ -166,6 +181,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         val databaseHandler = DatabaseHandler(this)
         val totalCash = cash.toDouble()
         TotalFunds = totalCash
+        id=getItemsList().size+1
         val status = databaseHandler.addUser(SettingModel(id, difficulty, card, ProfileName, TotalFunds))
         if (status > -1) {
             Toast.makeText(applicationContext, "Record saved", Toast.LENGTH_LONG).show()
@@ -278,6 +294,8 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
             "cardface2" -> cardface2.isChecked = true
             "cardface3" -> cardface3.isChecked = true
         }
+        id=settingModel.id
+        ProfileName=settingModel.profileName
         set_profile_name.setText(settingModel.profileName)
         set_curr_funds.text = settingModel.funds.toString()
         set_insert_funds.setText("0")

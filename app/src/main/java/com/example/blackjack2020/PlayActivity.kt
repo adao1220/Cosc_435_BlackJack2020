@@ -47,6 +47,19 @@ class PlayActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        val databaseHandler = DatabaseHandler(this)
+        databaseHandler.updateUser(
+            SettingModel(
+                SettingsActivity.id,
+                difficulty,
+                card,
+                name,
+                TotalFunds
+            )
+        )
+
+
+
         finish()
     }
 
@@ -558,6 +571,8 @@ class PlayActivity : AppCompatActivity() {
 
 
         }}
+
+
 
 
         fun confirm() {
