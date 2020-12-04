@@ -29,7 +29,7 @@ class Play_Settings_fragment : Fragment() {
     companion object {
         val cardface = "cardface"
         val difficulty = "difficulty"
-        val funds = "funds"
+        var funds = "funds"
         var name = "name"
     }
 
@@ -69,20 +69,23 @@ class Play_Settings_fragment : Fragment() {
 
     fun addmoney(view: View?) {
         var insertFunds = view!!.set_insert_funds.editableText.toString()
-        val fundsAdd = insertFunds.toDouble()
-        var currFund = view.set_curr_funds.text.toString()
-        val currFunAdd = currFund.toDouble()
-        val newFunds = fundsAdd + currFunAdd
+        if(insertFunds.toDouble()>0.0) {
+            val fundsAdd = insertFunds.toDouble()
+            var currFund = view.set_curr_funds.text.toString()
+            val currFunAdd = currFund.toDouble()
+            var newFunds = fundsAdd + currFunAdd
 
-        view.set_curr_funds.text = newFunds.toString()
-        view.set_insert_funds.setText("0")
-        TotalFunds = newFunds
-        Log.d(PlayActivity.tag, "Total funds:  " + TotalFunds)
+            view.set_curr_funds.text = newFunds.toString()
+            view.set_insert_funds.setText("")
+            TotalFunds = newFunds
+            Log.d(PlayActivity.tag, "Total funds:  " + TotalFunds)
 
-        var textview: TextView
-        textview=activity!!.findViewById(R.id.play_cash)
+            var textview: TextView
+            textview = activity!!.findViewById(R.id.play_cash)
 
-        textview.text="Total Cash: $" + TotalFunds.toString()
+            textview.text = "Total Cash: $" + TotalFunds.toString()
+        }
+
 
     }
 
@@ -159,12 +162,17 @@ class Play_Settings_fragment : Fragment() {
         playstandbtn=activity!!.findViewById(R.id.play_stand_btn)
         var playnewgamebtn : Button
         playnewgamebtn=activity!!.findViewById(R.id.play_new_game_btn)
+        var wrenchbtn : Button
+        wrenchbtn=activity!!.findViewById(R.id.play_changeSetting)
 
         if(TotalFunds>=5) {
             playhitbtn.isClickable = true
             playstandbtn.isClickable = true
             playnewgamebtn.isClickable = true
+            wrenchbtn.isClickable=true
         }
+
+
 
         getFragmentManager()!!.beginTransaction().remove(this).commit()
     }

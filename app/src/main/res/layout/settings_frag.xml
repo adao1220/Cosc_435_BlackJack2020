@@ -111,8 +111,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:hint="0"
             android:inputType="textPersonName|numberDecimal"
-            android:text="0"
             android:textSize="18sp"
             tools:text="@string/set_insert_funds" />
 

@@ -110,6 +110,7 @@ class PlayActivity : AppCompatActivity() {
     }
 
     fun launchfragment() {
+        play_changeSetting.isClickable=false
         val frag = Play_Settings_fragment()
         val args = Bundle()
         args.putString(Play_Settings_fragment.cardface, card)
@@ -630,6 +631,7 @@ class PlayActivity : AppCompatActivity() {
             var min = 5
             var step = 1
             var currentBet = 5
+
 
         }
 

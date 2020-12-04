@@ -81,7 +81,6 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
 
                 set_curr_funds.text = "0.0"
                 set_insert_funds.setText("")
-                set_insert_funds.setHint("0")
                 btnAdd.visibility = View.VISIBLE
                 setupListofDataIntoRecyclerView()
 
@@ -96,7 +95,6 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
 
                     set_curr_funds.text = TotalFunds.toString()
                     set_insert_funds.setText("")
-                    set_insert_funds.setHint("0")
                 }
                 setupListofDataIntoRecyclerView()
 
@@ -207,7 +205,6 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                 Log.i(TAG + "ID NUMBER:", id.toString())
                 btnAdd.visibility=View.GONE
                 set_insert_funds.setText("")
-                set_insert_funds.setHint("0")
             }
         }
         setupListofDataIntoRecyclerView()
