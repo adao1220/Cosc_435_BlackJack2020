@@ -119,9 +119,13 @@ class UnitTests{
         val count = Setting.getCount()
         assertThat(count).isEqualTo(1)
     }
-//    @Test
-//    fun `14) Tests to check how many rows are in the database`(){
-//        var Setting = SettingsActivity()
-//        var Set = Setting.getItemsList()
-//    }
+    @Test
+    fun `14) Betting system winning side `(){
+        var Game = PlayActivity()
+        Game.setTotalFunds(40.0)
+        Game.setCurrentBet(40)
+        val Bet= Game.getCurrentBet()
+        Game.BetCalculation(Bet, "won")
+        assertThat(Game.newBalance).isEqualTo(80.0)
+    }
 }

@@ -673,6 +673,9 @@ class PlayActivity : AppCompatActivity() {
     {
         currentBet=money
     }
+    fun getCurrentBet():Int{
+        return currentBet
+    }
     fun setTag()
     {
         tag="test"
