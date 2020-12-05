@@ -68,6 +68,9 @@
     <string name="play_my_hand">Players Hand</string>
     <string name="play_ai_hand">Dealers Hand</string>
     <!-- TODO: Remove or change this placeholder text -->
+
+
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
