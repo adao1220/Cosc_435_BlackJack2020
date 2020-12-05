@@ -2,6 +2,7 @@ package com.example.blackjack2020
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.nfc.Tag
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,11 +12,20 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.blackjack2020.Play_Settings_fragment.Companion.name
+import com.example.blackjack2020.SettingsActivity.Companion.ProfileName
+
+import com.example.blackjack2020.SettingsActivity.Companion.TotalFunds
+import com.example.blackjack2020.SettingsActivity.Companion.card
+import com.example.blackjack2020.SettingsActivity.Companion.difficulty
+import com.example.blackjack2020.SettingsActivity.Companion.TAG
+import com.example.blackjack2020.database.DatabaseHandler
 import com.example.blackjack2020.models.CardsModel
 import com.example.blackjack2020.models.SettingModel
 
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_play.*
+import kotlinx.android.synthetic.main.activity_settings.*
 
 
 private var deck= CardsModel(CardRepository())
@@ -23,62 +33,57 @@ const val USER="user"
 const val DEALER="dealer"
 
 class PlayActivity : AppCompatActivity() {
-    private lateinit var cardImage : ImageView
-    private lateinit var backcardImage : ImageView
-    private var numPlayerCards : Int = 2
-    private var numDealerCards : Int = 2
+    private lateinit var cardImage: ImageView
+    private var numPlayerCards: Int = 2
+    private var numDealerCards: Int = 2
 
     private lateinit var hiddenCard: Card
     private var BetView: TextView? = null
     private var BetBarView: SeekBar? = null
 
-    private var min = 5
-    private var max = 0
-    private var step = 5
-    private var currentBet = 5
-    private var newBalance = 0.0
-    private var backCard=""
+
+    var newBalance = 0.0
+
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        val databaseHandler = DatabaseHandler(this)
+        databaseHandler.updateUser(
+            SettingModel(
+                SettingsActivity.id,
+                difficulty,
+                card,
+                name,
+                TotalFunds
+            )
+        )
+
+
+
         finish()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
-
-        var difficulty=""
-
-
-
+        
         val options = intent.getStringExtra(MainActivity.LAUNCH_KEY)
-        if (options!= null){
+        if (options != null) {
             val FromSet = Gson().fromJson<SettingModel>(options, SettingModel::class.java)
+            id
             difficulty = FromSet.difficulty
-            //ToDo: need to do the decimal stuff
-            totalFunds = FromSet.funds
-            newBalance = totalFunds
-            play_cash.text = "Total Cash: $" + totalFunds.toString()
-            backCard = FromSet.card
-            max = totalFunds.toInt()
+            name = FromSet.profileName
+            card = FromSet.card
+            TotalFunds = FromSet.funds
+            newBalance = TotalFunds
+            play_cash.text = "Total Cash: $" + TotalFunds.toString()
+            max = TotalFunds.toInt()
         }
-        //Log.d(tag, backCard)
-
-
-
-
-
-
-        //this.backcardImage = findViewById(R.id.dealer_card_2)
 
         this.cardImage = findViewById(R.id.dealer_card_1)
-        //TODO change backcard to default card back onCreate
-        //cardOneImage.setImageResource(drawableResource)
-
-
         BetView = this.play_current_bet
         BetBarView = this.play_betbar
-        BetBarView!!.max = (max -min)/ step
+        BetBarView!!.max = (max - min) / step
         BetView!!.text = "Current Bet: $$min"
         BetBarView?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean) {
@@ -94,26 +99,55 @@ class PlayActivity : AppCompatActivity() {
 
 
         //Todo refactor total funds
-        play_hit_btn.setOnClickListener { hit("user", currentBet)  }
-        play_new_game_btn.setOnClickListener{confirm()}
-        play_stand_btn.setOnClickListener{stand(difficulty, currentBet)}
+
+        play_changeSetting.setOnClickListener { launchfragment() }
+
+        play_cash.text = "Total Cash: $" + TotalFunds.toString()
+
+        play_hit_btn.setOnClickListener { hit("user", currentBet) }
+        play_new_game_btn.setOnClickListener { confirm() }
+        play_stand_btn.setOnClickListener { stand(difficulty, currentBet) }
+    }
+
+    fun launchfragment() {
+        play_changeSetting.isClickable=false
+        val frag = Play_Settings_fragment()
+        val args = Bundle()
+        args.putString(Play_Settings_fragment.cardface, card)
+        args.putString(Play_Settings_fragment.difficulty, difficulty)
+        args.putString(Play_Settings_fragment.funds, TotalFunds.toString())
+        args.putString(Play_Settings_fragment.name, name)
+        frag.arguments = args
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.flfragment, frag, null)
+            //.addToBackStack(null)
+            .commit()
     }
 
 
-    fun deal(){ //can only "deal" from a full deck, if less than full you need a new game
-        if(deck.count()==52) {
+    fun deal() { //can only "deal" from a full deck, if less than full you need a new game
+        if (deck.count() == 52) {
             var card1 = deck.getRandomCard()
-            deck.addToHand(card1,"user")
+            //var card1=(Card(1,1))
+            deck.addToHand(card1, "user")
             isAce(USER, card1)
             this.cardImage = findViewById(R.id.player_card_1)
             changeImage(card1)
             userCount = deck.getValue(card1)
             var card2 = deck.getRandomCard()
-            deck.addToHand(card2,"user")
+            //var card2=(Card(2,1))
+            deck.addToHand(card2, "user")
             isAce(USER, card2)
             this.cardImage = findViewById(R.id.player_card_2)
             changeImage(card2)
             userCount += deck.getValue(card2)
+            if (userCount > 21 && userNumAces > 0) //checks for aces
+            {
+                userCount -= 10 // if the user has an ace, and over 21 will count the ace as 1 rather than 11
+                Log.d(tag, "TREATING ACE AS 1")
+                userNumAces--
+            }
 //            play_score.text= userCount.toString()
             var message =
                 "Your cards are: " + deck.cardFormat(card1) + " and " + deck.cardFormat(card2)
@@ -121,29 +155,39 @@ class PlayActivity : AppCompatActivity() {
 
             //******DEALER***********
             card1 = deck.getRandomCard()
+            //card1=(Card(3,1))
             isAce(DEALER, card1)
-            deck.addToHand(card1,"dealer")
+            deck.addToHand(card1, "dealer")
             dealerCount += deck.getValue(card1)
             this.cardImage = findViewById(R.id.dealer_card_1)
             changeImage(card1)
             card2 = deck.getRandomCard()
+            //card2=(Card(4,1))
             hiddenCard = card2
             isAce(DEALER, card2)
-            deck.addToHand(card2,"dealer")
+            deck.addToHand(card2, "dealer")
             dealerCount += deck.getValue(card2)
+            if (dealerCount > 21 && dealerNumAces > 0) //checks for aces
+            {
+                dealerCount -= 10 // if the user has an ace, and over 21 will count the ace as 1 rather than 11
+                Log.d(tag, "TREATING ACE AS 1")
+                dealerNumAces--
+            }
             this.cardImage = findViewById(R.id.dealer_card_2)
             changeImage(card2)
-            when(backCard){
-                "cardface1"->{
+            when (card) {
+                "cardface1" -> {
                     Log.d(tag, " 1. Dealer second selected!")
                     cardImage.setImageResource(R.drawable.card_face_1)
                 }
-                "cardface2"->{
+                "cardface2" -> {
                     Log.d(tag, " 2. Dealer second selected!")
-                    cardImage.setImageResource(R.drawable.card_face_2)                }
-                "cardface3"->{
+                    cardImage.setImageResource(R.drawable.card_face_2)
+                }
+                "cardface3" -> {
                     Log.d(tag, " 3. Dealer second selected!")
-                    cardImage.setImageResource(R.drawable.card_face_3)                }
+                    cardImage.setImageResource(R.drawable.card_face_3)
+                }
             }
 
 
@@ -160,8 +204,8 @@ class PlayActivity : AppCompatActivity() {
 
     fun changeImage(card: Card) {
 
-        val drawableResource = when(card.suit){
-            1 -> when(card.num){
+        val drawableResource = when (card.suit) {
+            1 -> when (card.num) {
                 1 -> R.drawable.ac
                 2 -> R.drawable.n2c
                 3 -> R.drawable.n3c
@@ -177,7 +221,7 @@ class PlayActivity : AppCompatActivity() {
                 13 -> R.drawable.kc
                 else -> R.drawable.card_face_1 // TODO need to handle fail
             }
-            2 -> when(card.num){
+            2 -> when (card.num) {
                 1 -> R.drawable.ad
                 2 -> R.drawable.n2d
                 3 -> R.drawable.n3d
@@ -193,7 +237,7 @@ class PlayActivity : AppCompatActivity() {
                 13 -> R.drawable.kd
                 else -> R.drawable.card_face_1 // TODO need to handle fail
             }
-            3 -> when(card.num){
+            3 -> when (card.num) {
                 1 -> R.drawable.ah
                 2 -> R.drawable.n2h
                 3 -> R.drawable.n3h
@@ -209,7 +253,7 @@ class PlayActivity : AppCompatActivity() {
                 13 -> R.drawable.kh
                 else -> R.drawable.card_face_1 // TODO need to handle fail
             }
-            4 -> when(card.num){
+            4 -> when (card.num) {
                 1 -> R.drawable.`as`
                 2 -> R.drawable.n2s
                 3 -> R.drawable.n3s
@@ -232,28 +276,29 @@ class PlayActivity : AppCompatActivity() {
     }
 
 
-    fun hit(string: String, currentBet: Int){ //will allow a new card unless over score of 21
-        this.play_betbar.visibility=View.INVISIBLE
-        if(string.equals("user")) {
+    fun hit(string: String, currentBet: Int) { //will allow a new card unless over score of 21
+        this.play_betbar.visibility = View.INVISIBLE
+        if (string.equals("user")) {
             if (userCount <= 21) {
                 var newCard = deck.getRandomCard()
                 isAce(USER, newCard)
                 deck.addToHand(newCard, string)
-                when(numPlayerCards){
+                //numPlayerCards++
+                when (numPlayerCards) {
                     2 -> {
                         this.cardImage = findViewById(R.id.player_card_3)
                         this.cardImage.visibility = View.VISIBLE
-                        numPlayerCards ++
+                        numPlayerCards++
                     }
                     3 -> {
                         this.cardImage = findViewById(R.id.player_card_4)
                         this.cardImage.visibility = View.VISIBLE
-                        numPlayerCards ++
+                        numPlayerCards++
                     }
                     4 -> {
                         this.cardImage = findViewById(R.id.player_card_5)
                         this.cardImage.visibility = View.VISIBLE
-                        numPlayerCards ++
+                        numPlayerCards++
                     }
                     else -> {
                         Log.d(tag, "No more cards to flip")
@@ -263,9 +308,9 @@ class PlayActivity : AppCompatActivity() {
                 changeImage(newCard)
 
                 userCount += deck.getValue(newCard)
-                if(userCount>21 && userNumAces>0) //checks for aces
+                if (userCount > 21 && userNumAces > 0) //checks for aces
                 {
-                    userCount-=10 // if the user has an ace, and over 21 will count the ace as 1 rather than 11
+                    userCount -= 10 // if the user has an ace, and over 21 will count the ace as 1 rather than 11
                     Log.d(tag, "TREATING ACE AS 1")
                     userNumAces--
                 }
@@ -273,34 +318,20 @@ class PlayActivity : AppCompatActivity() {
 
                 var message = "Your new card is: " + deck.cardFormat(newCard)
                 Log.d(tag, message)
-            } else{
+            } else {
                 Log.d(tag, "You've already lost")
                 play_hit_btn.isClickable = false
                 play_stand_btn.isClickable = false
                 lostBet(currentBet)
 
             }
-            if(userCount>21)
-            {
+            if (userCount > 21) {
                 play_hit_btn.isClickable = false
             }
-        }
-        else{
-                var newCard = deck.getRandomCard()
-                deck.addToHand(newCard, string)
-                dealerCount += deck.getValue(newCard)
-                var message = "Dealers card is: " + deck.cardFormat(newCard)
-                Log.d(tag, message)
-
-        }
-
-    }
-
-
-    fun dealerHit(string: String){
+        } else {
             var newCard = deck.getRandomCard()
-            isAce(DEALER, newCard)
             deck.addToHand(newCard, string)
+            dealerCount += deck.getValue(newCard)
             when (numDealerCards) {
                 2 -> {
                     this.cardImage = findViewById(R.id.dealer_card_3)
@@ -323,19 +354,21 @@ class PlayActivity : AppCompatActivity() {
 
             }
             changeImage(newCard)
-
-            dealerCount += deck.getValue(newCard)
-
             var message = "Dealers card is: " + deck.cardFormat(newCard)
+            if (dealerCount > 21 && dealerNumAces > 0) //checks for aces
+            {
+                dealerCount -= 10 // if the user has an ace, and over 21 will count the ace as 1 rather than 11
+                Log.d(tag, "TREATING ACE AS 1")
+                dealerNumAces--
+            }
             Log.d(tag, message)
+
         }
 
+    }
 
 
-
-
-
-    fun stand(difficultyString: String, currentBet: Int){
+    fun stand(difficultyString: String, currentBet: Int) {
         Log.d(tag, "User Finished with score of: " + userCount + "\n Dealers Turn")
         Log.d(tag, "Dealer count: " + dealerCount)
         this.cardImage = findViewById(R.id.dealer_card_2)
@@ -343,17 +376,18 @@ class PlayActivity : AppCompatActivity() {
         play_hit_btn.isClickable = false
         play_stand_btn.isClickable = false
         val winLose = difficultyAI(difficultyString)
-        when (winLose){
+        when (winLose) {
             0 -> wonBet(currentBet)
             1 -> lostBet(currentBet)
         }
-        gameover=true
+        gameover = true
+
     }
 
-    private fun lostBet(currentBet: Int){
-        var newFun = totalFunds
-        totalFunds = newFun - currentBet
-        play_cash.text = "Total Cash: $" + totalFunds.toString()
+    fun lostBet(currentBet: Int) {
+        BetCalculation(currentBet, "lost")
+
+        play_cash.text = "Total Cash: $" + TotalFunds.toString()
 
         val builder = AlertDialog.Builder(this)
         builder.setMessage("You lost :(  Do you want to play again? ");
@@ -367,10 +401,12 @@ class PlayActivity : AppCompatActivity() {
 
     }
 
-    fun wonBet(currentBet: Int){
-        var newFun = totalFunds
-        totalFunds = newFun + currentBet
-        play_cash.text = "Total Cash: $" + totalFunds.toString()
+
+
+    fun wonBet(currentBet: Int) {
+        BetCalculation(currentBet, "won")
+
+        play_cash.text = "Total Cash: $" + TotalFunds.toString()
 
         val builder = AlertDialog.Builder(this)
         builder.setMessage("You won:)  Do you want to play again? ");
@@ -383,93 +419,105 @@ class PlayActivity : AppCompatActivity() {
         alertDialog.show();
     }
 
+    fun BetCalculation(CurrentBet: Int,result: String): Double{
+        var newFun = TotalFunds
+        if(result.equals("lost")){
+            TotalFunds = newFun - CurrentBet
+        }
+        else if(result.equals("won")){
+            TotalFunds = newFun + CurrentBet
+        }
+        newBalance = TotalFunds
+        return TotalFunds
+    }
 
-
-
-    fun difficultyAI(level: String): Int
-    {
-        when(level){
-            "set_ai_easy_btn"->{
-                while (dealerCount<=12)
-                    dealerHit("Dealer")
-                if(dealerCount<=21 && userCount>21){
-                    Log.d(tag, "Dealer won, user went over 21 ")
+    fun difficultyAI(level: String): Int {
+        when (level) {
+            "set_ai_easy_btn" -> {
+                while (dealerCount <= 12)
+                    hit(DEALER, currentBet)
+                if (dealerCount <= 21 && userCount > 21) {
+                    //Log.d(tag, "Dealer won, user went over 21 ")
                     return 1
                 }
-                if(userCount<=21 && dealerCount>21){
-                    Log.d(tag, "User won, dealer went over 21 ")
+                if (userCount <= 21 && dealerCount > 21) {
+                    //Log.d(tag, "User won, dealer went over 21 ")
                     return 0
                 }
-                else if ((dealerCount> userCount)&& (dealerCount<=21)){
-                    Log.d(tag, "Dealer won with score of: "+ dealerCount)
+                if(numDealerCards>4)
                     return 1
-                }
-                else if ((dealerCount< userCount)&& (userCount<=21)) {
-                    Log.d(tag, "User won with score of: "+ userCount)
+                if(numPlayerCards>4)
                     return 0
-                }
-                else if((dealerCount>21 && userCount>21)){
-                    Log.d(tag, "It's a tie")
+                else if ((dealerCount > userCount) && (dealerCount <= 21)) {
+                    //Log.d(tag, "Dealer won with score of: " + dealerCount)
+                    return 1
+                } else if ((dealerCount < userCount) && (userCount <= 21)) {
+                    //Log.d(tag, "User won with score of: " + userCount)
+                    return 0
+                } else if ((dealerCount > 21 && userCount > 21)) {
+                    //Log.d(tag, "It's a tie")
+                    return 1
+                } else if ((dealerCount == userCount)) {
+                    //Log.d(tag, "It's a tie")
                     return 1
                 }
-                else if((dealerCount== userCount)){
-                    Log.d(tag, "It's a tie")
-                    return 1
-                }
-                Log.d(tag, "Easy")
+                //Log.d(tag, "Easy")
             }
-            "set_ai_normal_btn"->{
+            "set_ai_normal_btn" -> {
 
-                while ((dealerCount<15 || userVisibleTotal()> dealerCount) && userVisibleTotal()<19)
-                    dealerHit("Dealer")
-                if(dealerCount<=21 && userCount>21){
-                    Log.d(tag, "Dealer won, user went over 21 ")
+                while ((dealerCount < 15 || userVisibleTotal() > dealerCount) && userVisibleTotal() < 19)
+                    hit(DEALER, currentBet)
+                if (dealerCount <= 21 && userCount > 21) {
+                    //Log.d(tag, "Dealer won, user went over 21 ")
                     return 1
                 }
-                if(userCount<=21 && dealerCount>21){
+                if (userCount <= 21 && dealerCount > 21) {
                     Log.d(tag, "User won, dealer went over 21 ")
                     return 0
                 }
-                else if ((dealerCount> userCount)&& (dealerCount<=21)){
-                    Log.d(tag, "Dealer won with score of: "+ dealerCount)
+                if(numDealerCards>4)
                     return 1
-                }
-                else if ((dealerCount< userCount)&& (userCount<=21)){
-                    Log.d(tag, "User won with score of: "+ userCount)
+                if(numPlayerCards>4)
                     return 0
-                }
-                else if((dealerCount>21 && userCount>21)){
+                else if ((dealerCount > userCount) && (dealerCount <= 21)) {
+                    Log.d(tag, "Dealer won with score of: " + dealerCount)
+                    return 1
+                } else if ((dealerCount < userCount) && (userCount <= 21)) {
+                    Log.d(tag, "User won with score of: " + userCount)
+                    return 0
+                } else if ((dealerCount > 21 && userCount > 21)) {
                     Log.d(tag, "It's a tie")
                     return 1
-                }
-                else if((dealerCount== userCount)){
+                } else if ((dealerCount == userCount)) {
                     Log.d(tag, "It's a tie")
                     return 1
                 }
                 Log.d(tag, "Normal")
 
             }
-            "set_ai_hard_btn"->{
+            "set_ai_hard_btn" -> {
                 //kinda cheating
-                while (dealerCount<userCount && userCount<=21)
-                    dealerHit("Dealer")
-                if(dealerCount<=21 && userCount>21){
+                while (dealerCount < userCount && userCount <= 21)
+                    hit(DEALER, currentBet)
+                if (dealerCount <= 21 && userCount > 21) {
                     Log.d(tag, "Dealer won, user went over 21 ")
                     return 1
                 }
-                if(userCount<=21 && dealerCount>21){
+                if (userCount <= 21 && dealerCount > 21) {
                     Log.d(tag, "User won, dealer went over 21 ")
                     return 0
                 }
-                else if ((dealerCount> userCount)&& (dealerCount<=21)){
-                    Log.d(tag, "Dealer won with score of: "+ dealerCount)
+                if(numDealerCards>4)
                     return 1
-                }
-                else if ((dealerCount< userCount)&& (userCount<=21)){
-                    Log.d(tag, "User won with score of: "+ userCount)
+                if(numPlayerCards>4)
                     return 0
-                }
-                else if((dealerCount== userCount)){
+                else if ((dealerCount > userCount) && (dealerCount <= 21)) {
+                    //Log.d(tag, "Dealer won with score of: " + dealerCount)
+                    return 1
+                } else if ((dealerCount < userCount) && (userCount <= 21)) {
+                    Log.d(tag, "User won with score of: " + userCount)
+                    return 0
+                } else if ((dealerCount == userCount)) {
                     Log.d(tag, "It's a tie")
                     return 1
                 }
@@ -479,18 +527,21 @@ class PlayActivity : AppCompatActivity() {
         return 3
 
     }
-    private fun userVisibleTotal():Int {
+
+    private fun userVisibleTotal(): Int {
         //users total minus their first card (the hidden one)
-        return (userCount-deck.getIterator(USER).next().num)
+        return (userCount - deck.getIterator(USER).next().num)
     }
-    fun reset(){
+
+    fun reset() {
 
         numPlayerCards = 2 //reset the players hand
         numDealerCards = 2//
-        userNumAces=0
-        dealerNumAces=0
+        userNumAces = 0
+        dealerNumAces = 0
 
-        this.play_betbar.visibility=View.VISIBLE
+
+        this.play_betbar.visibility = View.VISIBLE
         dealer_card_3.visibility = View.INVISIBLE
         dealer_card_4.visibility = View.INVISIBLE
         dealer_card_5.visibility = View.INVISIBLE
@@ -499,73 +550,173 @@ class PlayActivity : AppCompatActivity() {
         player_card_5.visibility = View.INVISIBLE
 
 
-        if(totalFunds <= 0.0){
+
+        if (TotalFunds < 5) {
+
             play_hit_btn.isClickable = false
             play_stand_btn.isClickable = false
             play_new_game_btn.isClickable = false
-            Toast.makeText(this@PlayActivity, "You are poor, add more funds", Toast.LENGTH_SHORT).show()
-        }
-        else{
-            userCount=0
+            Toast.makeText(this@PlayActivity, "You are poor, add more funds", Toast.LENGTH_SHORT)
+                .show()
+        } else {
+            userCount = 0
             play_hit_btn.isClickable = true
             play_stand_btn.isClickable = true
             play_new_game_btn.isClickable = true
-            dealerCount=0
-            gameover=false
+            dealerCount = 0
+            gameover = false
             deck.newGame()
-            max = totalFunds.toInt()
-            BetBarView!!.max = (max -min)/ step
+            max = TotalFunds.toInt()
+            BetBarView!!.max = (max - min) / step
             deal()
-        }
-    }
 
 
-    fun confirm() {
-        when(!gameover){
-            true -> {
-                val builder = AlertDialog.Builder(this)
-                builder.setMessage("Are you sure you want to start a new game?");
-                builder.setTitle("New Game!")
-                builder.setCancelable(false)
+        }}
 
-                builder.setPositiveButton("Yes") { dialog, which -> reset() }
-                builder.setNegativeButton("No") { dialog, which -> dialog.cancel() }
-                val alertDialog = builder.create()
-                alertDialog.show();
+
+
+
+        fun confirm() {
+            when (!gameover) {
+                true -> {
+                    val builder = AlertDialog.Builder(this)
+                    Log.i(TAG,"UserCount: "+ numPlayerCards)
+                    if(numPlayerCards>2){builder.setMessage("You will lose $"+ currentBet)}
+                    else{builder.setMessage("You will lose $5")}
+
+                    builder.setTitle("New Game!")
+                    builder.setCancelable(false)
+
+                    builder.setPositiveButton("Yes") { dialog, which -> prematureloss() }
+                    builder.setNegativeButton("No") { dialog, which -> dialog.cancel() }
+                    val alertDialog = builder.create()
+                    alertDialog.show();
+                }
+                false -> {
+                    reset()
+                }
             }
-            false -> {
-                reset()
+        }
+
+    private fun prematureloss(){
+        var newFun = TotalFunds
+        if(numPlayerCards>2){
+            TotalFunds = newFun - currentBet
+        }
+        else
+            TotalFunds=newFun-5
+        play_cash.text = "Total Cash: $" + TotalFunds.toString()
+        reset()
+    }
+
+         fun isAce(string: String, card: Card) {
+            if (string.equals(USER) && card.num == 1) {
+                //Log.i(TAG,"ACE FOUND : USER")
+                userNumAces += 1
+            } else if (string.equals(DEALER) && card.num == 1) {
+                dealerNumAces += 1
+                Log.i(TAG,"ACE FOUND : DEALER")
             }
         }
-    }
 
-    private fun isAce(string: String, card: Card) {
-        if(string.equals(USER)&& card.num==1){
-            userNumAces+=1
+        companion object{
+            var tag = "test"
+            var id = 0
+            var userCount = 0 // holds score of user
+            var dealerCount = 0 //holds dealers score
+            var gameover = false
+            var dealerNumAces = 0
+            var userNumAces = 0
+            var max = 0
+            var min = 5
+            var step = 1
+            var currentBet = 5
+
+
         }
-        else if (string.equals(DEALER)&& card.num==1){
-            dealerNumAces+=1
+
+
+        fun updateCash() {
+            play_cash.text = "Total Cash: $" + TotalFunds.toString()
+
         }
+
+
+    fun setUserCount(user:Int){
+        userCount=user
     }
-    companion object{
-        const val tag="test"
-        var userCount=0 // holds score of user
-        var dealerCount=0 //holds dealers score
-        var gameover = false
-        var dealerNumAces=0
-        var userNumAces=0
+    fun setDealerCount(dealer: Int)
+    {
+        dealerCount=dealer
+    }
+    fun setGameover(flag: Boolean)
+    {
+        gameover=flag
+    }
+    fun setDealerNumAces(num: Int)
+    {
+        dealerNumAces=num
+    }
+    fun setUserNumAces(num: Int)
+    {
+        userNumAces=num
+    }
+    fun setTotalFunds(money: Double)
+    {
+        newBalance=money
+        TotalFunds = money
+    }
+    fun setCurrentBet(money: Int)
+    {
+        currentBet=money
+    }
+    fun setTag()
+    {
+        tag="test"
+    }
+    fun setDeck(){
+        deck= CardsModel(CardRepository())
+    }
+    fun setNumofPlayerCards(num: Int){
+        numPlayerCards= num
+    }
+    fun getNumofPlayerCards():Int{
+        return numPlayerCards
+    }
+    fun setNumofDealerCards(num: Int){
+        numDealerCards= num
     }
 
+    fun setId(Id: Int){
+        id = Id
+    }
+    fun getid():Int{
+        return id
+    }
+    fun setDifficulty(Difficulty: String){
+        difficulty=Difficulty
+    }
+    fun getDifficulty():String{
+        return difficulty
+    }
 
-
-
-
-//    Old Code
-//    fun score(){
-//        var message= "Your Score is : "+ userCount
-//        Log.d(tag, message)
-//    }
-//    fun myhand(){
-//        deck.getHand("user")
-//    }
+    fun cardface(cardface: String)
+    {
+        card=cardface
+    }
+    fun getcard():String{
+        return card
+    }
+    fun setProfileName(ProfileName: String){
+        name = ProfileName
+    }
+    fun getProfileName():String{
+        return name
+    }
+    fun getTotalFunds():Double{
+        return TotalFunds
+    }
+    fun getCurrentBet():Int{
+        return currentBet
+    }
 }

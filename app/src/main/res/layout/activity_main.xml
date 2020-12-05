@@ -40,9 +40,9 @@
         android:layout_marginTop="28dp"
         android:text="@string/hp_settings_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hp_how_to_play_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/hp_play_btn" />
 
     <Button
         android:id="@+id/hp_tips_btn"
@@ -53,7 +53,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hp_settings_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/hp_how_to_play_btn" />
 
     <Button
         android:id="@+id/hp_how_to_play_btn"
@@ -62,7 +62,8 @@
         android:layout_marginTop="28dp"
         android:text="@string/hp_how_to_play_btn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hp_play_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/hp_settings_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

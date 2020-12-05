@@ -4,7 +4,7 @@
     <string name="hp_play_btn">Play</string>
     <string name="hp_how_to_play_btn">How to play</string>
     <string name="hp_settings_btn">Settings</string>
-    <string name="hp_tips_btn">Tips N Tricks</string>
+    <string name="hp_tips_btn">Tips and Tricks</string>
 
     <string name="set_title">BlackJack2020 Settings</string>
     <string name="set_ai">Set AI difficulty:</string>
@@ -17,9 +17,12 @@
     <string name="set_insert_funds">Add me</string>
 
     <string name="set_card_img">Select Card Design:</string>
-    <string name="set_name">Input your Name: </string>
+    <string name="set_name">Name: </string>
     <string name="set_back">Save and Return</string>
     <string name="set_music">Music</string>
+    <string name="btnAdd">Add</string>
+
+
 
     //****************How to Play Page***************
     <string name="how_to_play_title">How to Play!</string>
@@ -69,5 +72,7 @@
     <string name="play_ai_hand">Dealers Hand</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="set_clear_btn">Clear</string>
+
 
 </resources>

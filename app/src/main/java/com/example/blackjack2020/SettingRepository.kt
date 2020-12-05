@@ -1,6 +1,10 @@
 package com.example.blackjack2020
 
 import com.example.blackjack2020.Interfaces.ISettingRepository
+import com.example.blackjack2020.SettingsActivity.Companion.ProfileName
+import com.example.blackjack2020.SettingsActivity.Companion.TotalFunds
+import com.example.blackjack2020.SettingsActivity.Companion.card
+import com.example.blackjack2020.SettingsActivity.Companion.difficulty
 
 import com.example.blackjack2020.models.SettingModel
 
@@ -8,7 +12,7 @@ class SettingRepository: ISettingRepository {
     val set: MutableList<SettingModel> = mutableListOf()
     init {
         set.add(
-            SettingModel("set_ai_easy_btn", "cardface1", "Alex", totalFunds, true)
+            SettingModel(1, difficulty, card, ProfileName, TotalFunds)
         )
     }
 
