@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 
@@ -20,10 +19,7 @@ class HowToPlayActivity : FragmentActivity() {
         viewPager = findViewById(R.id.pager)
         val pagerAdapter = PagerAdapter(this)
         viewPager.adapter = pagerAdapter
-//        val pAdapter = PagerAdapter(supportFragmentManager)
-//        pAdapter.addfragment(FragmentOneHtpOne(), "Goal")
-//        pAdapter.addfragment(FragmentTwoHtp(), "Rules")
-//        viewPager.adapter = pAdapter
+
 
     }
 

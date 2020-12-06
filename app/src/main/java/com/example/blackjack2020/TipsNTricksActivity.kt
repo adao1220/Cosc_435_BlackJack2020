@@ -11,19 +11,21 @@ import java.io.IOException
 
 
 class TipsNTricksActivity : AppCompatActivity() {
-    //private val scope = CoroutineScope(Dispatchers.IO)
+
     private lateinit var tipsAdapter: TipsAdapter
+    private var url: String = "https://my-json-server.typicode.com/jcbreen/blackjackJsonRepo/db"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tips_n_tricks)
         Recycler_View.layoutManager = LinearLayoutManager(this)
-        fetchJson()
+        fetchJson(url)
+
         supportActionBar?.hide()
 
-
     }
-    fun fetchJson() {
-        val URL = "https://my-json-server.typicode.com/jcbreen/blackjackJsonRepo/db"
+    fun fetchJson(url: String) {
+        var URL = url
         val request = Request.Builder().url(URL).build()
         val client = OkHttpClient()
         client.newCall(request).enqueue(object : Callback {
@@ -31,6 +33,7 @@ class TipsNTricksActivity : AppCompatActivity() {
                 val body = response.body?.string()
                 val gson = GsonBuilder().create()
                 val tipsFeed = gson.fromJson(body, TipsFeed::class.java)
+
                 runOnUiThread {
                     Recycler_View.adapter = TipsAdapter(tipsFeed)
                 }
@@ -38,8 +41,13 @@ class TipsNTricksActivity : AppCompatActivity() {
             override fun onFailure(call: Call, e: IOException) {
                 Log.d("test", "Failed to connect to Rest API")
             }
+
         })
+
     }
     public class TipsFeed(val newTips: List<TipsNew>)
     class TipsNew(val tipName: Int, val tipText: String)
+    fun getUrl() : String{
+        return url
+    }
 }
