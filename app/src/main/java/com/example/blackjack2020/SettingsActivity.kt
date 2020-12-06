@@ -11,9 +11,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.blackjack2020.MainActivity.Companion.SET_KEY
+import com.example.blackjack2020.PlayActivity.Companion.currentBet
 import com.example.blackjack2020.database.DatabaseHandler
 import com.example.blackjack2020.models.SettingModel
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.activity_play.*
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.user_row.*
 import okhttp3.internal.notify
@@ -134,16 +136,17 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
                         setDifficulty(difficulty)
                         setCard(card)
                         val setting = SettingModel(id, difficulty, card, ProfileName, TotalFunds)
-                        val databaseHandler = DatabaseHandler(this)
-                        databaseHandler.updateUser(
-                            SettingModel(
-                                id,
-                                difficulty,
-                                card,
-                                ProfileName,
-                                TotalFunds
-                            )
-                        )
+//                        val databaseHandler = DatabaseHandler(this)
+//                        databaseHandler.updateUser(
+//                            SettingModel(
+//                                id,
+//                                difficulty,
+//                                card,
+//                                ProfileName,
+//                                TotalFunds
+//                            )
+//                        )
+                        //todo Fix this... this breaks the code? if we change the user name
                         Log.i(TAG+ "SHIIIT Ret", TotalFunds.toString())
 
                         val json = Gson().toJson(setting)
@@ -284,7 +287,6 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         } else {
             Toast.makeText(applicationContext, "Name cannot be blank", Toast.LENGTH_LONG).show()
             setupListofDataIntoRecyclerView()
-
         }
     }
 
@@ -321,7 +323,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         set_curr_funds.text = settingModel.funds.toString()
         set_insert_funds.setText("")
         set_insert_funds.setHint("0")
-
+        play_changeSetting
         btnAdd.visibility = View.GONE
         return list
 
@@ -367,6 +369,7 @@ class SettingsActivity : AppCompatActivity(), View.OnClickListener {
         val newFunds = adding + current
         return newFunds
     }
+
 
 
     companion object {

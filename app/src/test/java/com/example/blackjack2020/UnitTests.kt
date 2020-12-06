@@ -121,7 +121,8 @@ class UnitTests{
     }
 
     @Test
-    fun `14) Winning side, method call`(){
+    fun `14) Betting system winning side `(){
+
         var Game = PlayActivity()
         Game.setTotalFunds(40.0)
         Game.setCurrentBet(40)
@@ -129,7 +130,5 @@ class UnitTests{
         Game.BetCalculation(Bet, "won")
         assertThat(Game.newBalance).isEqualTo(80.0)
     }
-
-
 
 }

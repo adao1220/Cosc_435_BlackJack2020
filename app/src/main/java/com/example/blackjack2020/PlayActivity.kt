@@ -123,10 +123,13 @@ class PlayActivity : AppCompatActivity() {
             .add(R.id.flfragment, frag, null)
             //.addToBackStack(null)
             .commit()
+
     }
 
 
     fun deal() { //can only "deal" from a full deck, if less than full you need a new game
+        play_changeSetting.visibility = View.VISIBLE
+
         if (deck.count() == 52) {
             var card1 = deck.getRandomCard()
             //var card1=(Card(1,1))
@@ -670,6 +673,9 @@ class PlayActivity : AppCompatActivity() {
     {
         currentBet=money
     }
+    fun getCurrentBet():Int{
+        return currentBet
+    }
     fun setTag()
     {
         tag="test"
@@ -716,7 +722,5 @@ class PlayActivity : AppCompatActivity() {
     fun getTotalFunds():Double{
         return TotalFunds
     }
-    fun getCurrentBet():Int{
-        return currentBet
-    }
+
 }

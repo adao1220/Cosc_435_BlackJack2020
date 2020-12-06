@@ -66,7 +66,6 @@ class Play_Settings_fragment : Fragment() {
         return view
     }
 
-
     fun addmoney(view: View?) {
         var insertFunds = view!!.set_insert_funds.editableText.toString()
         if(insertFunds.toDouble()>0.0) {
@@ -93,6 +92,7 @@ class Play_Settings_fragment : Fragment() {
     fun onApply(view: View?) {
         var ai = ""
         var card = ""
+
         when (view!!.aiGroup.checkedRadioButtonId) {
             R.id.set_ai_easy_btn -> {
                 ai = "set_ai_easy_btn"
