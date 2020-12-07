@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlayActivity">
+
+    <TextView
+        android:id="@+id/play_ai_hand"
+
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:text="@string/play_ai_hand"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Ai_hand" />
+
+    <TextView
+        android:id="@+id/play_current_bet"
+        android:layout_width="97dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:gravity="center"
+        android:text="- -"
+        app:layout_constraintBottom_toTopOf="@+id/play_betbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/play_cash"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <SeekBar
+        android:id="@+id/play_betbar"
+        android:layout_width="276dp"
+        android:layout_height="28dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/play_cash"
+
+        android:layout_width="82dp"
+        android:layout_height="33dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/play_betbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Total Cash" />
+
+    <Button
+        android:id="@+id/play_changeSetting"
+        android:layout_width="41dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="12dp"
+        android:background="@android:drawable/ic_menu_preferences"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/play_current_bet" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="379dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="10dp"
+        android:foregroundGravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/play_ai_hand">
+
+        <ImageView
+            android:id="@+id/dealer_card_1"
+            android:layout_width="75dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/dealer_card_2"
+            android:layout_width="75dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="30dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/dealer_card_1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/dealer_card_3"
+            android:layout_width="75dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="30dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/dealer_card_2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/card_face_1" />
+
+        <ImageView
+            android:id="@+id/dealer_card_4"
+            android:layout_width="75dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="30dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/dealer_card_3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/card_face_1" />
+
+        <ImageView
+            android:id="@+id/dealer_card_5"
+            android:layout_width="75dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="30dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/dealer_card_4"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/card_face_1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="401dp"
+        android:layout_height="157dp"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/play_betbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.54"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/player_card_1"
+            android:layout_width="75dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/player_card_2"
+            android:layout_width="75dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/player_card_1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/player_card_3"
+            android:layout_width="75dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="30dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/player_card_2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/card_face_1" />
+
+        <ImageView
+            android:id="@+id/player_card_4"
+            android:layout_width="75dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="30dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/player_card_3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/card_face_1" />
+
+        <ImageView
+            android:id="@+id/player_card_5"
+            android:layout_width="75dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="30dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/player_card_4"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/card_face_1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="294dp"
+        android:layout_height="113dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_weight="0"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/play_new_game_btn"
+                android:layout_width="126dp"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="@string/play_new_game_btn" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/play_hit_btn"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:text="@string/play_hit_btn" />
+
+            <Button
+                android:id="@+id/play_stand_btn"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="@string/play_stand_btn" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/play_my_hand"
+        android:layout_width="300dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:text="@string/play_my_hand"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="PlayersHand" />
+
+    <FrameLayout
+        android:id="@+id/flfragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

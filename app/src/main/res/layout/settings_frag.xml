@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#009688"
+    android:orientation="vertical"
+    android:padding="15dp"
+    tools:context=".MainActivity">
+
+
+    <TextView
+        android:id="@+id/set_ai"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/set_ai"
+        android:textSize="24sp" />
+
+    <RadioGroup
+        android:id="@+id/aiGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/set_ai_easy_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/set_ai_low" />
+
+        <RadioButton
+            android:id="@+id/set_ai_normal_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/set_ai_mid" />
+
+        <RadioButton
+            android:id="@+id/set_ai_hard_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/set_ai_high" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/set_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/set_card_img"
+        android:textSize="24sp" />
+
+    <RadioGroup
+        android:id="@+id/cardGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="165dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/cardface1"
+            android:layout_width="180dp"
+            android:layout_height="170dp"
+            android:layout_weight="1"
+            android:background="@drawable/card_face_1"
+            android:checked="false" />
+
+        <RadioButton
+            android:id="@+id/cardface2"
+            android:layout_width="190dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/card_face_2" />
+
+        <RadioButton
+            android:id="@+id/cardface3"
+            android:layout_width="180dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/card_face_3" />
+
+    </RadioGroup>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/set_funds"
+            android:layout_width="92dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/set_funds"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/set_curr_funds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            tools:text="@string/set_current_funds" />
+
+        <EditText
+            android:id="@+id/set_insert_funds"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="0"
+            android:inputType="textPersonName|numberDecimal"
+            android:textSize="18sp"
+            tools:text="@string/set_insert_funds" />
+
+        <Button
+            android:id="@+id/set_add_funds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/set_funds_btn" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/frag_Apply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apply"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/set_music_sw" />
+
+<!--        <Switch-->
+<!--            android:id="@+id/set_music_sw"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/set_music"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
